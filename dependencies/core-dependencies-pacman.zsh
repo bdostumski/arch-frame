@@ -18,6 +18,9 @@ packages=(
     noto-fonts-emoji noto-fonts-cjk ttf-fira-code ttf-fira-mono ttf-fira-sans
     ttf-jetbrains-mono ttf-hack ttf-inconsolata nerd-fonts ttf-opensans
 
+    # Terminal Fonts
+    terminus-font
+
     # System Utilities
     zsh git github-cli ranger
 
