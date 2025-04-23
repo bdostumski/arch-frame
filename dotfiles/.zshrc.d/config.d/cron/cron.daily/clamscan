@@ -1,0 +1,3 @@
+#!/bin/zsh
+0 20 * * * clamscan -r --quiet --bell -i /home/$USER/Downloads
+
