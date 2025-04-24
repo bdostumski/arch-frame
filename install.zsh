@@ -17,9 +17,8 @@ echo "\n"
 echo "Install Dependencies 📦"
 echo "0) Install dependencies neede for the script [Zsh, Kitty, Fonts, Python]"
 echo "1) Install core dependencies [System, Security, Virtualization, Basic Editors]"
-echo "2) Install DevOps tools [Docker, Vagrant, K8s, etc.]"
+echo "2) Install Dev Tools [Docker, Vagrant, K8s, etc.]"
 echo "3) Install IDE for programming [Doom Emacs]"
-echo "4) Install [Firmware and Drivers]"
 echo "x) Exit"
 echo "\n"
 echo -n "Enter your choise: "
@@ -50,7 +49,7 @@ case $choice in
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [Docker, Vagrant, K8s, etc.] . . ."
-    source ./dependencies/devops-pacman.zsh
+    source ./dependencies/dev-tools.zsh
     echo "💡 Restart [exit/start again] kitty terminal"
     ;;
 3)
@@ -58,13 +57,6 @@ case $choice in
     echo "= = = = = = = = = ="
     echo "Starting installation [Doom Emacs] . . ."
     source ./dependencies/doom-emacs-git.zsh
-    echo "💡 Restart [exit/start again] kitty terminal"
-    ;;
-4)
-    echo "\n"
-    echo "= = = = = = = = = ="
-    echo "Starting installation [Firmware, Drivers, Nvidia] . . ."
-    source ./dependencies/firmware-drivers.zsh
     echo "💡 Restart [exit/start again] kitty terminal"
     ;;
 *)
