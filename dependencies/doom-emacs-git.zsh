@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 source "$(dirname "$0")/install-utils.zsh"
 
@@ -24,6 +24,8 @@ if [[ -d "dotfiles" ]]; then
 else
     echo "❌ Dotfiles directory not found. Skipping dotfile setup."
 fi
+
+mkdir -p ~/Documents/org/roam/
 
 echo "🔧 Installing Doom Emacs..."
 ~/.config/emacs/bin/doom install

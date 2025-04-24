@@ -18,7 +18,8 @@ echo "Install Dependencies 📦"
 echo "0) Install dependencies neede for the script [Zsh, Kitty, Fonts, Python]"
 echo "1) Install core dependencies [System, Security, Virtualization, Basic Editors]"
 echo "2) Install Dev Tools [Docker, Vagrant, K8s, etc.]"
-echo "3) Install IDE for programming [Doom Emacs]"
+echo "3) Install as basic editor LazyVim"
+echo "4) Install IDE for programming [Doom Emacs]"
 echo "x) Exit"
 echo "\n"
 echo -n "Enter your choise: "
@@ -52,12 +53,18 @@ case $choice in
     source ./dependencies/dev-tools.zsh
     echo "💡 Restart [exit/start again] kitty terminal"
     ;;
+
 3)
+    echo "\n"
+    echo "= = = = = = = = = ="
+    echo "Starting installation [LazyVim] . . ."
+    source ./dependencies/lazyvim-git.zsh
+    ;;
+4)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [Doom Emacs] . . ."
     source ./dependencies/doom-emacs-git.zsh
-    echo "💡 Restart [exit/start again] kitty terminal"
     ;;
 *)
     echo "\n"
