@@ -45,6 +45,8 @@ done
 echo "🔧 Configuring Docker..."
 sudo systemctl enable --now docker.service
 sudo usermod -aG docker "$USER"
+newgrp docker
+newgrp libvirt
 
 # Libvirt configuration
 echo "🔧 Configuring libvirt..."
@@ -57,14 +59,9 @@ minikube start --driver=docker || echo "⚠️ Minikube failed to start. Check D
 
 # Helm repo setup (check if already added)
 echo "🎯 Adding Helm repo..."
-if ! helm repo list | grep -q "bitnami"; then
-    helm repo add bitnami https://charts.bitnami.com/bitnami
-    echo "✅ Added Helm repo: bitnami"
-else
-    echo "🎯 Bitnami Helm repo already exists, skipping."
-fi
+helm repo add bitnami https://charts.bitnami.com/bitnami
+echo "✅ Added Helm repo: bitnami"
 
 # Completion message
 echo -e "\n🎉 All DevOps tools installed and configured successfully!"
-echo "📌 Run: \`newgrp docker\` and \`newgrp libvirt\` or reboot to apply group changes."
 echo -e "💡 Happy hacking! 🧑‍💻\n"

@@ -95,10 +95,9 @@ echo "📁 Backing up ~/.emacs.d (if any)..."
 [[ -d ~/.emacs.d ]] && mv ~/.emacs.d ~/.emacs.d-bak && echo "✅ Backup created."
 
 echo "🌀 Enabling and starting Emacs systemd service..."
-systemctl --user enable --now emacs.service
-systemctl --user restart emacs.service
-systemctl --user status emacs.service --no-pager
-systemctl --user stop emacs.service
+systemctl enable --now emacs.service
+systemctl start emacs.service
+systemctl status emacs.service --no-pager
 echo "✅ Emacs systemd service set up."
 
 # ----------------------------------
