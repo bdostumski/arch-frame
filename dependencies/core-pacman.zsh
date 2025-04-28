@@ -150,9 +150,9 @@ echo "⚙️ Zsh is now your default shell."
 chmod +x ~/.zshrc.d/functions.d/*.zsh
 
 # Install github copilot
+
 echo "🔧 GitHub Login"
 gh auth login
-
 echo "📦 Install github copilot"
 gh extension install github/gh-copilot
 
