@@ -92,12 +92,14 @@ echo "✅ mbsyncrc config written."
 # Emacs service start
 # -----------------------
 echo "📁 Backing up ~/.emacs.d (if any)..."
-[[ -d ~/.emacs.d ]] && mv ~/.emacs.d ~/.emacs.d-bak && echo "✅ Backup created."
+mv ~/.emacs.d ~/.emacs.d-bak
+"✅ Backup created."
 
 echo "🌀 Enabling and starting Emacs systemd service..."
 systemctl enable --now emacs.service
-systemctl start emacs.service
-systemctl status emacs.service --no-pager
+systemctl restart emacs.service
+systemctl status emacs.service
+systemctl stop emacs.service
 echo "✅ Emacs systemd service set up."
 
 # ----------------------------------
