@@ -5,6 +5,10 @@ packages=(
 
     # Printer
     cups system-config-printer foomatic-db foomatic-db-engine ghostscript
+
+    # Nvidia
+    nvidia nvidia-utils nvidia-settings 
+    cuda
     
 )
 
@@ -23,7 +27,6 @@ for pkg in "${packages[@]}"; do
 done
 
 # Setup printer
-
 echo "✅ Enable cups"
 sudo systemctl enable --now cups.service
 
@@ -32,6 +35,13 @@ yay -S --noconfirm brother-dcp-l2510d
 
 echo "✅ Restart cups"
 sudo systemctl restart cups.service
+
+# Setup Nvidia
+echo "✅ Setup Nvidia"
+echo 'export PATH=/opt/cuda/bin:$PATH' >> ~/.zshrc.d/environment.zsh
+echo 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.zshrc.d/environment.zsh
+source ~/.zshrc
+
 
 
 
