@@ -20,6 +20,7 @@ echo "1) Install core dependencies [System, Security, Virtualization, Basic Edit
 echo "2) Install Dev Tools [Docker, Vagrant, K8s, etc.]"
 echo "3) Install as basic editor [LazyVim]"
 echo "4) Install IDE for programming [Doom Emacs]"
+echo "5) Install System Drivers & Firmware"
 echo "x) Exit"
 echo "\n"
 echo -n "Enter your choise: "
@@ -65,6 +66,12 @@ case $choice in
     echo "= = = = = = = = = ="
     echo "Starting installation [Doom Emacs] . . ."
     source ./dependencies/doom-emacs-git.zsh
+    ;;
+5)
+    echo "\n"
+    echo "= = = = = = = = = ="
+    echo "Install System Drivers & Firmware . . ."
+    source ./dependencies/firmware.zsh
     ;;
 *)
     echo "\n"
