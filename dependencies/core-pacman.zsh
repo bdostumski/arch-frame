@@ -12,7 +12,7 @@ sudo pacman -Syu --noconfirm
 # Define packages
 packages=(
     # System Utilities
-    tmux fd less man bat btop htop pydf tldr reflector stow
+    base-devel tmux fd less man bat btop htop pydf tldr reflector stow
     ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
     kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
     ueberzug wine fzf cargo gwenview system-config-printer

@@ -3,6 +3,9 @@
 # Define packages
 packages=(
 
+    # Linux kernel
+    linux-zen linux-zen-headers
+
     # Printer
     cups system-config-printer foomatic-db foomatic-db-engine ghostscript
 
@@ -41,6 +44,10 @@ echo "✅ Setup Nvidia"
 echo 'export PATH=/opt/cuda/bin:$PATH' >> ~/.zshrc.d/environment.zsh
 echo 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.zshrc.d/environment.zsh
 source ~/.zshrc
+
+# System setup
+sudo systemctl enable systemd-oomd --now # Enable the Out-of-Memory daemon for better memory management:
+
 
 
 

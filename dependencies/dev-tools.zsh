@@ -43,10 +43,10 @@ done
 
 # Docker configuration
 echo "🔧 Configuring Docker..."
-sudo systemctl enable --now docker.service
-sudo usermod -aG docker "$USER"
 newgrp docker
 newgrp libvirt
+sudo systemctl enable --now docker.service
+sudo usermod -aG docker "$USER"
 
 # Libvirt configuration
 echo "🔧 Configuring libvirt..."
