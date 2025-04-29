@@ -15,7 +15,7 @@ packages=(
     tmux fd less man bat btop htop pydf tldr reflector stow
     ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
     kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
-    ueberzug wine fzf cargo gwenview
+    ueberzug wine fzf cargo gwenview system-config-printer
 
     # GUI Applications
     virtualbox firefox thunderbird filezilla gimp
@@ -148,12 +148,5 @@ echo "⚙️ Zsh is now your default shell."
 
 # Make all scripts executable
 chmod +x ~/.zshrc.d/functions.d/*.zsh
-
-# Install github copilot
-
-echo "🔧 GitHub Login"
-gh auth login
-echo "📦 Install github copilot"
-gh extension install github/gh-copilot
 
 echo -e "\n🎉 Setup complete. Your system is ready!"
