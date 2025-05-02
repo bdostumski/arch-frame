@@ -13,6 +13,10 @@ sudo pacman -Syu --noconfirm
 
 # Define packages
 packages=(
+
+    # Linux kernel
+    linux-zen linux-zen-headers
+
     # Fonts
     kitty ttf-dejavu ttf-liberation ttf-roboto ttf-ubuntu-font-family noto-fonts
     noto-fonts-emoji noto-fonts-cjk ttf-fira-code ttf-fira-mono ttf-fira-sans

@@ -43,15 +43,16 @@ mkdir -p ~/.config/systemd/user
 
 cat <<EOF >~/.config/systemd/user/emacs.service
 [Unit]
-Description=Emacs text editor
+Description=Emacs text editor (daemon)
 Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+After=default.target
 
 [Service]
 Type=forking
 ExecStart=/usr/bin/emacs --daemon
 ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
-Environment=SSH_AUTH_SOCK=%t/keyring/ssh
 Restart=on-failure
+Environment=SSH_AUTH_SOCK=%t/keyring/ssh
 
 [Install]
 WantedBy=default.target
@@ -96,10 +97,9 @@ mv ~/.emacs.d ~/.emacs.d-bak
 "✅ Backup created."
 
 echo "🌀 Enabling and starting Emacs systemd service..."
-systemctl enable --now emacs.service
-systemctl restart emacs.service
-systemctl status emacs.service
-systemctl stop emacs.service
+systemctl --user daemon-reexec
+systemctl --user daemon-reload
+systemctl --user enable --now emacs.service
 echo "✅ Emacs systemd service set up."
 
 # ----------------------------------

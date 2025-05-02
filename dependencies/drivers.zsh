@@ -3,9 +3,6 @@
 # Define packages
 packages=(
 
-    # Linux kernel
-    linux-zen linux-zen-headers
-
     # Printer
     cups system-config-printer foomatic-db foomatic-db-engine ghostscript
 
