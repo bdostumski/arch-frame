@@ -13,8 +13,7 @@ sudo pacman -Syu --noconfirm
 
 # 📦 DevOps tools from official repos
 official_packages=(
-    docker terraform ansible
-    minikube kubeadm kubectl
+    docker ansible minikube kubeadm kubectl
     containerd helm virtualbox
 )
 
@@ -43,24 +42,24 @@ done
 
 # Docker configuration
 echo "🔧 Configuring Docker..."
-newgrp docker
-newgrp libvirt
 sudo systemctl enable --now docker.service
 sudo usermod -aG docker "$USER"
 
 # Libvirt configuration
-echo "🔧 Configuring libvirt..."
+echo "🔧 Configuring Libvirt..."
 sudo systemctl enable --now libvirtd
 sudo usermod -aG libvirt "$USER"
 
 # Minikube setup
-echo "🚀 Starting Minikube..."
-minikube start --driver=docker || echo "⚠️ Minikube failed to start. Check Docker permissions."
+echo "🔧 Configuring MiniKube..."
+minikube start --driver=docker 
 
 # Helm repo setup (check if already added)
 echo "🎯 Adding Helm repo..."
 helm repo add bitnami https://charts.bitnami.com/bitnami
 echo "✅ Added Helm repo: bitnami"
+
+echo "📦 Should install terraform manually"
 
 # Completion message
 echo -e "\n🎉 All DevOps tools installed and configured successfully!"

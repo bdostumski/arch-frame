@@ -71,7 +71,7 @@ case $choice in
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Install System Drivers & Firmware . . ."
-    source ./dependencies/firmware.zsh
+    source ./dependencies/drivers.zsh
     ;;
 *)
     echo "\n"
