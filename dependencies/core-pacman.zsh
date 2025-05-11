@@ -15,11 +15,12 @@ packages=(
     base-devel tmux fd less man bat btop htop pydf tldr reflector stow
     ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
     kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
-    ueberzug wine fzf cargo gwenview system-config-printer
+    ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
 
     # GUI Applications
-    virtualbox firefox thunderbird filezilla gimp
+    virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
     libreoffice dbeaver steam discord obs-studio kdenlive gparted vlc
+    qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libvirt edk2-ovmf
 
     # Development Tools
     vim neovim emacs make gcc clang cmake direnv maven gradle nodejs npm yarn
@@ -58,6 +59,11 @@ if [[ -d "dotfiles" ]]; then
 else
     echo "❌ Dotfiles directory not found. Skipping dotfile setup."
 fi
+
+systemctl enable --now libvirtd
+sudo usermod -aG libvirt $(whoami)
+systemctl start libvirtd
+systemctl enable vboxservice.service
 
 # VBox drivers (only if using VirtualBox with Vagrant)
 if lsmod | grep -q vboxdrv; then
