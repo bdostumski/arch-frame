@@ -13,11 +13,11 @@ sudo pacman -Syu --noconfirm
 
 # 📦 DevOps tools from official repos
 official_packages=(
-    docker ansible minikube kubeadm kubectl
-    containerd helm virtualbox
+    docker docker-machine docker-compose ansible minikube kubeadm kubectl
+    containerd helm 
 )
 
-echo "📥 Installing DevOps tools (official repos)..."
+echo "📥 Installing DevOps tools (official repos)...":
 sudo pacman -S --needed --noconfirm "${official_packages[@]}"
 
 # 📦 DevOps tools from AUR

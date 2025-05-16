@@ -17,24 +17,6 @@ fi
 
 # -------------------------------------
 # Dotfiles
-# -------------------------------------
-echo "💾 Copying main config file to home root directory..."
-if [[ -d "dotfiles" ]]; then
-    backup_and_copy ~/.zshrc.d/config.d/doom ~/.config/doom
-else
-    echo "❌ Dotfiles directory not found. Skipping dotfile setup."
-fi
-
-mkdir -p ~/Documents/org/roam/
-
-echo "🔧 Installing Doom Emacs..."
-~/.config/emacs/bin/doom install
-
-echo "🔄 Syncing Doom Emacs profiles..."
-~/.config/emacs/bin/doom profile sync --all
-~/.config/emacs/bin/doom sync --rebuild
-echo "✅ Doom profiles synced and rebuilt."
-
 # -------------------------
 # Create systemd service
 # -------------------------
@@ -114,5 +96,23 @@ if [[ ! -f "/usr/lib/libtree-sitter.so.0.24" && -f "/usr/lib/libtree-sitter.so" 
 else
     echo "✅ libtree-sitter already properly linked or missing entirely."
 fi
+
+# -------------------------------------
+#echo "💾 Copying main config file to home root directory..."
+if [[ -d "dotfiles" ]]; then
+    backup_and_copy ~/.zshrc.d/config.d/doom ~/.config/doom
+else
+    echo "❌ Dotfiles directory not found. Skipping dotfile setup."
+fi
+
+mkdir -p ~/Documents/doom/org/roam/
+
+echo "🔧 Installing Doom Emacs..."
+~/.config/emacs/bin/doom install
+
+echo "🔄 Syncing Doom Emacs profiles..."
+~/.config/emacs/bin/doom profile sync --all
+~/.config/emacs/bin/doom sync --rebuild
+echo "✅ Doom profiles synced and rebuilt."
 
 echo "\n🎉 Setup complete!"

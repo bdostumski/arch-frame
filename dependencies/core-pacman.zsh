@@ -16,6 +16,7 @@ packages=(
     ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
     kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
     ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
+    direnv sqlite
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp

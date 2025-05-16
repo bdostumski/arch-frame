@@ -20,7 +20,7 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k # powerlevel10k - prompt th
 # gh extension install github/gh-copilot
 
 # Add a comment to stop github copilot for terminal
-zinit light loiccoyle/zsh-github-copilot # github copilot
+# zinit light loiccoyle/zsh-github-copilot # github copilot
 
 # -----------------
 # COMPLETIONS - USE TABKEY TO COMPLETE COMMANDS AND OPTIONS
