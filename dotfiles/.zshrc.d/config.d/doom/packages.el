@@ -47,3 +47,37 @@
 ;; (unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
+
+;; IntelliSense and code intelligence
+(package! lsp-ui)
+(package! lsp-treemacs)
+(package! dap-mode)
+
+;; Treesitter for highlighting
+(package! tree-sitter)
+(package! tree-sitter-langs)
+
+;; IntelliJ-like icons and visuals
+(package! all-the-icons-dired)
+(package! treemacs-all-the-icons)
+
+;; Java and language tools
+(package! lsp-java)
+(package! gradle-mode)
+(package! maven-test-mode)
+(package! groovy-mode)
+
+;; Optional: if you use Kotlin
+(package! kotlin-mode)
+
+;; Snippet collections
+(package! yasnippet-snippets)
+
+;; Running and testing
+(package! test-simple)
+
+(package! graphql-mode)
+
+(package! exec-path-from-shell)
+
+(package! copilot :recipe (:host github :repo "zerolfx/copilot.el"))

@@ -8,6 +8,18 @@
 (setq user-full-name "Borislav Dostumski"
       user-mail-address "b.dostumski@gmail.com")
 
+;; yast snippets
+(setq yas-snippet-dirs
+      '("~/.config/emacs/snippets"))
+
+;; Auto install missing packages
+(setq use-package-always-ensure t)
+
+;; Enable projecticle for main workspace directory
+(setq projectile-project-search-path '("~/Workspace/"))
+;; Auto-discover projects
+(setq projectile-auto-discover t)
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
@@ -30,3 +42,12 @@
 ;; It shows the file system outlines of your projects in a simple tree layout allowing quick navigation and exploration, while also possessing basic file management utilities.
 (load! "packages/ui/treemacs.el")
 
+;; Languages
+;; Java, Maven, Lombok setup
+(load! "packages/lang/java.el")
+
+;; JavaScript setup
+(load! "packages/lang/javascript.el")
+
+;; Mu4e mail setup
+(load! "packages/email/mu4e.el")
