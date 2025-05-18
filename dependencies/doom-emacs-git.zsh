@@ -44,7 +44,8 @@ echo "✅ Emacs systemd service created."
 
 echo "💾 Create ~/.authinfo file..."
 cat <<EOF >~/.authinfo
-machine smtp.gmail.com login b.dostumski@gmail.com password your_app_password port 587
+machine imap.gmail.com login b.dostumski@gmail.com password your_password  port 993
+machine smtp.gmail.com login b.dostumski@gmail.com password  port 587
 EOF
 echo "✅ Please edit ~/.authinfo file with your own data."
 
@@ -57,23 +58,27 @@ IMAPAccount gmail
 Host imap.gmail.com
 User b.dostumski@gmail.com
 PassCmd "gpg -q --for-your-eyes-only --no-tty -d ~/.mailpw.gpg"
-SSLType IMAPS
+TLSType IMAPS
 AuthMechs LOGIN
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore gmail-remote
 Account gmail
 
 MaildirStore gmail-local
-Path ~/Documents/doom/mail/gmail/
-Inbox ~/Documents/doom/mail/gmail/Inbox
-Flatten .
+Path /home/dostumski/Documents/doom/mail/gmail/
+Inbox /home/dostumski/Documents/doom/mail/gmail/INBOX/
+SubFolders Verbatim
 
 Channel gmail
-Far :gmail-remote:
-Near :gmail-local:
+Far :gmail-remote:*
+Near :gmail-local:*
 Patterns *
-Create Near
-Sync All
+Create Both
+SyncState *
+
+Group gmail
+Channel gmail
 EOF
 
 echo "✅ mbsyncrc config written."
@@ -86,6 +91,9 @@ gpg --full-generate-key
 
 echo "🔐 Encrypt .authinfo with GPG"
 gpg -e -r b.dostumski@gmail.com ~/.authinfo
+
+mu init --maildir=~/Documents/doom/mail/gmail/ --my-address=b.dostumski@gmail.com
+mu index
 
 # -----------------------
 # Emacs service start
