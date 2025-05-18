@@ -22,8 +22,9 @@ sudo pacman -S --needed --noconfirm "${official_packages[@]}"
 
 # 📦 DevOps tools from AUR
 aur_packages=(
-    vagrant docker-compose
-    vagrant-libvirt qemu libvirt virt-manager
+    grip
+    docker-compose dockfmt
+    vagrant vagrant-libvirt qemu libvirt virt-manager
     ebtables-nft dnsmasq
 )
 

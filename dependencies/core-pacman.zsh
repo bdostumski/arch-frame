@@ -16,7 +16,9 @@ packages=(
     ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
     kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
     ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
-    direnv sqlite
+    direnv sqlite jq wl-clipboard graphviz gnuplot maim scrot plantuml
+    shfmt shellcheck tidy stylelint isync xorg-xwininfo msmtp gnupg w3m
+    haveged
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
@@ -24,7 +26,7 @@ packages=(
     qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libvirt edk2-ovmf
 
     # Development Tools
-    vim neovim emacs make gcc clang cmake direnv maven gradle nodejs npm yarn
+    vim neovim emacs make gcc clang cmake direnv maven gradle nodejs npm yarn spring
     jdk17-openjdk go ruby rust luarocks cabal-install kotlin clojure lighttpd php composer
 )
 
@@ -61,6 +63,7 @@ else
     echo "❌ Dotfiles directory not found. Skipping dotfile setup."
 fi
 
+systemctl enable --now haveged
 systemctl enable --now libvirtd
 sudo usermod -aG libvirt $(whoami)
 systemctl start libvirtd

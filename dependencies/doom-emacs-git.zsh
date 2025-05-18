@@ -42,6 +42,12 @@ EOF
 
 echo "✅ Emacs systemd service created."
 
+echo "💾 Create ~/.authinfo file..."
+cat <<EOF >~/.authinfo
+machine smtp.gmail.com login b.dostumski@gmail.com password your_app_password port 587
+EOF
+echo "✅ Please edit ~/.authinfo file with your own data."
+
 # -------------------------------
 # Create basic mbsyncrc config
 # -------------------------------
@@ -49,27 +55,37 @@ echo "💾 Writing mbsyncrc config..."
 cat <<EOF >~/.mbsyncrc
 IMAPAccount gmail
 Host imap.gmail.com
-User your@gmail.com
-PassCmd "gpg -q --for-your-eyes-only --no-tty -d ~/.authinfo.gpg"
+User b.dostumski@gmail.com
+PassCmd "gpg -q --for-your-eyes-only --no-tty -d ~/.mailpw.gpg"
 SSLType IMAPS
+AuthMechs LOGIN
 
 IMAPStore gmail-remote
 Account gmail
 
 MaildirStore gmail-local
-Path ~/.mail/gmail/
-Inbox ~/.mail/gmail/INBOX
+Path ~/Documents/doom/mail/gmail/
+Inbox ~/Documents/doom/mail/gmail/Inbox
+Flatten .
 
 Channel gmail
-Master :gmail-remote:
-Slave :gmail-local:
+Far :gmail-remote:
+Near :gmail-local:
 Patterns *
-Create Both
+Create Near
 Sync All
-Expunge Both
 EOF
 
 echo "✅ mbsyncrc config written."
+
+# -----------------------
+# GPG encryption
+# -----------------------
+echo "🔒 Generate a GPG key..."
+gpg --full-generate-key
+
+echo "🔐 Encrypt .authinfo with GPG"
+gpg -e -r b.dostumski@gmail.com ~/.authinfo
 
 # -----------------------
 # Emacs service start
@@ -105,6 +121,7 @@ else
     echo "❌ Dotfiles directory not found. Skipping dotfile setup."
 fi
 
+mkdir -p ~/Documents/doom/mail/gmail/{cur,new,tpm,Sent,Trash,Drafts,Archive}
 mkdir -p ~/Documents/doom/org/roam/
 
 echo "🔧 Installing Doom Emacs..."

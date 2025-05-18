@@ -27,6 +27,8 @@ packages=(
     haskell-language-server
     # Java IDE
     intellij-idea-community-edition
+    # Other
+    js-beautify mu lombok-common
 )
 
 echo "\n🔧 Starting installation of AUR packages...\n"
