@@ -28,7 +28,7 @@ packages=(
     # Java IDE
     intellij-idea-community-edition
     # Other
-    js-beautify mu lombok-common
+    js-beautify mu lombok-common auto-cpufreq
 )
 
 echo "\n🔧 Starting installation of AUR packages...\n"

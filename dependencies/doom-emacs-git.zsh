@@ -53,33 +53,47 @@ echo "✅ Please edit ~/.authinfo file with your own data."
 # Create basic mbsyncrc config
 # -------------------------------
 echo "💾 Writing mbsyncrc config..."
-cat <<EOF >~/.mbsyncrc
-IMAPAccount gmail
-Host imap.gmail.com
-User b.dostumski@gmail.com
-PassCmd "gpg -q --for-your-eyes-only --no-tty -d ~/.mailpw.gpg"
-TLSType IMAPS
-AuthMechs LOGIN
-CertificateFile /etc/ssl/certs/ca-certificates.crt
+cat <<EOF >~/.offlineimaprc
+[general]
+accounts = Gmail
+maxsyncaccounts = 3
 
-IMAPStore gmail-remote
-Account gmail
+[Account Gmail]
+localrepository = Local
+remoterepository = Remote
 
-MaildirStore gmail-local
-Path /home/dostumski/Documents/doom/mail/gmail/
-Inbox /home/dostumski/Documents/doom/mail/gmail/INBOX/
-SubFolders Verbatim
+[Repository Local]
+type = Maildir
+localfolders = ~/Maildir
 
-Channel gmail
-Far :gmail-remote:*
-Near :gmail-local:*
-Patterns *
-Create Both
-SyncState *
-
-Group gmail
-Channel gmail
+[Repository Remote]
+type = IMAP
+remotehost = imap.gmail.com
+remoteuser = YOUR_EMAIL
+remotepass = YOUR_PASSWORD
+ssl = yes
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+maxconnections = 1
 EOF
+
+cat <<EOF >~/.msmtprc
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+
+account Gmail
+host smtp.gmail.com
+port 587
+from YOUR_EMAIL
+user YOUR_EMAIL
+password YOUR_PASSWORD
+
+account default : Gmail
+EOF
+
+chmod 600 ~/.offlineimap
+chmod 600 ~/.msmtprc
 
 echo "✅ mbsyncrc config written."
 
@@ -89,10 +103,17 @@ echo "✅ mbsyncrc config written."
 echo "🔒 Generate a GPG key..."
 gpg --full-generate-key
 
+echo "🔒 Register your mail clien..."
+firefox https://support.google.com/accounts/answer/185833
+
+echo "🔐 Setup username and password (password should be without spaces generated from google) in .offlineimaprc "
+vim ~/.offlineimaprc
+
 echo "🔐 Encrypt .authinfo with GPG"
+vim ~/.authinfo
 gpg -e -r b.dostumski@gmail.com ~/.authinfo
 
-mu init --maildir=~/Documents/doom/mail/gmail/ --my-address=b.dostumski@gmail.com
+mu init --maildir=~/Maildir --my-address=b.dostumski@gmail.com
 mu index
 
 # -----------------------
@@ -129,7 +150,7 @@ else
     echo "❌ Dotfiles directory not found. Skipping dotfile setup."
 fi
 
-mkdir -p ~/Documents/doom/mail/gmail/{cur,new,tpm,Sent,Trash,Drafts,Archive}
+mkdir -p ~/Maildir
 mkdir -p ~/Documents/doom/org/roam/
 
 echo "🔧 Installing Doom Emacs..."

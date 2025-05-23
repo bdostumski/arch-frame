@@ -1,57 +1,77 @@
-(after! mu4e
-  (setq
-   ;; Maildir root directory - point directly to the 'gmail' subfolder
-   mu4e-maildir (expand-file-name "~/Documents/doom/mail/gmail")
+(require 'mu4e)
 
-   ;; Folder names inside the maildir - case sensitive
-   mu4e-inbox-folder "/INBOX"
-   mu4e-sent-folder "/Sent"
-   mu4e-drafts-folder "/Drafts"
-   mu4e-trash-folder "/Trash"
-   mu4e-refile-folder "/Archive"
+;; Use mu4e for e-mail in emacs
+(setq mail-user-agent 'mu4e-user-agent)
 
-   ;; Command to fetch mail (mbsync syncs all accounts)
-   mu4e-get-mail-command "mbsync -a"
+(setq mu4e-drafts-folder "/[Gmail].Drafts")
+(setq mu4e-sent-folder   "/[Gmail].Sent Mail")
+(setq mu4e-trash-folder  "/[Gmail].Trash")
 
-   ;; Update interval for mail index in seconds (5 minutes)
-   mu4e-update-interval 300
-   mu4e-index-update-inhibit nil
+;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+(setq mu4e-sent-messages-behavior 'delete)
 
-   ;; Viewing settings
-   mu4e-view-show-images t
-   mu4e-view-show-addresses t
+;; (See the documentation for `mu4e-sent-messages-behavior' if you have
+;; additional non-Gmail addresses and want assign them different
+;; behavior.)
 
-   ;; Composing settings
-   mu4e-compose-format-flowed t
-   mu4e-compose-signature-auto-include t
+;; setup some handy shortcuts
+;; you can quickly switch to your Inbox -- press ``ji''
+;; then, when you want archive some messages, move them to
+;; the 'All Mail' folder by pressing ``ma''.
 
-   ;; Your identity
-   user-full-name "Borislav Dostumski"
+(setq mu4e-maildir-shortcuts
+    '( (:maildir "/INBOX"              :key ?i)
+       (:maildir "/[Gmail].Sent Mail"  :key ?s)
+       (:maildir "/[Gmail].Trash"      :key ?t)
+       (:maildir "/[Gmail].All Mail"   :key ?a)))
+
+(add-to-list 'mu4e-bookmarks
+    ;; ':favorite t' i.e, use this one for the modeline
+   '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
+
+;; allow for updating mail using 'U' in the main view:
+(setq mu4e-get-mail-command "offlineimap")
+
+;; something about ourselves
+(setq
    user-mail-address "b.dostumski@gmail.com"
-   mu4e-user-mail-address-list '("b.dostumski@gmail.com")
+   user-full-name  "Borislav Dostumski"
+   message-signature
+    (concat
+      "Borislav Dostumski\n"
+      "http://www.github.com/bdostumski\n"))
 
-   ;; Make mu4e rename files when moving (avoids copy+delete)
-   mu4e-change-filenames-when-moving t
+;; sending mail -- replace USERNAME with your gmail username
+;; also, make sure the gnutls command line utils are installed
+;; package 'gnutls-bin' in Debian/Ubuntu
 
-   ;; Maildir shortcuts for quick navigation in mu4e
-   mu4e-maildir-shortcuts
-   '(("/INBOX"    . ?i)
-     ("/Sent"     . ?s)
-     ("/Drafts"   . ?d)
-     ("/Trash"    . ?t)
-     ("/Archive"  . ?a))))
+(require 'smtpmail)
+;;(setq message-send-mail-function 'smtpmail-send-it
+;;   starttls-use-gnutls t
+;;   smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+;;   smtpmail-auth-credentials
+;;     '(("smtp.gmail.com" 587 "USERNAME@gmail.com" nil))
+;;   smtpmail-default-smtp-server "smtp.gmail.com"
+;;   smtpmail-smtp-server "smtp.gmail.com"
+;;   smtpmail-smtp-service 587)
 
-;; Use w3m to render HTML mails
-(setq mu4e-html2text-command "w3m -T text/html")
+;; alternatively, for emacs-24 you can use:
+;;(setq message-send-mail-function 'smtpmail-send-it
+;;      smtpmail-stream-type 'starttls
+;;      smtpmail-default-smtp-server "smtp.gmail.com"
+;;      smtpmail-smtp-server "smtp.gmail.com"
+;;      smtpmail-smtp-service 587)
 
-;; Configure sending mail using msmtp
 (setq sendmail-program "/usr/bin/msmtp"
-      message-send-mail-function 'message-send-mail-with-sendmail
       message-sendmail-f-is-evil t
-      message-sendmail-extra-arguments '("--read-envelope-from"))
+      message-sendmail-extra-arguments '("--read-envelope-from")
+      mail-specify-envelope-from t
+      mail-envelope-from 'header
+      message-send-mail-function 'message-send-mail-with-sendmail)
 
-;; Auth sources for msmtp and IMAP (encrypted credentials)
-(setq auth-sources '("~/.authinfo.gpg"))
+;; (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo"))
 
-;; Enable signing outgoing mail with your GPG key
-(setq mml-secure-openpgp-sign-with-sender t)
+(setq mu4e-maildir "~/Maildir")
+
+;; don't keep message buffers around
+(setq message-kill-buffer-on-exit t)

@@ -10,7 +10,7 @@
 
 ;; yast snippets
 (setq yas-snippet-dirs
-      '("~/.config/emacs/snippets"))
+      '("~/.config/doom/snippets"))
 
 ;; Auto install missing packages
 (setq use-package-always-ensure t)

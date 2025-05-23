@@ -17,7 +17,7 @@ packages=(
     kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
     ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
     direnv sqlite jq wl-clipboard graphviz gnuplot maim scrot plantuml
-    shfmt shellcheck tidy stylelint isync xorg-xwininfo msmtp gnupg w3m
+    shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
     haveged
 
     # GUI Applications
