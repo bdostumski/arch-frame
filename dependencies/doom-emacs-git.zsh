@@ -42,17 +42,10 @@ EOF
 
 echo "✅ Emacs systemd service created."
 
-echo "💾 Create ~/.authinfo file..."
-cat <<EOF >~/.authinfo
-machine imap.gmail.com login b.dostumski@gmail.com password your_password  port 993
-machine smtp.gmail.com login b.dostumski@gmail.com password  port 587
-EOF
-echo "✅ Please edit ~/.authinfo file with your own data."
-
 # -------------------------------
-# Create basic mbsyncrc config
+# Create basic offlinemaprc IMAP config
 # -------------------------------
-echo "💾 Writing mbsyncrc config..."
+echo "💾 Writing offlineimaprc config..."
 cat <<EOF >~/.offlineimaprc
 [general]
 accounts = Gmail
@@ -76,6 +69,12 @@ sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 maxconnections = 1
 EOF
 
+chmod 600 ~/.offlineimap
+echo "✅ offlineimap config written."
+
+# -------------------------------
+# Create basic msmtprc SMTP config
+# -------------------------------
 cat <<EOF >~/.msmtprc
 defaults
 auth           on
@@ -92,10 +91,8 @@ password YOUR_PASSWORD
 account default : Gmail
 EOF
 
-chmod 600 ~/.offlineimap
 chmod 600 ~/.msmtprc
-
-echo "✅ mbsyncrc config written."
+echo "✅ msmtprc config written."
 
 # -----------------------
 # GPG encryption
@@ -109,9 +106,8 @@ firefox https://support.google.com/accounts/answer/185833
 echo "🔐 Setup username and password (password should be without spaces generated from google) in .offlineimaprc "
 vim ~/.offlineimaprc
 
-echo "🔐 Encrypt .authinfo with GPG"
-vim ~/.authinfo
-gpg -e -r b.dostumski@gmail.com ~/.authinfo
+echo "🔐 Setup username and password (password should be without spaces generated from google) in .msmtprc "
+vim ~/.msmtprc
 
 mu init --maildir=~/Maildir --my-address=b.dostumski@gmail.com
 mu index
