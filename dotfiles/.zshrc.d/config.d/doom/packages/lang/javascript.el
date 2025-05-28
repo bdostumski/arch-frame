@@ -1,15 +1,24 @@
 ;;; packages/lang/javascript.el -*- lexical-binding: t; -*-
 
-;; Projectile project path
-(after! projectile
-  (setq projectile-project-search-path '("~/Workspace/")))
+;;; packages/lang/javascript.el -*- lexical-binding: t; -*-
+;; ... projectile config ...
 
-;; Configure prettier and eslint in apheleia to use local binaries first
+;; Helper for local node binaries
+(defun local-node-bin (bin)
+  "Return path to local BIN (from node_modules/.bin) if it exists, else just BIN."
+  (let* ((root (or (locate-dominating-file default-directory "node_modules/.bin/")
+                   (projectile-project-root)
+                   default-directory))
+         (local-bin (expand-file-name (concat "node_modules/.bin/" bin) root)))
+    (if (and local-bin (file-exists-p local-bin))
+        local-bin
+      bin)))
+
 (after! apheleia
   (setq apheleia-formatters
         (append
-         `((prettier . (, (local-node-bin "prettier") "--stdin-filepath" filepath))
-           (eslint . (, (local-node-bin "eslint") "--fix" "--stdin" "--stdin-filename" filepath)))
+         `((prettier . (,(local-node-bin "prettier") "--stdin-filepath" filepath))
+           (eslint . (,(local-node-bin "eslint") "--fix" "--stdin" "--stdin-filename" filepath)))
          apheleia-formatters))
 
   (set-formatter! 'javascript-mode 'prettier)

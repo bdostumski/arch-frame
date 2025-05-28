@@ -71,6 +71,7 @@
 
 ;; (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo"))
 
+;; Mu4e mail directory
 (setq mu4e-maildir "~/Maildir")
 
 ;; don't keep message buffers around
