@@ -81,3 +81,5 @@ eval "$(pyenv init -)"
 # ----------
 # Export path
 export PATH
+export PATH=/opt/cuda/bin:$PATH
+export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH

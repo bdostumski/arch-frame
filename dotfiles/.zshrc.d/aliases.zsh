@@ -21,10 +21,11 @@ alias emacs-kill="killall emacs || echo 'Emacs server not running'; /usr/bin/ema
 # SHELL COMMANDS
 # -----------------
 # external applications
-alias help='tldr'                      # help with examples
-alias zsh-source='source $HOME/.zshrc' # source zsh
-alias zsh-theme='p10k configure'       # configure p10k theme
-alias templates="templates"            # file templates for git, docker, kubernetes, vagrant etc.
+alias help='tldr'                                              # help with examples
+alias zsh-source='source $HOME/.zshrc'                         # source zsh
+alias config-source='~/.zshrc.d/functions.d/config-update.zsh' # update configuration files
+alias zsh-theme='p10k configure'                               # configure p10k theme
+alias templates="templates"                                    # file templates for git, docker, kubernetes, vagrant etc.
 # ----------
 # TUI applications
 alias rr='ranger_cd' # change the current working directory after closing ranger

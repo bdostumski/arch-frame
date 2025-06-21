@@ -50,7 +50,7 @@
 (load! "packages/lang/javascript.el")
 
 ;; Mu4e mail setup
-(load! "packages/email/mu4e.el")
+;;(load! "packages/email/mu4e.el")
 
 ;; Calendar connected with google
 (load! "packages/app/calendar.el")

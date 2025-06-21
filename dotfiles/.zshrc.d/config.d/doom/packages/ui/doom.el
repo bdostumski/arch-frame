@@ -21,7 +21,10 @@
 ;;    doom-tomorrow-night: by Chris Kempson.
 ;;
 ;; This can be changed by changing the doom-theme variable, e.g. )
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-nord)
+
+;; Remove titlebar
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 ;; core/core-ui.el has four relevant variables:
 ;;

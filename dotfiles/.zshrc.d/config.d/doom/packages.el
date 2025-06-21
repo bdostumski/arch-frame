@@ -1,4 +1,4 @@
-;; -*- no-byte-compile: t; -*-
+
 ;;; $DOOMDIR/packages.el
 
 ;; To install a package with Doom you must declare them here and run 'doom sync'
@@ -58,9 +58,14 @@
 (package! tree-sitter)
 (package! tree-sitter-langs)
 
+;; Dired
+(package! all-the-icons)
+
 ;; IntelliJ-like icons and visuals
 (package! all-the-icons-dired)
 (package! treemacs-all-the-icons)
+(package! treemacs)
+(package! treemacs-icons-dired)
 
 ;; Java and language tools
 (package! lsp-java)

@@ -100,8 +100,8 @@ echo "✅ msmtprc config written."
 echo "🔒 Generate a GPG key..."
 gpg --full-generate-key
 
-echo "🔒 Register your mail clien..."
-firefox https://support.google.com/accounts/answer/185833
+#e cho "🔒 Register your mail clien..."
+# firefox https://support.google.com/accounts/answer/185833
 
 echo "🔐 Setup username and password (password should be without spaces generated from google) in .offlineimaprc "
 vim ~/.offlineimaprc
