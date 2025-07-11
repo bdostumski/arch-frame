@@ -18,7 +18,7 @@ packages=(
     ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
     direnv sqlite jq wl-clipboard graphviz gnuplot maim scrot plantuml
     shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
-    haveged
+    haveged man man-pages man-db
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
