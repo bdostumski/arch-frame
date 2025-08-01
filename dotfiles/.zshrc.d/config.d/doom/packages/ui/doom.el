@@ -21,7 +21,7 @@
 ;;    doom-tomorrow-night: by Chris Kempson.
 ;;
 ;; This can be changed by changing the doom-theme variable, e.g. )
-(setq doom-theme 'doom-nord)
+(setq doom-theme 'doom-wilmersdorf)
 
 ;; Remove titlebar
 (add-to-list 'default-frame-alist '(undecorated . t))

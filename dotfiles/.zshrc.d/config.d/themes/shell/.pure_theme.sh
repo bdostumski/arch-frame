@@ -28,7 +28,7 @@
 [[ ! -o 'no_brace_expand' ]] || p10k_config_opts+=('no_brace_expand')
 'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
 
-() {
+function() {
   emulate -L zsh -o extended_glob
 
   # Unset all configuration options.
@@ -49,13 +49,13 @@
   # Left prompt segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
-    # context                 # user@host
+    #context                  # user@host
     dir                       # current directory
     vcs                       # git status
     # command_execution_time  # previous command duration
     # =========================[ Line #2 ]=========================
     newline                   # \n
-    # virtualenv              # python virtual environment
+    virtualenv                # python virtual environment
     prompt_char               # prompt symbol
   )
 
@@ -65,7 +65,7 @@
     command_execution_time    # previous command duration
     virtualenv                # python virtual environment
     context                   # user@host
-    # time                    # current time
+    time                      # current time
     # =========================[ Line #2 ]=========================
     newline                   # \n
   )
@@ -144,6 +144,7 @@
   typeset -g POWERLEVEL9K_VCS_DIRTY_ICON='*'
   # Show '⇣' if local branch is behind remote.
   typeset -g POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON=':⇣'
+
   # Show '⇡' if local branch is ahead of remote.
   typeset -g POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON=':⇡'
   # Don't show the number of commits next to the ahead/behind arrows.
@@ -152,9 +153,9 @@
   typeset -g POWERLEVEL9K_VCS_CONTENT_EXPANSION='${${${P9K_CONTENT/⇣* :⇡/⇣⇡}// }//:/ }'
 
   # Grey current time.
-  typeset -g POWERLEVEL9K_TIME_FOREGROUND=$grey
+  typeset -g POWERLEVEL9K_TIME_FOREGROUND=$blue
   # Format for the current time: 09:51:02. See `man 3 strftime`.
-  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
+  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S} '
   # If set to true, time will update when you hit enter. This way prompts for the past
   # commands will contain the start times of their commands rather than the end times of
   # their preceding commands.
