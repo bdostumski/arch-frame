@@ -41,6 +41,7 @@
           treemacs-read-string-input               'from-child-frame
           treemacs-recenter-distance               0.1
           treemacs-recenter-after-file-follow      nil
+          treemacs-follow-mode                     t
           treemacs-recenter-after-tag-follow       nil
           treemacs-recenter-after-project-jump     'always
           treemacs-recenter-after-project-expand   'on-distance
@@ -54,6 +55,11 @@
           treemacs-select-when-already-in-treemacs 'move-back
           treemacs-space-between-root-nodes        t
           treemacs-tag-follow-cleanup              t
+          treemacs-toggle-show-dotfiles            t
+          treemacs-fringe-indicator-mode           'always
+          treemacs-filewatch-mode                  t
+          treemacs-git-commit-diff-mode            t
+          treemacs-indicate-top-scroll-mode        t
           treemacs-tag-follow-delay                1.5
           treemacs-text-scale                      nil
           treemacs-user-mode-line-format           nil
@@ -67,12 +73,6 @@
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
     ;;(treemacs-resize-icons 44)
-
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (treemacs-fringe-indicator-mode 'always)
-    (when treemacs-python-executable
-      (treemacs-git-commit-diff-mode t))
 
     (pcase (cons (not (null (executable-find "git")))
                  (not (null treemacs-python-executable)))
