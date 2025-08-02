@@ -5,8 +5,8 @@
 # Usage: find-dir <search dir>
 #
 
-find_dir() {
-  fd -g -H -t d "$1" |
+function find_dir() {
+  fd -g -H -t d "${1}" |
     fzf --preview "lsd -al --color=auto {}" \
       --bind "enter:execute(nvim {})"
 }

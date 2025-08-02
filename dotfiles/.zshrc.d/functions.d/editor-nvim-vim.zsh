@@ -5,11 +5,11 @@
 # Example: if nvim exists then use nvim, else vim
 #
 
-editor_nvim_vim() {
+function editor_nvim_vim() {
     if command -v nvim >/dev/null 2>&1; then
-        nvim "$@"
+        nvim "${@}"
     elif command -v vim >/dev/null 2>&1; then
-        vim "$@"
+        vim "${@}"
     else
         echo "No suitable editor (lvim, nvim, or vim) found in PATH." >&2
         exit 1

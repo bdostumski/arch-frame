@@ -21,11 +21,11 @@ alias emacs-kill="killall emacs || echo 'Emacs server not running'; /usr/bin/ema
 # SHELL COMMANDS
 # -----------------
 # external applications
-alias help='tldr'                                              # help with examples
-alias zsh-source='source $HOME/.zshrc'                         # source zsh
-alias config-source='~/.zshrc.d/functions.d/config-update.zsh' # update configuration files
-alias zsh-theme='p10k configure'                               # configure p10k theme
-alias templates="templates"                                    # file templates for git, docker, kubernetes, vagrant etc.
+alias help='tldr'                                                    # help with examples
+alias zsh-source='source ${HOME}/.zshrc'                             # source zsh
+alias config-source='${HOME}/.zshrc.d/functions.d/config-update.zsh' # update configuration files
+alias zsh-theme='p10k configure'                                     # configure p10k theme
+alias templates="templates"                                          # file templates for git, docker, kubernetes, vagrant etc.
 # ----------
 # TUI applications
 alias rr='ranger_cd' # change the current working directory after closing ranger
@@ -124,7 +124,7 @@ alias g='git' # g for git it is good combination with .gitconfig aliases
 alias log='git log --oneline --graph --decorate | bat --paging=always --language=gitlog'
 alias logall='git log --graph --decorate | bat --paging=always --language=gitlog'
 alias logfull='git log --graph --decorate --full-history | bat --paging=always --language=gitlog'
-alias logauthor='function_logauthor() { git log --graph --decorate --full-history --author="$1" | bat --paging=always --language=gitlog }; function_logauthor'
+alias logauthor='function_logauthor() { git log --graph --decorate --full-history --author="${1}" | bat --paging=always --language=gitlog }; function_logauthor'
 # ----------
 # github cli aliases
 alias copilot='gh copilot'
@@ -209,10 +209,10 @@ alias ufw-mail-allow="sudo ufw allow 25,465,587,143,993,110,995/tcp"
 alias ufw-mail-status="sudo ufw status | grep -E '25|465|587|143|993|110|995'"
 alias ufw-mail-deny="sudo ufw deny 25,465,587,143,993,110,995/tcp"
 # clamav linux antivirus
-alias clamscan-home="clamscan -r --bell -i /home/$USER"
+alias clamscan-home="clamscan -r --bell -i /home/${USER}"
 alias clamscan-full="sudo clamscan -r --bell -i --exclude-dir=/sys --exclude-dir=/proc --exclude-dir=/dev /"
-alias clamscan-home-quarantine="clamscan -r --move=/home/$USER/.confg/.clamav/quarantine /home/$USER/"
-alias clamscan-root-quarantine="sudo clamscan -r --move=/home/$USER/.confg/.clamav/quarantine /"
+alias clamscan-home-quarantine="clamscan -r --move=/home/${USER}/.confg/.clamav/quarantine /home/${USER}/"
+alias clamscan-root-quarantine="sudo clamscan -r --move=/home/${USER}/.confg/.clamav/quarantine /"
 alias clamscan-logs="sudo tail -f /var/log/clamav/clamd.log"
 alias clamscan-update="sudo freshclam"
 # system and hardware commands

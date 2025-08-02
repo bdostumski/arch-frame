@@ -10,12 +10,12 @@
 # To create new prompt configuration, run `p10k configure`
 # ---------- 
 # Theme home directory path
-THEMES=$SHELLDIR/config.d/themes
+THEMES="$SHELLDIR/config.d/themes"
 # ---------- 
 # Setup terminal theme
 PURE_THEME='.pure_theme.sh'
 # Prompt pure theme using (p10k plugin)
-[ ! -f "$THEMES/shell/$PURE_THEME" ] || source "$THEMES/shell/$PURE_THEME"
+[[ ! -f "$THEMES/shell/$PURE_THEME" ]] || source "$THEMES/shell/$PURE_THEME"
 
 # -----------------
 # LS COLOR SCHEMES
@@ -56,7 +56,7 @@ LS_COLOR_SCHEME="$THEMES/ls/iceberg-dark"
 
 # ---------- 
 # Setup vivid plugin color scheme | Else use default custom color scheme
-[ -f "$LS_COLOR_SCHEME" ] && export LS_COLORS="$(cat "$LS_COLOR_SCHEME")"
+[[ -f "$LS_COLOR_SCHEME" ]] && export LS_COLORS="$(cat "$LS_COLOR_SCHEME")"
 
 # -----------------
 # FZF CONFIGURATIONS

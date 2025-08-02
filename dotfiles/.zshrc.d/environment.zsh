@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+#
 # ENVIRONMENT
 # Description: Export configuration paths and environment configuration variables
 #
@@ -31,55 +32,56 @@ export ZSH_IGNORE_ALL_DUPS=1                                         # ignore al
 # -----------------
 # ZINIT CONFIGURATION
 # -----------------
-export ZINIT[PLUGINS_DIR]=$HOME/.config/zinit/share/zinit/plugins
-export ZINIT[SNIPPETS_DIR]=$HOME/.config/zinit/share/zinit/snippets
-export ZINIT_HOME="$HOME/.config/zinit"
+export ZINIT[PLUGINS_DIR]="${HOME}/.config/zinit/share/zinit/plugins"
+export ZINIT[SNIPPETS_DIR]="${HOME}/.config/zinit/share/zinit/snippets"
+export ZINIT_HOME="${HOME}/.config/zinit"
 export ZINIT[COMPINIT_OPTS]=-C
 export ZINIT[ZCOMET_NO_UPDATE]=1
 export ZINIT_DEFAULT_PROTOCOL="SSH"
-export PYENV_ROOT="$HOME/.pyenv"
+export PYENV_ROOT="${HOME}/.pyenv"
 
 # -----------------
 # PATH CONFIGURATION
 # -----------------
 # add bin to path
-if [ -d "$HOME/.bin" ]; then
-	PATH="$HOME/.bin:$PATH"
+if [[ -d "${HOME}/.bin" ]]; then
+	PATH="${HOME}/.bin:${PATH}"
 fi
 # ----------
 # add local bin to path
-if [ -d "$HOME/.local/bin" ]; then
-	PATH="$HOME/.local/bin:$PATH"
+if [[ -d "${HOME}/.local/bin" ]]; then
+	PATH="${HOME}/.local/bin:${PATH}"
 fi
 # ----------
 # add emacs path
-if [ -d "$HOME/.emacs.d/bin" ]; then
-	PATH="$HOME/.emacs.d/bin:$PATH"
+if [[ -d "${HOME}/.emacs.d/bin" ]]; then
+	PATH="${HOME}/.emacs.d/bin:${PATH}"
 fi
 # ----------
 # add emacs config path
-if [ -d "$HOME/.config/emacs/bin" ]; then
-	PATH="$HOME/.config/emacs/bin:$PATH"
+if [[ -d "${HOME}/.config/emacs/bin" ]]; then
+	PATH="${HOME}/.config/emacs/bin:${PATH}"
 fi
 # ----------
 # add Applications to path
-if [ -d "$HOME/Applications" ]; then
-	PATH="$HOME/Applications:$PATH"
+if [[ -d "${HOME}/Applications" ]]; then
+	PATH="${HOME}/Applications:${PATH}"
 fi
 # ----------
 # add doom emacs to path
-if [ -d "$HOME/.config/emacs/bin/doom" ]; then
-	PATH='$HOME/.config/emacs/bin/doom:$PATH'
+if [[ -d "${HOME}/.config/emacs/bin/doom" ]]; then
+	PATH="${HOME}/.config/emacs/bin/doom:${PATH}"
 fi
 # ----------
 # add go lang to path
-PATH="$HOME/go/bin:$PATH"
+if [[ -d "${HOME}/go" ]]; then
+	PATH="${HOME}/go/bin:${PATH}"
+fi
 # ----------
 # add python to path
-PATH="$PYENV_ROOT/bin:$PATH"
+PATH="${PYENV_ROOT}/bin:${PATH}"
 eval "$(pyenv init -)"
 # ----------
 # Export path
-export PATH
-export PATH=/opt/cuda/bin:$PATH
-export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH
+export PATH="/opt/cuda/bin:${PATH}"
+export LD_LIBRARY_PATH="/opt/cuda/lib64:${LD_LIBRARY_PATH}"

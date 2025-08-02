@@ -5,45 +5,48 @@
 # Path: ~/.zshrc.d/functions.d/
 #
 
+# Relative path from this file to the others. Someting like ./other_file
+CURRENT_DIR="$(dirname "$0")/functions.d"
+
 # -----------------
 # ARCHIVE EXTRATION
 # -----------------
 # Usage: extract <file name>
-. "$(dirname "$0")/functions.d/archive-extraction.zsh"
+. "$CURRENT_DIR/archive-extraction.zsh"
 
 # -----------------
 # NAVIGATION
 # -----------------
-# Example: cd-up 3
+# Example: up 3
 # This will navigate up 3 directories
-. "$(dirname "$0")/functions.d/change-dir-up.zsh"
+. "$CURRENT_DIR/change-dir-up.zsh"
 
 # -----------------
 # FIND DIRECTORY
 # -----------------
 # Find directory and open selected in Nvim
-. "$(dirname "$0")/functions.d/find-dir.zsh"
+. "$CURRENT_DIR/find-dir.zsh"
 
 # -----------------
 # FIND FILE
 # -----------------
 # Find file and open selected in Nvim
-. "$(dirname "$0")/functions.d/find-file.zsh"
+. "$CURRENT_DIR/find-file.zsh"
 
 # -----------------
 # RANGER
 # -----------------
 # Automatically change the current working directory after closing ranger
-. "$(dirname "$0")/functions.d/ranger-cd.zsh"
+. "$CURRENT_DIR/ranger-cd.zsh"
 
 # -----------------
 # EDITOR MAIN LVIM
 # -----------------
 # If lvim exists then use lvim, else nvim, else vim
-. "$(dirname "$0")/functions.d/editor-lvim-nvim-vim.zsh"
+. "$CURRENT_DIR/editor-lvim-nvim-vim.zsh"
 
 # -----------------
 # EDITOR MAIN NVIM
 # -----------------
 # If nvim exists then use nvim, else vim
-. "$(dirname "$0")/functions.d/editor-nvim-vim.zsh"
+. "$CURRENT_DIR/editor-nvim-vim.zsh"

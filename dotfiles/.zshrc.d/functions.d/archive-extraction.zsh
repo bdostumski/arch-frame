@@ -1,48 +1,56 @@
 #!/usr/bin/env zsh
 #
-# ARCHIVE EXTRATION
-# Usage: extract <file>
+# EXTRACT ARCHIVE FILES
+# Usage: extract [FILE]
 #
 
-SAVEIFS=$IFS
-IFS=$(echo -en "\n\b")
-
-extract() {
-	if [ -z "$1" ]; then
-		# display usage if no parameters given
-		echo "Usage: extract <path/file_name>.<zip|rar|gz|tar|tbz2|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
-		echo "extract: <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
+function extract() {
+	if [[ $# -eq 0 ]]; then
+		# Display usage if no parameters given
+		echo "Usage: extract [FILE]..." >&2
+		echo "" >&2
+		echo "Extract one or more archive files based on their extension." >&2
+		echo "" >&2
+		echo "Supported formats:" >&2
+		echo "  .tar       .tar.gz    .tar.bz2   .tar.xz    .tgz       .tbz2      .txz       .cbt" >&2
+		echo "  .gz        .bz2       .lzma      .xz        .Z" >&2
+		echo "  .zip       .cbz       .epub" >&2
+		echo "  .rar       .cbr" >&2
+		echo "  .7z        .cb7       .arj       .cab       .chm       .deb       .dmg       .iso" >&2
+		echo "  .lzh       .msi       .pkg       .rpm       .udf       .wim       .xar" >&2
+		echo "  .exe       .cpio      .ace       .cba" >&2
+		echo "" >&2
+		echo "Note: File format is determined by file extension." >&2
+		return 1
 	else
-		for n in "$@"; do
-			if [ -f "$n" ]; then
-				case "${n%,}" in
+		for FILE in "$@"; do
+			if [ -f "${FILE}" ]; then
+				case "${FILE%,}" in
 				*.cbt | *.tar.bz2 | *.tar.gz | *.tar.xz | *.tbz2 | *.tgz | *.txz | *.tar)
-					tar xfv "$n"
+					tar xfv "${FILE}"
 					;;
-				*.lzma) unlzma ./"$n" ;;
-				*.bz2) bnzip2 ./"$n" ;;
-				*.cbr | *.rar) unrar x -ad ./"$n" ;;
-				*.gz) gunzip ./"$n" ;;
-				*.cbz | *.epub | *.zip) unzip ./"$n" ;;
-				*.z) uncompress ./"$n" ;;
+				*.lzma) unlzma ./"${FILE}" ;;
+				*.bz2) bnzip2 ./"${FILE}" ;;
+				*.cbr | *.rar) unrar x -ad ./"${FILE}" ;;
+				*.gz) gunzip ./"${FILE}" ;;
+				*.cbz | *.epub | *.zip) unzip ./"${FILE}" ;;
+				*.z) uncompress ./"${FILE}" ;;
 				*.7z | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.dmg | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf | *.wim | *.xar)
-					7z x ./"$n"
+					7z x ./"${FILE}"
 					;;
-				*.xz) unxz ./"$n" ;;
-				*.exe) cabextract ./"$n" ;;
-				*.cpio) cpio -id <./"$n" ;;
-				*.cba | *.ace) unace x ./"$n" ;;
+				*.xz) unxz ./"${FILE}" ;;
+				*.exe) cabextract ./"${FILE}" ;;
+				*.cpio) cpio -id <./"${FILE}" ;;
+				*.cba | *.ace) unace x ./"${FILE}" ;;
 				*)
-					echo "extract: '$n' - unknown archive method"
+					echo "Extract: '${FILE}' - unknown archive method" >&2
 					return 1
 					;;
 				esac
 			else
-				echo "'$n' - file does not exists"
+				echo "'${FILE}' - file does not exists" >&2
 				return 1
 			fi
 		done
 	fi
 }
-
-IFS=$SAVEIFS

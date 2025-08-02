@@ -47,11 +47,11 @@ bindkey '^D' autosuggest-execute # accept and execute the current suggestion
 # -----------------
 # SETUP HISTORY SEARCH
 # -----------------
-bindkey '^[]' history-beginning-search-forward   # search forward in history for a related command "alt + ]"
-bindkey '^[[' history-beginning-search-backward  # search backward in history for a related command "alt + ["
+bindkey '^[]' history-beginning-search-forward  # search forward in history for a related command "alt + ]"
+bindkey '^[[' history-beginning-search-backward # search backward in history for a related command "alt + ["
 #
 # -----------------
 # FZF KEY BINDINGS
 # -----------------
 bindkey '^R' fzf-history-widget # search history with fzf
-bindkey '^F' fzf-file-widget # search files with fzf
+bindkey '^F' fzf-file-widget    # search files with fzf

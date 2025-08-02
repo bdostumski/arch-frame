@@ -5,19 +5,25 @@
 # Example: up 3
 #
 
-cd_up() {
-	local d=""
-	local limit="$1"
+function cd_up() {
 
-	if [ -z "$limit" ] || [ "$limit" -le 0 ]; then
-		limit=1
+	local LIMIT="$1"
+	local LOCATION=""
+
+	# If ${LIMIT} is empty or does not contains integer or is les than zero.
+	# Then return error message.
+	if [[ -z "${LIMIT}" || ! "${LIMIT}" =~ ^[0-9]+$ || "${LIMIT}" -le 0 ]]; then
+		echo "Error: Please provide a positive number." >&2
+		return 1
+	else
+		LIMIT=1
+		for ((count = 1; count <= LIMIT; count++)); do
+			LOCATION="../${LOCATION}"
+		done
 	fi
 
-	for ((i = 1; i <= limit; i++)); do
-		d="../$d"
-	done
-
-	if ! cd "$d"; then
-		echo "Could not go up $limit dirs."
+	if ! cd "${LOCATION}"; then
+		echo "Error: Could not go up ${LIMIT} directories." >&2
+		return 1
 	fi
 }
