@@ -7,25 +7,25 @@
 # -----------------
 # LOGS CONFIGURATION
 # -----------------
-LOGS="$HOME/.logs.d"
+LOGS="${HOME}/.logs.d"
 # Create .logs.d to store application messages
-[[ ! -d "$LOGS" ]] && mkdir -p "$LOGS"
+[[ ! -d "${LOGS}" ]] && mkdir -p "${LOGS}"
 
 # -----------------
 # HISTORY FILE
 # -----------------
 # Create history file if it does not exist
-[[ ! -f "$LOGS/.zsh_history" ]] && touch "$LOGS/.zsh_history"
+[[ ! -f "${LOGS}/.zsh_history" ]] && touch "${LOGS}/.zsh_history"
 
 # -----------------
 # ZINIT CONFIGURATION
 # -----------------
-ZINIT_HOME="$HOME/.config/zinit/.zinit.git"
+ZINIT_HOME="${HOME}/.config/zinit/.zinit.git"
 # ----------
 # Download Zinit, if not already installed
-if [[ ! -d "$ZINIT_HOME" ]]; then
-    mkdir -p "$(dirname $ZINIT_HOME)"
-    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+if [[ ! -d "${ZINIT_HOME}" ]]; then
+    mkdir -p "$(dirname ${ZINIT_HOME})"
+    git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT_HOME}"
 fi
 
 # ----------

@@ -26,10 +26,10 @@ function copy_file() {
 # Override target file if backup file exists
 function config_backup() {
 
-    COPY_FILE_DATA="${1}"
-    PASTE_FILE_PATH="${2}"
-    SUDO="${3}"
-    FILE_NAME="$(echo "${COPY_FILE_DATA}" | awk -F '/' '{print $NF}')"
+    local COPY_FILE_DATA="${1}"
+    local PASTE_FILE_PATH="${2}"
+    local SUDO="${3}"
+    local FILE_NAME="$(echo "${COPY_FILE_DATA}" | awk -F '/' '{print $NF}')"
 
     if [[ -s "${COPY_FILE_DATA}" && ! -e "${PASTE_FILE_PATH}${FILE_NAME}.bak" ]]; then
         echo "Backup ${FILE_NAME} into ${PASTE_FILE_PATH} path." >&2
