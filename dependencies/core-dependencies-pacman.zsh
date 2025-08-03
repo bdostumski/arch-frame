@@ -14,7 +14,7 @@ source "$(dirname "${0}")/install-utils.zsh"
 # Install Common Tools for Arch Linux
 # -------------------------------------
 
-echo "🔄 Updating system..."
+log "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
 
 # Define packages
@@ -47,17 +47,17 @@ install_packman_packages "${PACMAN_PACKAGES}"
 # Configure Zsh as Default Shell
 # -------------------------------------
 if [[ "${SHELL}" != *"zsh" ]]; then
-    echo "⚙️ Setting Zsh as default shell..."
+    log "⚙️ Setting Zsh as default shell..."
     chsh -s "$(which zsh)"
 else
-    echo "✅ Zsh is already the default shell." >&2
+    log "✅ Zsh is already the default shell." >&2
 fi
 
 # -------------------------------------
 # Dotfiles
 # -------------------------------------
-DOTFILES="../dotfiles"
-echo "💾 Copying main config file to home root directory..."
+DOTFILES="dotfiles"
+log "💾 Copying main config file to home root directory..."
 if [[ -d "${DOTFILES}" ]]; then
 
     local CONFIG_DIR="${HOME}/.zshrc.d/config.d"
@@ -70,11 +70,11 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${CONFIG_DIR}/arch/pacman.conf" "/etc/pacman.conf" true
 
 else
-    echo "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
+    log "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
     return 1
 fi
 
 # -------------------------------------
 # Done
 # -------------------------------------
-echo "\n🎉 All setup steps completed!"
+log "\n🎉 All setup steps completed!"

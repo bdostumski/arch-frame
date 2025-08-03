@@ -24,7 +24,7 @@ PACMAN_PACKAGES=(
 install_packman_packages "${PACMAN_PACKAGES}"
 
 # Setup printer
-echo "✅ Enable cups"
+log "✅ Enable cups"
 sudo systemctl enable --now cups.service
 
 # -------------------------------------
@@ -33,13 +33,13 @@ sudo systemctl enable --now cups.service
 AUR_PACKAGES=(brother-dcp-l2510d)
 install_yay_packages "${AUR_PACKAGES}"
 
-echo "✅ Restart cups"
+log "✅ Restart cups"
 sudo systemctl restart cups.service
 
 # Setup Nvidia
-echo "✅ Setup Nvidia"
-echo 'export PATH=/opt/cuda/bin:$PATH' >>~/.zshrc.d/environment.zsh
-echo 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH' >>~/.zshrc.d/environment.zsh
+log "✅ Setup Nvidia"
+log 'export PATH=/opt/cuda/bin:$PATH' >>~/.zshrc.d/environment.zsh
+log 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH' >>~/.zshrc.d/environment.zsh
 source ~/.zshrc
 
 # System setup

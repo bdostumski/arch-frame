@@ -7,7 +7,7 @@
 # Import Install Utils
 source "$(dirname "${0}")/install-utils.zsh"
 
-echo "🔄 Updating system..."
+log "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
 
 # Define packages
@@ -17,7 +17,7 @@ PACMAN_PACKAGES=(
     ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
     kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
     ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
-    direnv sqlite jq wl-clipboard graphviz gnuplot maim scrot plantuml
+    direnv sqlite jq -clipboard graphviz gnuplot maim scrot plantuml
     shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
     haveged man man-pages man-db bc
 
@@ -40,7 +40,7 @@ install_packman_packages "${PACMAN_PACKAGES}"
 # Dotfiles
 # -------------------------------------
 DOTFILES="../dotfiles"
-echo "💾 Copying main config file to home root directory..."
+log "💾 Copying main config file to home root directory..."
 if [[ -d "${DOTFILES}" ]]; then
 
     local CONFIG_DIR="${HOME}/.zshrc.d/config.d"
@@ -55,7 +55,7 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${CONFIG_DIR}/ufw/before.rules" "/etc/ufw/before.rules" true
 
 else
-    echo "❌ Dotfiles directory not found. Skipping dotfile setup." &>2
+    log "❌ Dotfiles directory not found. Skipping dotfile setup." &>2
 fi
 
 systemctl enable --now haveged
@@ -66,16 +66,16 @@ systemctl enable vboxservice.service
 
 # VBox drivers (only if using VirtualBox with Vagrant)
 if lsmod | grep -q vboxdrv; then
-    echo "📦 vboxdrv already loaded"
+    log "📦 vboxdrv already loaded"
 else
-    echo "📦 Loading vboxdrv kernel module..."
-    sudo modprobe vboxdrv || echo "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers." >&2
+    log "📦 Loading vboxdrv kernel module..."
+    sudo modprobe vboxdrv || log "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers." >&2
 fi
 
 # -------------------------------------
 # UFW Firewall Configuration
 # -------------------------------------
-echo "🔧 Configuring UFW firewall..."
+log "🔧 Configuring UFW firewall..."
 
 sudo systemctl enable --now ufw
 sudo ufw --force enable
@@ -90,7 +90,7 @@ sudo ufw logging high
 # -------------------------------------
 # ClamAV Configuration
 # -------------------------------------
-echo "🛡️ Setting up ClamAV..."
+log "🛡️ Setting up ClamAV..."
 
 # Stop existing ClamAV services
 sudo systemctl stop clamav-clamonacc.service clamav-daemon.service clamav-freshclam.service
@@ -136,7 +136,7 @@ EOF
 
 # Allow notifications
 if ! grep -q 'clamav ALL' /etc/sudoers.d/clamav &>/dev/null; then
-    echo 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' | sudo tee /etc/sudoers.d/clamav >/dev/null
+    log 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' | sudo tee /etc/sudoers.d/clamav >/dev/null
 fi
 
 # Enable and start ClamAV services
@@ -150,9 +150,9 @@ sudo systemctl enable --now cronie.service
 # Change default shell to Zsh
 chsh -s "$(which zsh)"
 source ~/.zshrc
-echo "⚙️ Zsh is now your default shell."
+log "⚙️ Zsh is now your default shell."
 
 # Make all scripts executable
 chmod +x ~/.zshrc.d/functions.d/*.zsh
 
-echo -e "\n🎉 Setup complete. Your system is ready!"
+log "\n🎉 Setup complete. Your system is ready!"

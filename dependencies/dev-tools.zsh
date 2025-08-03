@@ -14,7 +14,7 @@ setopt no_nomatch
 source "$(dirname "${0}")/install-utils.zsh"
 
 # 🌀 Update system
-echo "🔄 Updating system packages..."
+log "🔄 Updating system packages..."
 sudo pacman -Syu --noconfirm
 
 # 📦 DevOps tools from official repos
@@ -41,26 +41,26 @@ AUR_PACKAGES=(
 install_yay_packages "${AUR_PACKAGES}"
 
 # Docker configuration
-echo "🔧 Configuring Docker..."
+log "🔧 Configuring Docker..."
 sudo systemctl enable --now docker.service
 sudo usermod -aG docker "${USER}"
 
 # Libvirt configuration
-echo "🔧 Configuring Libvirt..."
+log "🔧 Configuring Libvirt..."
 sudo systemctl enable --now libvirtd
 sudo usermod -aG libvirt "${USER}"
 
 # Minikube setup
-echo "🔧 Configuring MiniKube..."
+log "🔧 Configuring MiniKube..."
 minikube start --driver=docker
 
 # Helm repo setup (check if already added)
-echo "🎯 Adding Helm repo..."
+log "🎯 Adding Helm repo..."
 helm repo add bitnami https://charts.bitnami.com/bitnami
-echo "✅ Added Helm repo: bitnami"
+log "✅ Added Helm repo: bitnami"
 
-echo "📦 Should install terraform manually"
+log "📦 Should install terraform manually"
 
 # Completion message
-echo -e "\n🎉 All DevOps tools installed and configured successfully!"
-echo -e "💡 Happy hacking! 🧑‍💻\n"
+log "\n🎉 All DevOps tools installed and configured successfully!"
+log "💡 Happy hacking! 🧑‍💻\n"

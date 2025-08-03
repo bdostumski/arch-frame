@@ -8,14 +8,15 @@ export function log() {
 
     local MESSAGE="${1}"
     local SPECIAL_SYMBOL="${2}"
-    local INSTALLATION_LOG="${3:-../installation_log_message}"
+    local SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local INSTALLATION_LOG="${3:-${SCRIPT_DIR}/install_messages.log}"
 
-    if [[ -f "${INSTALLATION_LOG}" ]]; then
+    if [[ ! -f "${INSTALLATION_LOG}" ]]; then
         touch "${INSTALLATION_LOG}"
     fi
 
     echo -e "${MESSAGE}" "${SPECIAL_SYMBOL}"
-    echo -e "$(date) : ${MESSAGE}" "${SPECIAL_SYMBOL}" >> "${INSTALATION_LOG}"
+    echo -e "$(date) : ${MESSAGE}" "${SPECIAL_SYMBOL}" >> "${INSTALLATION_LOG}"
 
     return 0
 }
@@ -41,17 +42,17 @@ export function install_packman_packages() {
 
     local PACKAGES="${1}"
 
-    echo "📦 Installing ${#PACKAGES[@]} packages..."
+    log "📦 Installing ${#PACKAGES[@]} packages..."
     for PKG in "${PACKAGES[@]}"; do
-        echo -e "\n👉 Installing: \033[1m${PKG}\033[0m"
+        log "\n👉 Installing: \033[1m${PKG}\033[0m"
         if ! pacman -Qi "${PKG}" &>/dev/null; then
             if sudo pacman -S --needed --noconfirm "${PKG}"; then
-                echo -e "✅ \033[1m${PKG}\033[0m installed."
+                log "✅ \033[1m${PKG}\033[0m installed."
             else
-                echo -e "❌ Failed to install: \033[1m${PKG}\033[0m" &>2
+                log "❌ Failed to install: \033[1m${PKG}\033[0m" &>2
             fi
         else
-            echo -e "✅ \033[1m${PKG}\033[0m is already installed." &>2
+            log "✅ \033[1m${PKG}\033[0m is already installed." &>2
         fi
     done
 
@@ -62,17 +63,17 @@ export function install_yay_packages() {
 
     local PACKAGES="${1}"
 
-    echo "\n🔧 Starting installation of AUR packages...\n"
+    log "\n🔧 Starting installation of AUR packages...\n"
     for PKG in "${PACKAGES[@]}"; do
-        echo "📦 Installing: ${PKG}"
+        log "📦 Installing: ${PKG}"
         if yay -Qi "${PKG}" &>/dev/null; then
-            echo "✅ Already installed: ${PKG}"
+            log "✅ Already installed: ${PKG}"
         elif yay -S --noconfirm "${PKG}" &>/dev/null; then
-            echo "✅ Success: ${PKG} installed"
+            log "✅ Success: ${PKG} installed"
         else
-            echo "❌ Failed: ${PKG} installation failed"
+            log "❌ Failed: ${PKG} installation failed"
         fi
-        echo ""
+        log ""
     done
 
     return 0

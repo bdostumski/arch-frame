@@ -41,7 +41,7 @@ AUR_PACKAGES=(
 # -------------------------------------
 install_yay_packages "${AUR_PACKAGES}"
 
-echo "🏁 All packages processed."
+log "🏁 All packages processed."
 
 # Suggestions (manual install/configuration may be required):
 # yay -S --noconfirm aur/intellij-idea-ultimate-edition  # Java IDE (Ultimate)
