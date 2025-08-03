@@ -11,6 +11,8 @@ function copy_directory() {
     else
         cp -r "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
     fi
+
+    return 0
 }
 
 # Check if it is sudo or not and copy file
@@ -20,6 +22,8 @@ function copy_file() {
     else
         cp "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
     fi
+
+    return 0
 }
 
 # Backup target file and override it with new configuration
@@ -73,6 +77,7 @@ function config_update() {
     config_backup "${LOCATION}/arch/pacman.conf" "/etc/" true
     config_backup "${LOCATION}/ufw/before.rules" "/etc/ufw/" true
 
+    return 0
 }
 
 # Call function

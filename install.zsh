@@ -24,34 +24,36 @@ echo "5) Install System Drivers & Firmware"
 echo "x) Exit"
 echo "\n"
 echo -n "Enter your choise: "
-read -r choice
-if [ "$choice" = "x" ]; then
+read -r CHOICE
+if [ "${CHOICE}" = "x" ]; then
     echo "Exiting..."
-    exit
+    exit 0
 fi
 
-case $choice in
+DEPENDENCIES_PATH="./dependencies"
+
+case $CHOICE in
 0)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [Zsh, Kitty, Fonts, Python] . . ."
-    source ./dependencies/core-dependencies-pacman.zsh
+    source "${DEPENDENCIES_PATH}/core-dependencies-pacman.zsh"
     echo "💡 Exit default terminal, and run kitty terminal"
     ;;
 1)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [System, ClamAV, UFW, Wine, VirtualBox, Vim, Neovim, Emacs, etc] . . ."
-    source ./dependencies/core-pacman.zsh
-    source ./dependencies/core-git.zsh
-    source ./dependencies/core-yay.zsh
+    source "${DEPENDENCIES_PATH}/core-pacman.zsh"
+    source "${DEPENDENCIES_PATH}/core-git.zsh"
+    source "${DEPENDENCIES_PATH}/core-yay.zsh"
     echo "💡 Restart [exit/start again] rerun the script with kitty terminal"
     ;;
 2)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [Docker, Vagrant, K8s, etc.] . . ."
-    source ./dependencies/dev-tools.zsh
+    source "${DEPENDENCIES_PATH}/dev-tools.zsh"
     echo "💡 Restart [exit/start again] kitty terminal"
     ;;
 
@@ -59,22 +61,25 @@ case $choice in
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [LazyVim] . . ."
-    source ./dependencies/lazyvim-git.zsh
+    source "${DEPENDENCIES_PATH}/lazyvim-git.zsh"
     ;;
 4)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [Doom Emacs] . . ."
-    source ./dependencies/doom-emacs-git.zsh
+    source "${DEPENDENCIES_PATH}/doom-emacs-git.zsh"
     ;;
 5)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Install System Drivers & Firmware . . ."
-    source ./dependencies/drivers.zsh
+    source "${DEPENDENCIES_PATH}/drivers.zsh"
     ;;
 *)
     echo "\n"
-    echo -e "Invalid choice. Please try again."
+    echo -e "Invalid CHOICE. Please try again." >&2
+    exit 1
     ;;
 esac
+
+exit 0

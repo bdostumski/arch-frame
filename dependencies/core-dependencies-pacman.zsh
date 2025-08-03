@@ -1,8 +1,14 @@
 #!/usr/bin/env zsh
+#
+# ----------------------------------------------------------------------
+# Install Core Dependencies
+# ----------------------------------------------------------------------
 
 # Exit on error
 set -e
-source "$(dirname "$0")/install-utils.zsh"
+
+# Import Install Utils
+source "$(dirname "${0}")/install-utils.zsh"
 
 # -------------------------------------
 # Install Common Tools for Arch Linux
@@ -12,7 +18,7 @@ echo "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
 
 # Define packages
-packages=(
+PACMAN_PACKAGES=(
 
     # Linux kernel
     linux-zen linux-zen-headers
@@ -32,45 +38,40 @@ packages=(
     python python-pip python-pipenv python-virtualenv python-pynvim pyenv
 )
 
-echo "📦 Installing ${#packages[@]} packages..."
-for pkg in "${packages[@]}"; do
-    echo -e "\n👉 Installing: \033[1m$pkg\033[0m"
-    if ! pacman -Qi "$pkg" &>/dev/null; then
-        if sudo pacman -S --needed --noconfirm "$pkg"; then
-            echo -e "✅ \033[1m$pkg\033[0m installed."
-        else
-            echo -e "❌ Failed to install: \033[1m$pkg\033[0m"
-        fi
-    else
-        echo -e "✅ \033[1m$pkg\033[0m is already installed."
-    fi
-done
+# -------------------------------------
+#  Install Packman Packages
+# -------------------------------------
+install_packman_packages "${PACMAN_PACKAGES}"
 
 # -------------------------------------
 # Configure Zsh as Default Shell
 # -------------------------------------
-if [[ "$SHELL" != *"zsh" ]]; then
+if [[ "${SHELL}" != *"zsh" ]]; then
     echo "⚙️ Setting Zsh as default shell..."
     chsh -s "$(which zsh)"
 else
-    echo "✅ Zsh is already the default shell."
+    echo "✅ Zsh is already the default shell." >&2
 fi
 
 # -------------------------------------
 # Dotfiles
 # -------------------------------------
+DOTFILES="../dotfiles"
 echo "💾 Copying main config file to home root directory..."
-if [[ -d "dotfiles" ]]; then
+if [[ -d "${DOTFILES}" ]]; then
 
-    backup_and_copy ./dotfiles/.zshrc.d ~/.zshrc.d
-    backup_and_copy ~/.zshrc.d/config.d/vim/.vimrc ~/.vimrc
-    backup_and_copy ~/.zshrc.d/config.d/kitty ~/.config/kitty
-    backup_and_copy ~/.zshrc.d/config.d/env/.env.zsh ~/.env.zsh
-    backup_and_copy ~/.zshrc.d/config.d/gitconf/.gitconfig ~/.gitconfig
-    backup_and_copy ~/.zshrc.d/config.d/arch/pacman.conf /etc/pacman.conf true
+    local CONFIG_DIR="${HOME}/.zshrc.d/config.d"
+
+    backup_and_copy "${DOTFILES}/.zshrc.d" "${HOME}/.zshrc.d" false
+    backup_and_copy "${CONFIG_DIR}/vim/.vimrc" "${HOME}/.vimrc" false
+    backup_and_copy "${CONFIG_DIR}/kitty" "${HOME}/.config/kitty" false
+    backup_and_copy "${CONFIG_DIR}/env/.env.zsh" "${HOME}/.env.zsh" false
+    backup_and_copy "${CONFIG_DIR}/gitconf/.gitconfig" "${HOME}/.gitconfig" false
+    backup_and_copy "${CONFIG_DIR}/arch/pacman.conf" "/etc/pacman.conf" true
 
 else
-    echo "❌ Dotfiles directory not found. Skipping dotfile setup."
+    echo "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
+    return 1
 fi
 
 # -------------------------------------

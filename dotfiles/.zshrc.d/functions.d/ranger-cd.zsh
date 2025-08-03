@@ -8,8 +8,12 @@
 function ranger_cd() {
     TEMP_FILE="$(mktemp -t "ranger_cd.XXXXXXXXXX")"
     ranger --choosedir="${TEMP_FILE}" -- "${@:-$PWD}"
+
     if CHOSEN_DIR="$(cat -- "${TEMP_FILE}")" && [ -n "${CHOSEN_DIR}" ] && [ "${CHOSEN_DIR}" != "${PWD}" ]; then
         cd -- "${CHOSEN_DIR}"
     fi
+
     rm -f -- "${TEMP_FILE}"
+
+    return 0
 }

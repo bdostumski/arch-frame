@@ -4,24 +4,29 @@
 # Usage: extract [FILE]
 #
 
+# Display usage if no parameters given
+function usecase() {
+	echo "Usage: extract [FILE]..." >&2
+	echo "" >&2
+	echo "Extract one or more archive files based on their extension." >&2
+	echo "" >&2
+	echo "Supported formats:" >&2
+	echo "  .tar       .tar.gz    .tar.bz2   .tar.xz    .tgz       .tbz2      .txz       .cbt" >&2
+	echo "  .gz        .bz2       .lzma      .xz        .Z" >&2
+	echo "  .zip       .cbz       .epub" >&2
+	echo "  .rar       .cbr" >&2
+	echo "  .7z        .cb7       .arj       .cab       .chm       .deb       .dmg       .iso" >&2
+	echo "  .lzh       .msi       .pkg       .rpm       .udf       .wim       .xar" >&2
+	echo "  .exe       .cpio      .ace       .cba" >&2
+	echo "" >&2
+	echo "Note: File format is determined by file extension." >&2
+
+	return 1
+}
+
 function extract() {
 	if [[ $# -eq 0 ]]; then
-		# Display usage if no parameters given
-		echo "Usage: extract [FILE]..." >&2
-		echo "" >&2
-		echo "Extract one or more archive files based on their extension." >&2
-		echo "" >&2
-		echo "Supported formats:" >&2
-		echo "  .tar       .tar.gz    .tar.bz2   .tar.xz    .tgz       .tbz2      .txz       .cbt" >&2
-		echo "  .gz        .bz2       .lzma      .xz        .Z" >&2
-		echo "  .zip       .cbz       .epub" >&2
-		echo "  .rar       .cbr" >&2
-		echo "  .7z        .cb7       .arj       .cab       .chm       .deb       .dmg       .iso" >&2
-		echo "  .lzh       .msi       .pkg       .rpm       .udf       .wim       .xar" >&2
-		echo "  .exe       .cpio      .ace       .cba" >&2
-		echo "" >&2
-		echo "Note: File format is determined by file extension." >&2
-		return 1
+		usecase
 	else
 		for FILE in "$@"; do
 			if [ -f "${FILE}" ]; then
@@ -53,4 +58,6 @@ function extract() {
 			fi
 		done
 	fi
+
+	return 0
 }

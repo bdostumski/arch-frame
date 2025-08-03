@@ -1,6 +1,11 @@
 #!/usr/bin/env zsh
+#
+# ----------------------------------------------------------------------
+# Install Doom Emacs
+# ----------------------------------------------------------------------
 
-source "$(dirname "$0")/install-utils.zsh"
+# Import Install Utils
+source "$(dirname "${0}")/install-utils.zsh"
 
 echo "\n⚙️  Starting Doom Emacs installation...\n"
 
@@ -135,7 +140,7 @@ if [[ ! -f "/usr/lib/libtree-sitter.so.0.24" && -f "/usr/lib/libtree-sitter.so" 
         echo "✅ libtree-sitter symlink created." ||
         echo "❌ Failed to create libtree-sitter symlink."
 else
-    echo "✅ libtree-sitter already properly linked or missing entirely."
+    echo "✅ libtree-sitter already properly linked or missing entirely." >&2
 fi
 
 # -------------------------------------
@@ -143,7 +148,7 @@ fi
 if [[ -d "dotfiles" ]]; then
     backup_and_copy ~/.zshrc.d/config.d/doom ~/.config/doom
 else
-    echo "❌ Dotfiles directory not found. Skipping dotfile setup."
+    echo "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
 fi
 
 mkdir -p ~/Maildir

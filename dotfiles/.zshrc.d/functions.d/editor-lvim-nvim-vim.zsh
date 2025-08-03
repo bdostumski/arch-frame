@@ -14,6 +14,8 @@ function editor_lvim_nvim_vim() {
         vim "${@}"
     else
         echo "No suitable editor (lvim, nvim, or vim) found in PATH." >&2
-        exit 1
+        return 1
     fi
+
+    return 0
 }

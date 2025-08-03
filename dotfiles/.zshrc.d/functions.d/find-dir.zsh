@@ -9,4 +9,6 @@ function find_dir() {
   fd -g -H -t d "${1}" |
     fzf --preview "lsd -al --color=auto {}" \
       --bind "enter:execute(nvim {})"
+
+  return 0
 }

@@ -26,4 +26,6 @@ function cd_up() {
 		echo "Error: Could not go up ${LIMIT} directories." >&2
 		return 1
 	fi
+
+	return 0
 }

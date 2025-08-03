@@ -9,4 +9,6 @@ function find_file() {
   fd -g -H -t f "${1}" |
     fzf --preview "lsd -al --color=auto {}" \
       --bind "enter:execute(nvim {})"
+
+  return 0
 }

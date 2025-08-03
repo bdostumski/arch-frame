@@ -1,4 +1,11 @@
 #!/usr/bin/env zsh
+#
+# ----------------------------------------------------------------------
+# Installing LaziVim
+# ----------------------------------------------------------------------
+
+# Import Install Utils
+source "$(dirname "${0}")/install-utils.zsh"
 
 # Backup and remove existing Neovim config
 echo "🔄 Backing up and removing existing Neovim config..."

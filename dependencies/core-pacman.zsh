@@ -1,16 +1,17 @@
 #!/usr/bin/env zsh
-
+#
 # -------------------------------------
 # Install Common Tools for Arch Linux
 # -------------------------------------
 
-source "$(dirname "$0")/install-utils.zsh"
+# Import Install Utils
+source "$(dirname "${0}")/install-utils.zsh"
 
 echo "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
 
 # Define packages
-packages=(
+PACMAN_PACKAGES=(
     # System Utilities
     base-devel tmux fd less man bat btop htop pydf tldr reflector stow
     ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
@@ -30,37 +31,31 @@ packages=(
     jdk17-openjdk go ruby rust luarocks cabal-install kotlin clojure lighttpd php composer
 )
 
-echo "📦 Installing ${#packages[@]} packages..."
-for pkg in "${packages[@]}"; do
-    echo -e "\n👉 Installing: \033[1m$pkg\033[0m"
-    if ! pacman -Qi "$pkg" &>/dev/null; then
-        if sudo pacman -S --needed --noconfirm "$pkg"; then
-            echo -e "✅ \033[1m$pkg\033[0m installed."
-        else
-            echo -e "❌ Failed to install: \033[1m$pkg\033[0m"
-        fi
-    else
-        echo -e "✅ \033[1m$pkg\033[0m is already installed."
-    fi
-done
+# -------------------------------------
+#  Install Packman Packages
+# -------------------------------------
+install_packman_packages "${PACMAN_PACKAGES}"
 
 # -------------------------------------
 # Dotfiles
 # -------------------------------------
+DOTFILES="../dotfiles"
 echo "💾 Copying main config file to home root directory..."
-if [[ -d "dotfiles" ]]; then
+if [[ -d "${DOTFILES}" ]]; then
 
-    backup_and_copy ./dotfiles/.zshrc ~/.zshrc
-    backup_and_copy ~/.zshrc.d/config.d/nvim ~/.config/nvim
-    backup_and_copy ~/.zshrc.d/config.d/tmux ~/.config/tmux
-    backup_and_copy ~/.zshrc.d/config.d/ranger ~/.config/ranger
-    backup_and_copy ~/.zshrc.d/config.d/clamav /etc/clamav true
-    backup_and_copy ~/.zshrc.d/config.d/cron/cron.daily /etc/cron.daily true
-    backup_and_copy ~/.zshrc.d/config.d//cron/cron.weekly /etc/cron.weekly true
-    backup_and_copy ~/.zshrc.d/config.d/ufw/before.rules /etc/ufw/before.rules true
+    local CONFIG_DIR="${HOME}/.zshrc.d/config.d"
+
+    backup_and_copy "${DOTFILES}/.zshrc" "${HOME}/.zshrc" false
+    backup_and_copy "${CONFIG_DIR}/nvim" "${HOME}/.config/nvim" false
+    backup_and_copy "${CONFIG_DIR}/tmux" "${HOME}/.config/tmux" false
+    backup_and_copy "${CONFIG_DIR}/ranger" "${HOME}/.config/ranger" false
+    backup_and_copy "${CONFIG_DIR}/clamav" "/etc/clamav" true
+    backup_and_copy "${CONFIG_DIR}/cron/cron.daily" "/etc/cron.daily" true
+    backup_and_copy "${CONFIG_DIR}/cron/cron.weekly" "/etc/cron.weekly" true
+    backup_and_copy "${CONFIG_DIR}/ufw/before.rules" "/etc/ufw/before.rules" true
 
 else
-    echo "❌ Dotfiles directory not found. Skipping dotfile setup."
+    echo "❌ Dotfiles directory not found. Skipping dotfile setup." &>2
 fi
 
 systemctl enable --now haveged
@@ -74,7 +69,7 @@ if lsmod | grep -q vboxdrv; then
     echo "📦 vboxdrv already loaded"
 else
     echo "📦 Loading vboxdrv kernel module..."
-    sudo modprobe vboxdrv || echo "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers."
+    sudo modprobe vboxdrv || echo "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers." >&2
 fi
 
 # -------------------------------------
@@ -104,6 +99,7 @@ sudo systemctl stop clamav-clamonacc.service clamav-daemon.service clamav-freshc
 if ! getent group shadow &>/dev/null; then
     sudo groupadd shadow
 fi
+
 if ! id -u clamav &>/dev/null; then
     sudo useradd -r -s /usr/bin/nologin clamav
 fi
@@ -113,7 +109,7 @@ sudo chown root:shadow /etc/shadow && sudo chmod 640 /etc/shadow
 
 # Create required directories and set permissions
 sudo install -d -o clamav -g clamav -m 755 /var/lib/clamav /var/log/clamav /var/run/clamav /root/quarantine
-if [[ ! -d "$HOME/quarantine" ]]; then
+if [[ ! -d "${HOME}/quarantine" ]]; then
     mkdir -p ~/quarantine
 fi
 sudo chown -R clamav:clamav ~/quarantine

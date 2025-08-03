@@ -1,8 +1,13 @@
 #!/usr/bin/env zsh
-
+#
+# ----------------------------------------------------------------------
 # Install yay packages one by one with status icons
+# ----------------------------------------------------------------------
 
-packages=(
+# Import Install Utils
+source "$(dirname "${0}")/install-utils.zsh"
+
+AUR_PACKAGES=(
     # Code editor
     visual-studio-code-bin
     # API testing
@@ -31,19 +36,10 @@ packages=(
     js-beautify mu lombok-common auto-cpufreq
 )
 
-echo "\n🔧 Starting installation of AUR packages...\n"
-
-for pkg in "${packages[@]}"; do
-    echo "📦 Installing: $pkg"
-    if yay -Qi "$pkg" &>/dev/null; then
-        echo "✅ Already installed: $pkg"
-    elif yay -S --noconfirm "$pkg" &>/dev/null; then
-        echo "✅ Success: $pkg installed"
-    else
-        echo "❌ Failed: $pkg installation failed"
-    fi
-    echo ""
-done
+# -------------------------------------
+#  Install AUR Packages
+# -------------------------------------
+install_yay_packages "${AUR_PACKAGES}"
 
 echo "🏁 All packages processed."
 
