@@ -4,13 +4,15 @@
 # Install Doom Emacs
 # ----------------------------------------------------------------------
 
-# Import Install Utils
-source "$(dirname "${0}")/install-utils.zsh"
+# -------------------------------
+# External Imports
+# -------------------------------
+source "$(dirname "${0}")/utils/install-utils.zsh"
 
 log "\n⚙️  Starting Doom Emacs installation...\n"
 
 # -------------------------------
-# Install Doom Emacs if needed
+# Install DOOM EMACS
 # -------------------------------
 log "📦 Cloning Doom Emacs..."
 if git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs &>/dev/null; then
@@ -20,10 +22,12 @@ else
     exit 1
 fi
 
-# -------------------------------------
+# -------------------------
 # Dotfiles
 # -------------------------
-# Create systemd service
+
+# -------------------------
+# Create SYSTEMD service
 # -------------------------
 log "🛠️  Setting up systemd service for Emacs..."
 mkdir -p ~/.config/systemd/user
@@ -105,7 +109,7 @@ log "✅ msmtprc config written."
 log "🔒 Generate a GPG key..."
 gpg --full-generate-key
 
-#e cho "🔒 Register your mail clien..."
+# echo "🔒 Register your mail clien..."
 # firefox https://support.google.com/accounts/answer/185833
 
 log "🔐 Setup username and password (password should be without spaces generated from google) in .offlineimaprc "
@@ -140,7 +144,7 @@ if [[ ! -f "/usr/lib/libtree-sitter.so.0.24" && -f "/usr/lib/libtree-sitter.so" 
         log "✅ libtree-sitter symlink created." ||
         log "❌ Failed to create libtree-sitter symlink."
 else
-    log "✅ libtree-sitter already properly linked or missing entirely." >&2
+    log "✅ libtree-sitter already properly linked or missing entirely." ">&2"
 fi
 
 # -------------------------------------
@@ -148,7 +152,7 @@ fi
 if [[ -d "dotfiles" ]]; then
     backup_and_copy ~/.zshrc.d/config.d/doom ~/.config/doom
 else
-    log "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
+    log "❌ Dotfiles directory not found. Skipping dotfile setup." ">&2"
 fi
 
 mkdir -p ~/Maildir
@@ -162,4 +166,7 @@ log "🔄 Syncing Doom Emacs profiles..."
 ~/.config/emacs/bin/doom sync --rebuild
 log "✅ Doom profiles synced and rebuilt."
 
-log "\n🎉 Setup complete!"
+# -------------------------------------
+# DONE
+# -------------------------------------
+log "\n🎉 All setup steps completed!"

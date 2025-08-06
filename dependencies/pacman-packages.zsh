@@ -4,46 +4,28 @@
 # Install Common Tools for Arch Linux
 # -------------------------------------
 
-# Import Install Utils
-source "$(dirname "${0}")/install-utils.zsh"
+# -------------------------------------
+# External Imports
+# -------------------------------------
+source "$(dirname "${0}")/utils/install-utils.zsh"
+source "$(dirname "${0}")/packages/pkg-pacman.zsh"
 
 log "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
 
-# Define packages
-PACMAN_PACKAGES=(
-    # System Utilities
-    base-devel tmux fd less man bat btop htop pydf tldr reflector stow
-    ranger speedtest-cli openssh trash-cli fzf glances lsd ripgrep lazygit vivid
-    kdiff3 httpie curl ncdu onefetch neofetch fastfetch cronie ufw clamav git-delta
-    ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
-    direnv sqlite jq -clipboard graphviz gnuplot maim scrot plantuml
-    shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
-    haveged man man-pages man-db bc
-
-    # GUI Applications
-    virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
-    libreoffice dbeaver steam discord obs-studio kdenlive gparted vlc
-    qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libvirt edk2-ovmf
-
-    # Development Tools
-    vim neovim emacs make gcc clang cmake direnv maven gradle nodejs npm yarn spring
-    jdk17-openjdk go ruby rust luarocks cabal-install kotlin clojure lighttpd php composer
-)
+# -------------------------------------
+#  Install PACKMAN packages
+# -------------------------------------
+install_packman_packages "${PACMAN_PACKAGES[@]}"
 
 # -------------------------------------
-#  Install Packman Packages
-# -------------------------------------
-install_packman_packages "${PACMAN_PACKAGES}"
-
-# -------------------------------------
-# Dotfiles
+# Copy and backup DOTFILES
 # -------------------------------------
 DOTFILES="../dotfiles"
 log "💾 Copying main config file to home root directory..."
 if [[ -d "${DOTFILES}" ]]; then
 
-    local CONFIG_DIR="${HOME}/.zshrc.d/config.d"
+    CONFIG_DIR="${HOME}/.zshrc.d/config.d"
 
     backup_and_copy "${DOTFILES}/.zshrc" "${HOME}/.zshrc" false
     backup_and_copy "${CONFIG_DIR}/nvim" "${HOME}/.config/nvim" false
@@ -55,7 +37,7 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${CONFIG_DIR}/ufw/before.rules" "/etc/ufw/before.rules" true
 
 else
-    log "❌ Dotfiles directory not found. Skipping dotfile setup." &>2
+    log "❌ Dotfiles directory not found. Skipping dotfile setup." "&>2"
 fi
 
 systemctl enable --now haveged
@@ -64,12 +46,14 @@ sudo usermod -aG libvirt $(whoami)
 systemctl start libvirtd
 systemctl enable vboxservice.service
 
+# -------------------------------------
 # VBox drivers (only if using VirtualBox with Vagrant)
+# -------------------------------------
 if lsmod | grep -q vboxdrv; then
     log "📦 vboxdrv already loaded"
 else
     log "📦 Loading vboxdrv kernel module..."
-    sudo modprobe vboxdrv || log "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers." >&2
+    sudo modprobe vboxdrv || log "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers." ">&2"
 fi
 
 # -------------------------------------
@@ -136,7 +120,7 @@ EOF
 
 # Allow notifications
 if ! grep -q 'clamav ALL' /etc/sudoers.d/clamav &>/dev/null; then
-    log 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' | sudo tee /etc/sudoers.d/clamav >/dev/null
+    echo 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' | sudo tee /etc/sudoers.d/clamav >/dev/null
 fi
 
 # Enable and start ClamAV services

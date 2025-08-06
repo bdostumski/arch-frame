@@ -30,23 +30,23 @@ if [ "${CHOICE}" = "x" ]; then
     exit 0
 fi
 
-DEPENDENCIES_PATH="./dependencies"
+DEPENDENCIES_PATH="$(dirname ${0})/dependencies"
 
 case $CHOICE in
 0)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [Zsh, Kitty, Fonts, Python] . . ."
-    source "${DEPENDENCIES_PATH}/core-dependencies-pacman.zsh"
+    source "${DEPENDENCIES_PATH}/pacman-packages-main.zsh"
     echo "💡 Exit default terminal, and run kitty terminal"
     ;;
 1)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [System, ClamAV, UFW, Wine, VirtualBox, Vim, Neovim, Emacs, etc] . . ."
-    source "${DEPENDENCIES_PATH}/core-pacman.zsh"
-    source "${DEPENDENCIES_PATH}/core-git.zsh"
-    source "${DEPENDENCIES_PATH}/core-yay.zsh"
+    source "${DEPENDENCIES_PATH}/pacman-packages.zsh"
+    source "${DEPENDENCIES_PATH}/git-packages.zsh"
+    source "${DEPENDENCIES_PATH}/yay-packages.zsh"
     echo "💡 Restart [exit/start again] rerun the script with kitty terminal"
     ;;
 2)
@@ -61,13 +61,13 @@ case $CHOICE in
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [LazyVim] . . ."
-    source "${DEPENDENCIES_PATH}/lazyvim-git.zsh"
+    source "${DEPENDENCIES_PATH}/lazyvim.zsh"
     ;;
 4)
     echo "\n"
     echo "= = = = = = = = = ="
     echo "Starting installation [Doom Emacs] . . ."
-    source "${DEPENDENCIES_PATH}/doom-emacs-git.zsh"
+    source "${DEPENDENCIES_PATH}/doom-emacs.zsh"
     ;;
 5)
     echo "\n"

@@ -1,50 +1,22 @@
 #!/usr/bin/env zsh
 #
 # ----------------------------------------------------------------------
-# Install Core Dependencies
+# Install Common Tools for Arch Linux
 # ----------------------------------------------------------------------
 
-# Exit on error
-set -e
-
-# Import Install Utils
-source "$(dirname "${0}")/install-utils.zsh"
+# -------------------------------------
+# External Imports
+# -------------------------------------
+source "$(dirname "${0}")/utils/install-utils.zsh"
+source "$(dirname "${0}")/packages/pkg-pacman-main.zsh"
 
 # -------------------------------------
-# Install Common Tools for Arch Linux
+#  install packman packages
 # -------------------------------------
-
-log "🔄 Updating system..."
-sudo pacman -Syu --noconfirm
-
-# Define packages
-PACMAN_PACKAGES=(
-
-    # Linux kernel
-    linux-zen linux-zen-headers
-
-    # Fonts
-    kitty ttf-dejavu ttf-liberation ttf-roboto ttf-ubuntu-font-family noto-fonts
-    noto-fonts-emoji noto-fonts-cjk ttf-fira-code ttf-fira-mono ttf-fira-sans
-    ttf-jetbrains-mono ttf-hack ttf-inconsolata nerd-fonts ttf-opensans
-
-    # Terminal Fonts
-    terminus-font
-
-    # System Utilities
-    zsh git github-cli ranger
-
-    # Python + tools
-    python python-pip python-pipenv python-virtualenv python-pynvim pyenv
-)
+install_packman_packages "${PACMAN_PACKAGES[@]}"
 
 # -------------------------------------
-#  Install Packman Packages
-# -------------------------------------
-install_packman_packages "${PACMAN_PACKAGES}"
-
-# -------------------------------------
-# Configure Zsh as Default Shell
+# Configure ZSH as default shell
 # -------------------------------------
 if [[ "${SHELL}" != *"zsh" ]]; then
     log "⚙️ Setting Zsh as default shell..."
@@ -54,13 +26,13 @@ else
 fi
 
 # -------------------------------------
-# Dotfiles
+# Copy and backup DOTFILES
 # -------------------------------------
 DOTFILES="dotfiles"
 log "💾 Copying main config file to home root directory..."
 if [[ -d "${DOTFILES}" ]]; then
 
-    local CONFIG_DIR="${HOME}/.zshrc.d/config.d"
+    CONFIG_DIR="${HOME}/.zshrc.d/config.d"
 
     backup_and_copy "${DOTFILES}/.zshrc.d" "${HOME}/.zshrc.d" false
     backup_and_copy "${CONFIG_DIR}/vim/.vimrc" "${HOME}/.vimrc" false
@@ -70,11 +42,11 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${CONFIG_DIR}/arch/pacman.conf" "/etc/pacman.conf" true
 
 else
-    log "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
+    log "❌ Dotfiles directory not found. Skipping dotfile setup." ">&2"
     return 1
 fi
 
 # -------------------------------------
-# Done
+# DONE
 # -------------------------------------
 log "\n🎉 All setup steps completed!"

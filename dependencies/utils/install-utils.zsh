@@ -15,8 +15,8 @@ export function log() {
         touch "${INSTALLATION_LOG}"
     fi
 
-    echo -e "${MESSAGE}" "${SPECIAL_SYMBOL}"
-    echo -e "$(date) : ${MESSAGE}" "${SPECIAL_SYMBOL}" >> "${INSTALLATION_LOG}"
+    echo -e "${MESSAGE} ${SPECIAL_SYMBOL}"
+    echo -e "$(date) : ${MESSAGE}" >> "${INSTALLATION_LOG}"
 
     return 0
 }
@@ -39,29 +39,45 @@ export function backup_and_copy() {
 }
 
 export function install_packman_packages() {
+    log "🔄 PACMAN Updating system..."
 
-    local PACKAGES="${1}"
+    if [[ -f "/var/lib/pacman/db.lck" ]]; then
+        sudo rm /var/lib/pacman/db.lck
+    fi
+
+    sudo packman -Syu --noconfirm
+
+    local PACKAGES=("${@}")
 
     log "📦 Installing ${#PACKAGES[@]} packages..."
     for PKG in "${PACKAGES[@]}"; do
-        log "\n👉 Installing: \033[1m${PKG}\033[0m"
+        log "📦 Installing: ${PKG}"
         if ! pacman -Qi "${PKG}" &>/dev/null; then
             if sudo pacman -S --needed --noconfirm "${PKG}"; then
-                log "✅ \033[1m${PKG}\033[0m installed."
+                log "✅ ${PKG} installed."
             else
-                log "❌ Failed to install: \033[1m${PKG}\033[0m" &>2
+                log "❌ Failed to install: ${PKG}."
             fi
         else
-            log "✅ \033[1m${PKG}\033[0m is already installed." &>2
+            log "✅ ${PKG} is already installed."
         fi
     done
 
+    echo "🏁 All packages processed."
     return 0
 }
 
 export function install_yay_packages() {
+    log "🔄 YAY Updating system..."
 
-    local PACKAGES="${1}"
+    if [[ -f "/var/lib/pacman/db.lck" ]]; then
+        sudo rm /var/lib/pacman/db.lck
+    fi
+
+    sudo chown -R "${USER}" ~/.cache/yay
+    yay -Syu --noconfirm
+
+    local PACKAGES=("${@}")
 
     log "\n🔧 Starting installation of AUR packages...\n"
     for PKG in "${PACKAGES[@]}"; do
@@ -73,8 +89,8 @@ export function install_yay_packages() {
         else
             log "❌ Failed: ${PKG} installation failed"
         fi
-        log ""
     done
 
+    echo "🏁 All packages processed."
     return 0
 }
