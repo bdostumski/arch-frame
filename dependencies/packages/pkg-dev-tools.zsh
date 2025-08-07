@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 #
-# Development Tools Packages
+# Development tools packages
+# Export packages for dev-tools.zsh
 #
 
-# Export Packman Packages for Dev Tools
 export PACMAN_PACKAGES=(
     docker
     docker-machine
@@ -16,7 +16,6 @@ export PACMAN_PACKAGES=(
     helm
 )
 
-# Export yay packages for dev tools
 export AUR_PACKAGES=(
     grip
     docker-compose

@@ -1,11 +1,12 @@
 #!/usr/bin/env zsh
 #
 # ----------------------------------------------------------------------
-# Install & Configure DevOps Tools on Arch Linux
+# Install & Configure DEVELOPMENT TOOLS on Arch Linux
 # ----------------------------------------------------------------------
+#
 
 # ---------------------------
-# External Imports
+# External IMPORTS
 # ---------------------------
 source "$(dirname "${0}")/utils/install-utils.zsh"
 source "$(dirname "${0}")/packages/pkg-dev-tools.zsh"

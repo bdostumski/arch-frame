@@ -1,17 +1,18 @@
 #!/usr/bin/env zsh
 #
-# ----------------------------------------------------------------------
-# Install Common Tools for Arch Linux
-# ----------------------------------------------------------------------
+# -------------------------------------
+# Install COMMON TOOLS for Arch Linux
+# -------------------------------------
+#
 
 # -------------------------------------
-# External Imports
+# External IMPORTS
 # -------------------------------------
 source "$(dirname "${0}")/utils/install-utils.zsh"
 source "$(dirname "${0}")/packages/pkg-pacman-main.zsh"
 
 # -------------------------------------
-#  install packman packages
+#  Install PACKMAN packages
 # -------------------------------------
 install_packman_packages "${PACMAN_PACKAGES[@]}"
 
@@ -19,10 +20,12 @@ install_packman_packages "${PACMAN_PACKAGES[@]}"
 # Configure ZSH as default shell
 # -------------------------------------
 if [[ "${SHELL}" != *"zsh" ]]; then
+
     log "⚙️ Setting Zsh as default shell..."
     chsh -s "$(which zsh)"
 else
-    log "✅ Zsh is already the default shell." >&2
+
+    log "✅ Zsh is already the default shell." ">&2"
 fi
 
 # -------------------------------------
@@ -40,8 +43,8 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${CONFIG_DIR}/env/.env.zsh" "${HOME}/.env.zsh" false
     backup_and_copy "${CONFIG_DIR}/gitconf/.gitconfig" "${HOME}/.gitconfig" false
     backup_and_copy "${CONFIG_DIR}/arch/pacman.conf" "/etc/pacman.conf" true
-
 else
+
     log "❌ Dotfiles directory not found. Skipping dotfile setup." ">&2"
     return 1
 fi

@@ -1,11 +1,12 @@
 #!/usr/bin/env zsh
 #
 # ----------------------------------------------------------------------
-# Install yay packages one by one with status icons
+# Install YAY packages
 # ----------------------------------------------------------------------
+#
 
 # -------------------------------------
-# External Imports
+# External IMPORTS
 # -------------------------------------
 source "$(dirname "${0}")/utils/install-utils.zsh"
 source "$(dirname "${0}")/packages/pkg-yay.zsh"

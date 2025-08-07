@@ -3,14 +3,17 @@
 # ----------------------------------------
 # Install YAY (AUR Helper)
 # ----------------------------------------
+#
 
 # ----------------------------------------
-# External Imports
+# External IMPORTS
 # ----------------------------------------
 source "$(dirname "${0}")/utils/install-utils.zsh"
 
 if ! command -v yay &>/dev/null; then
+
     log "📦 Installing yay..."
+
     sudo pacman -S --needed git base-devel --noconfirm
     TMPDIR="$(mktemp -d)"
     git clone https://aur.archlinux.org/yay.git "${TMPDIR}/yay"
@@ -21,13 +24,14 @@ else
 fi
 
 # ----------------------------------------
-# Install TMUX Plugin Manager (TPM)
+# Install TMUX plugin manager (TPM)
 # ----------------------------------------
 TPM_DIR="${HOME}/.config/tmux/plugins/tpm"
 if [[ ! -d "${TPM_DIR}" ]]; then
     log "📦 Installing TPM..."
     git clone https://github.com/tmux-plugins/tpm "${TPM_DIR}"
 else
+
     log "✅ TPM already exists at $TPM_DIR" ">&2"
 fi
 

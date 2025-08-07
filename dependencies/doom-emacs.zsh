@@ -1,11 +1,12 @@
 #!/usr/bin/env zsh
 #
-# ----------------------------------------------------------------------
-# Install Doom Emacs
-# ----------------------------------------------------------------------
+# -------------------------------
+# Install DOOM EMACS
+# -------------------------------
+#
 
 # -------------------------------
-# External Imports
+# External IMPORTS
 # -------------------------------
 source "$(dirname "${0}")/utils/install-utils.zsh"
 
@@ -15,7 +16,7 @@ log "\n⚙️  Starting Doom Emacs installation...\n"
 # Install DOOM EMACS
 # -------------------------------
 log "📦 Cloning Doom Emacs..."
-if git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs &>/dev/null; then
+if git clone --depth 1 "https://github.com/doomemacs/doomemacs" "${HOME}/.config/emacs" &>/dev/null; then
     log "✅ Doom Emacs cloned."
 else
     log "❌ Doom Emacs already exists at ~/.config/emacs. Skipping clone."
@@ -23,14 +24,10 @@ else
 fi
 
 # -------------------------
-# Dotfiles
-# -------------------------
-
-# -------------------------
 # Create SYSTEMD service
 # -------------------------
 log "🛠️  Setting up systemd service for Emacs..."
-mkdir -p ~/.config/systemd/user
+mkdir -p "${HOME}/.config/systemd/user"
 
 cat <<EOF >~/.config/systemd/user/emacs.service
 [Unit]
@@ -52,7 +49,7 @@ EOF
 log "✅ Emacs systemd service created."
 
 # -------------------------------
-# Create basic offlinemaprc IMAP config
+# Create offlinemaprc IMAP config
 # -------------------------------
 log "💾 Writing offlineimaprc config..."
 cat <<EOF >~/.offlineimaprc
@@ -78,11 +75,11 @@ sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 maxconnections = 1
 EOF
 
-chmod 600 ~/.offlineimap
+chmod 600 "${HOME}/.offlineimap"
 log "✅ offlineimap config written."
 
 # -------------------------------
-# Create basic msmtprc SMTP config
+# Create msmtprc SMTP config
 # -------------------------------
 cat <<EOF >~/.msmtprc
 defaults
@@ -100,7 +97,7 @@ password YOUR_PASSWORD
 account default : Gmail
 EOF
 
-chmod 600 ~/.msmtprc
+chmod 600 "${HOME}/.msmtprc"
 log "✅ msmtprc config written."
 
 # -----------------------
@@ -113,20 +110,22 @@ gpg --full-generate-key
 # firefox https://support.google.com/accounts/answer/185833
 
 log "🔐 Setup username and password (password should be without spaces generated from google) in .offlineimaprc "
-vim ~/.offlineimaprc
+vim "${HOME}/.offlineimaprc"
 
 log "🔐 Setup username and password (password should be without spaces generated from google) in .msmtprc "
-vim ~/.msmtprc
+vim "${HOME}/.msmtprc"
 
-mu init --maildir=~/Maildir --my-address=b.dostumski@gmail.com
+mu init --maildir="${HOME}/Maildir" --my-address=b.dostumski@gmail.com
 mu index
 
 # -----------------------
-# Emacs service start
+# Start EMACS service
 # -----------------------
 log "📁 Backing up ~/.emacs.d (if any)..."
-mv ~/.emacs.d ~/.emacs.d-bak
-"✅ Backup created."
+move_file "${HOME}/.emacs.d"
+if [[ "${?}" -eq 0 ]]; then
+    "✅ Backup created."
+fi
 
 log "🌀 Enabling and starting Emacs systemd service..."
 systemctl --user daemon-reexec
@@ -135,7 +134,7 @@ systemctl --user enable --now emacs.service
 log "✅ Emacs systemd service set up."
 
 # ----------------------------------
-# Link libtree-sitter if missing
+# Link LIBTREE-SITTER if missing
 # ----------------------------------
 log "\n🧪 Checking libtree-sitter..."
 if [[ ! -f "/usr/lib/libtree-sitter.so.0.24" && -f "/usr/lib/libtree-sitter.so" ]]; then
@@ -147,23 +146,25 @@ else
     log "✅ libtree-sitter already properly linked or missing entirely." ">&2"
 fi
 
-# -------------------------------------
-#log "💾 Copying main config file to home root directory..."
+# -------------------------
+# Copy and backup DOTFILES
+# -------------------------
+log "💾 Copying main config file to home root directory..."
 if [[ -d "dotfiles" ]]; then
-    backup_and_copy ~/.zshrc.d/config.d/doom ~/.config/doom
+    backup_and_copy "${HOME}/.zshrc.d/config.d/doom" "${HOME}/.config/doom"
 else
     log "❌ Dotfiles directory not found. Skipping dotfile setup." ">&2"
 fi
 
-mkdir -p ~/Maildir
-mkdir -p ~/Documents/doom/org/roam/
+mkdir -p "${HOME}/Maildir"
+mkdir -p "${HOME}/Documents/doom/org/roam/"
 
 log "🔧 Installing Doom Emacs..."
-~/.config/emacs/bin/doom install
+"${HOME}/.config/emacs/bin/doom install"
 
 log "🔄 Syncing Doom Emacs profiles..."
-~/.config/emacs/bin/doom profile sync --all
-~/.config/emacs/bin/doom sync --rebuild
+"${HOME}/.config/emacs/bin/doom profile sync --all"
+"${HOME}/.config/emacs/bin/doom sync --rebuild"
 log "✅ Doom profiles synced and rebuilt."
 
 # -------------------------------------

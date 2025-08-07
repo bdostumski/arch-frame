@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 #
 # Drivers
+# Export packages for drivers.zsh
 #
 
 export PACMAN_PACKAGES=(

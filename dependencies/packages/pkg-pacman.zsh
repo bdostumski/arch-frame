@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 #
-# Pacman  Packages
+# Pacman  packages
+# Export packages for pacman-packages.zsh
 #
 
 export PACMAN_PACKAGES=(

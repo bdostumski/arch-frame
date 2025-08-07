@@ -1,9 +1,13 @@
 #!/usr/bin/env zsh
 #
-# ----------------------------------------------------------------------
+# --------------------
 # Installation Utils
-# ----------------------------------------------------------------------
+# --------------------
+#
 
+# -----------------------
+# System LOG messages
+# -----------------------
 export function log() {
 
     local MESSAGE="${1}"
@@ -16,11 +20,14 @@ export function log() {
     fi
 
     echo -e "${MESSAGE} ${SPECIAL_SYMBOL}"
-    echo -e "$(date) : ${MESSAGE}" >> "${INSTALLATION_LOG}"
+    echo -e "$(date "+%F %T") : ${MESSAGE}" >> "${INSTALLATION_LOG}"
 
     return 0
 }
 
+# ----------------------------------
+# Copy and Backup FILE
+# ----------------------------------
 export function backup_and_copy() {
 
     local SRC="${1}"
@@ -38,11 +45,32 @@ export function backup_and_copy() {
     return 0
 }
 
+# ----------------------------------
+# Move FILE to FILE.bak
+# ----------------------------------
+function move_file() {
+
+    local SRC="${1}"
+
+    if [[ ! -d "${SRC}.bak" ]]; then
+        log "Moving ${SRC} to ${SRC}.bak"
+        mv "✔ ️${SRC}" "${SRC}.bak"
+    else
+        log "⚠️ ${SRC}.bak already exists" ">&2"
+        return 1
+    fi
+
+    return 0
+}
+
+# ----------------------------------
+# Install PACMAN packages
+# ----------------------------------
 export function install_packman_packages() {
     log "🔄 PACMAN Updating system..."
 
     if [[ -f "/var/lib/pacman/db.lck" ]]; then
-        sudo rm /var/lib/pacman/db.lck
+        sudo rm "/var/lib/pacman/db.lck"
     fi
 
     sudo packman -Syu --noconfirm
@@ -67,11 +95,14 @@ export function install_packman_packages() {
     return 0
 }
 
+# ----------------------------------
+# Install YAY/AUR packages
+# ----------------------------------
 export function install_yay_packages() {
     log "🔄 YAY Updating system..."
 
     if [[ -f "/var/lib/pacman/db.lck" ]]; then
-        sudo rm /var/lib/pacman/db.lck
+        sudo rm "/var/lib/pacman/db.lck"
     fi
 
     sudo chown -R "${USER}" ~/.cache/yay
@@ -83,7 +114,7 @@ export function install_yay_packages() {
     for PKG in "${PACKAGES[@]}"; do
         log "📦 Installing: ${PKG}"
         if yay -Qi "${PKG}" &>/dev/null; then
-            log "✅ Already installed: ${PKG}"
+            log "✅  Already installed: ${PKG}"
         elif yay -S --noconfirm "${PKG}" &>/dev/null; then
             log "✅ Success: ${PKG} installed"
         else

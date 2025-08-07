@@ -1,4 +1,8 @@
 #!/usr/bin/env zsh
+#
+# YAY  packages
+# Export packages for yay-packages.zsh
+#
 
 export AUR_PACKAGES=(
     visual-studio-code-bin
