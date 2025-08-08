@@ -24,6 +24,21 @@ else
 fi
 
 # -------------------------
+# Create SYSTEMD service
+# -------------------------
+config-doom-emacs-systemd
+
+# -------------------------------
+# Create OFFLINEMAPRC IMAP config
+# -------------------------------
+config-offlineimaprs-imap
+
+# -------------------------------
+# Create MSMTPRC SMTP config
+# -------------------------------
+config-msmtprc-smtp
+
+# -------------------------
 # MAIL CLIENT configuration
 # -------------------------
 log "Do you want MU4E configuration [y/n]:"
@@ -33,25 +48,10 @@ if [[ "${MAIL}" -eq 'y' ]]; then
 
     log "🛠️ Starting mail client configuration for doom-emacs ..."
 
-    # -------------------------
-    # Create SYSTEMD service
-    # -------------------------
-    config-doom-emacs-systemd
-
     # -----------------------
     # GPG encryption and register your MAIL CLIENT
     # -----------------------
     config-gpg-key
-
-    # -------------------------------
-    # Create OFFLINEMAPRC IMAP config
-    # -------------------------------
-    config-offlineimaprs-imap
-
-    # -------------------------------
-    # Create MSMTPRC SMTP config
-    # -------------------------------
-    config-msmtprc-smtp
 
     # -------------------------------
     # MU4E configuration

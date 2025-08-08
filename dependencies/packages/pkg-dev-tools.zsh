@@ -19,10 +19,10 @@ export PACMAN_PACKAGES=(
 export AUR_PACKAGES=(
     grip
     docker-compose
-    dockfmt
     vagrant
     qemu-full
     libvirt
     virt-manager
     dnsmasq
+    dockfmt-git
 )
