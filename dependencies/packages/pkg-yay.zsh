@@ -13,11 +13,15 @@ export AUR_PACKAGES=(
     backintime-cli
     downgrade
     scala
+    scalafmt
     metals
     haskell-language-server
     intellij-idea-community-edition
     js-beautify
     mu
+    gomodifytags
+    gotests
+    gore
     lombok-common
     auto-cpufreq
 )
