@@ -1,28 +1,33 @@
+;;; packages.el --- Doom Emacs Package Declarations -*- no-byte-compile: t; -*-
+
+;; This file declares all packages used by your Doom config.
+;; Run `doom sync` after modifying it, then restart Emacs.
+
 ;; ============================
-;; 🧠 Core Tools & Utilities
+;; 🛠 Core Tools & Utilities
 ;; ============================
 
-(package! beacon)              ; highlight cursor after big motions
-(package! exec-path-from-shell); ensure shell env vars inside Emacs
-(package! git-link)            ; create web links to git commits/files
-(package! git-messenger)       ; popup commit messages at point
-(package! sudo-edit)           ; open files as root
-(package! wgrep)               ; edit grep results inline
-(package! dirvish)
+(package! beacon)                  ; highlight cursor after jumps
+(package! exec-path-from-shell)    ; inherit shell env vars in GUI Emacs
+(package! git-link)                ; copy links to GitHub/GitLab commits/files
+(package! git-messenger)           ; show commit message at point
+(package! sudo-edit)               ; open files as root
+(package! wgrep)                   ; edit grep results in-place
+(package! dirvish)                 ; modern Dired interface
 
 ;; ============================
 ;; 🧠 Code Intelligence & LSP
 ;; ============================
 
 (package! dap-mode)
-(package! flycheck-posframe)     ; show Flycheck errors in childframe
+(package! flycheck-posframe)       ; show Flycheck errors in posframe
 (package! gradle-mode)
 (package! lsp-java)
 (package! lsp-mode)
 (package! lsp-treemacs)
 (package! lsp-ui)
 (package! maven-test-mode)
-(package! rainbow-delimiters)    ; rainbow parentheses for Lisps
+(package! rainbow-delimiters)      ; rainbow parens for Lisp modes
 
 ;; ============================
 ;; 🔤 Completion & Snippets
@@ -107,16 +112,15 @@
 ;; 🧩 Optional / Disabled
 ;; ============================
 
-;; Ligature support (enable :ui ligatures)
-;; (package! ligature)
+;; (package! ligature)              ; ligatures support
+;; (package! neotree)               ; alternative to treemacs
 
-;; Neotree as an alternative to Treemacs
-;; (package! neotree)
-
-;; Vertico + extensions (use instead of Ivy)
+;; Vertico stack (if you want to switch from Ivy)
 ;; (package! vertico)
 ;; (package! orderless)
 ;; (package! marginalia)
 ;; (package! consult)
 ;; (package! embark)
 ;; (package! embark-consult)
+
+;;; packages.el ends here
