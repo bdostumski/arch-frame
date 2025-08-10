@@ -12,7 +12,7 @@ export PACMAN_PACKAGES=(
     ueberzug wine fzf cargo gwenview system-config-printer transmission-cli transmission-gtk
     direnv sqlite jq wl-clipboard graphviz gnuplot maim scrot plantuml
     shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
-    haveged man man-pages man-db bc leiningen libvips gopls 
+    haveged man man-pages man-db bc leiningen libvips gopls hunspell hunspell-en_us
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
