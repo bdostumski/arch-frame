@@ -21,19 +21,20 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
+       icons
        (company +childframe)           ; the ultimate code completion backend
        ;;(corfu +orderless)  ; complete with cap(f), cape and a flying feather!
-       ;;(helm +childframe +fuzzy +icons)              ; the *other* search engine for love and life
+       ;;(helm +childframe +fuzzy)              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       (ivy +childframe +fuzzy +icons +prescient)               ; a search engine for love and lifedoom emacs config el create and use sub packages
-       ;;(vertico +icons)           ; the search engine of the future
+       (ivy +childframe +fuzzy +prescient +icons)               ; a search engine for love and lifedoom emacs config el create and use sub packages
+       ;;(vertico)           ; the search engine of the future
 
        :ui
        deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;; (emoji +unicode +ascii +github)  ; 🙂
+       (emoji +unicode +ascii +github)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        indent-guides     ; highlighted indent columns
        ;; (ligatures +extra)         ; ligatures and symbols to make your code pretty again
@@ -68,7 +69,7 @@
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       (dired +icons)             ; making dired pretty [functional]
+       (dired +dirvish +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        ;;eww               ; the internet is gross
        (ibuffer +icons)           ; interactive buffer management
@@ -88,25 +89,24 @@
 
        :tools
        (projectile +native) ; Project management
-       ansible
-       biblio            ; Writes a PhD for you (citation needed)
+       ;;ansible
+       ;;biblio            ; Writes a PhD for you (citation needed)
        collab            ; buffers with friends
        (debugger +lsp)   ; FIXME stepping through code, to help you add bugs
        (testing +lsp)    ; For running tests (mainly in Python, JS, etc.)
        direnv
        (docker +lsp)
        editorconfig      ; let someone else argue about tabs vs spaces
-       ein               ; tame Jupyter notebooks with emacs
+       ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        (lookup +elgot +dictionary)              ; navigate your code and its documentation
-       ;;llm               ; when I said you needed friends, I didn't mean...
        (lsp +peek)             ; M-x vscode
        (magit +forge)             ; a git porcelain for Emacs
        taskrunner        ; this module integrates taskrunner into Doom Emacs, which scraps runnable tasks from build systems like make, gradle, npm and the like.
        make              ; run make tasks from Emacs
        pass              ; password manager for nerds
        pdf               ; pdf enhancements
-       terraform         ; infrastructure as code
+       ;;terraform         ; infrastructure as code
        tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
        rgb               ; highlights color hex values and names with the color itself, and provides tools to easily modify color values or formats.
@@ -143,8 +143,8 @@
        ;;fsharp            ; ML stands for Microsoft's Language
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
        ;;gdscript          ; the language you waited for
-       ;;(go +lsp)         ; the hipster dialect
-       ;;(graphql +lsp)    ; Give queries a REST
+       (go +lsp)         ; the hipster dialect
+       (graphql +lsp)    ; Give queries a REST
        ;;(haskell +lsp)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
@@ -155,16 +155,16 @@
        (typescript +lsp)   ; enable typescript
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       ;;latex             ; writing papers in Emacs has never been so fun
+       (latex +latexmk +lsp)             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        (markdown +pandoc)          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org +dragndrop +noter +present +roam2 +pandoc +gnuplot +journal +hugo)  ; organize your plain life in plain text
-       ;;php               ; perl's insecure younger brother
+       php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        graphviz          ; diagrams for confusing yourself even more
        ;;purescript        ; javascript, but functional
@@ -174,9 +174,9 @@
        ;;raku              ; the artist formerly known as perl6
        rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
-       ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       (ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-       ;;scala             ; java, but good
+       (scala +lsp)             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
        (sh +lsp)                ; she sells {ba,z,fi}sh shells on the C xor
        (shell +zsh +bash +fish)
@@ -189,7 +189,7 @@
        ;;zig               ; C, but simpler
 
        :email
-       ;;(mu4e +org +gmail)
+       (mu4e +org +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
 

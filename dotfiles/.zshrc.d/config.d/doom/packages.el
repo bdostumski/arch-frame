@@ -1,91 +1,121 @@
+;; ============================
+;; 🧠 Core Tools & Utilities
+;; ============================
 
-;;; $DOOMDIR/packages.el
+(package! beacon)              ; highlight cursor after big motions
+(package! exec-path-from-shell); ensure shell env vars inside Emacs
+(package! git-link)            ; create web links to git commits/files
+(package! git-messenger)       ; popup commit messages at point
+(package! sudo-edit)           ; open files as root
+(package! wgrep)               ; edit grep results inline
 
-;; To install a package with Doom you must declare them here and run 'doom sync'
-;; on the command line, then restart Emacs for the changes to take effect -- or
+;; ============================
+;; 🧠 Code Intelligence & LSP
+;; ============================
 
-
-;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
-;; (package! some-package)
-
-;; To install a package directly from a remote git repo, you must specify a
-;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
-;; https://github.com/radian-software/straight.el#the-recipe-format
-;; (package! another-package
-;;   :recipe (:host github :repo "username/repo"))
-
-;; If the package you are trying to install does not contain a PACKAGENAME.el
-;; file, or is located in a subdirectory of the repo, you'll need to specify
-;; `:files' in the `:recipe':
-;; (package! this-package
-;;   :recipe (:host github :repo "username/repo"
-;;            :files ("some-file.el" "src/lisp/*.el")))
-
-;; If you'd like to disable a package included with Doom, you can do so here
-;; with the `:disable' property:
-;; (package! builtin-package :disable t)
-
-;; You can override the recipe of a built in package without having to specify
-;; all the properties for `:recipe'. These will inherit the rest of its recipe
-;; from Doom or MELPA/ELPA/Emacsmirror:
-;; (package! builtin-package :recipe (:nonrecursive t))
-;; (package! builtin-package-2 :recipe (:repo "myfork/package"))
-
-;; Specify a `:branch' to install a package from a particular branch or tag.
-;; This is required for some packages whose default branch isn't 'master' (which
-;; our package manager can't deal with; see radian-software/straight.el#279)
-;; (package! builtin-package :recipe (:branch "develop"))
-
-;; Use `:pin' to specify a particular commit to install.
-;; (package! builtin-package :pin "1a2b3c4d5e")
-
-
-;; Doom's packages are pinned to a specific commit and updated from release to
-;; release. The `unpin!' macro allows you to unpin single packages...
-;; (unpin! pinned-package)
-;; ...or multiple packages
-;; (unpin! pinned-package another-pinned-package)
-;;
-;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
-;; (unpin! t)
-
-;; IntelliSense and code intelligence
-(package! lsp-ui)
-(package! lsp-treemacs)
 (package! dap-mode)
-
-;; Treesitter for highlighting
-(package! tree-sitter)
-(package! tree-sitter-langs)
-
-;; Dired
-(package! all-the-icons)
-
-;; IntelliJ-like icons and visuals
-(package! all-the-icons-dired)
-(package! treemacs-all-the-icons)
-(package! treemacs)
-(package! treemacs-icons-dired)
-
-;; Java and language tools
-(package! lsp-java)
+(package! flycheck-posframe)     ; show Flycheck errors in childframe
 (package! gradle-mode)
+(package! lsp-java)
+(package! lsp-mode)
+(package! lsp-treemacs)
+(package! lsp-ui)
 (package! maven-test-mode)
-(package! groovy-mode)
+(package! rainbow-delimiters)    ; rainbow parentheses for Lisps
 
-;; Optional: if you use Kotlin
-(package! kotlin-mode)
+;; ============================
+;; 🔤 Completion & Snippets
+;; ============================
 
-;; Snippet collections
+(package! all-the-icons-ivy-rich)
+(package! bash-completion)
+(package! company)
+(package! company-box)
+(package! emmet-mode)
+(package! fish-mode)
+(package! ivy)
+(package! ivy-posframe)
+(package! ivy-prescient)
+(package! ivy-rich)
+(package! jq-mode)
+(package! prettier-js)
 (package! yasnippet-snippets)
 
-;; Running and testing
+;; ============================
+;; 🎨 UI Enhancements
+;; ============================
+
+(package! ace-window)
+(package! all-the-icons)
+(package! all-the-icons-dired)
+(package! avy)
+(package! deadgrep)
+(package! expand-region)
+(package! highlight-indent-guides)
+(package! hl-todo)
+(package! minimap)
+(package! smooth-scrolling)
+(package! solaire-mode)
+(package! treemacs)
+(package! treemacs-all-the-icons)
+(package! treemacs-icons-dired)
+(package! treemacs-magit)
+(package! treemacs-persp)
+(package! treemacs-projectile)
+(package! treemacs-tab-bar)
+(package! tree-sitter)
+(package! tree-sitter-langs
+  :recipe (:host github :repo "emacs-tree-sitter/tree-sitter-langs"))
+(package! visual-fill-column)
+
+;; ============================
+;; ✍️ Writing, Org & Notes
+;; ============================
+
+(package! deft)
+(package! emojify)
+(package! org-appear)
+(package! org-download)
+(package! org-gcal)
+(package! org-modern)
+(package! org-roam-ui)
+(package! org-super-agenda)
+(package! ox-hugo)
+(package! auctex-latexmk)
+(package! math-preview)
+(package! cdlatex)
+
+;; ============================
+;; 🧪 Testing & Dev Tools
+;; ============================
+
+(package! cider)
+(package! clojure-mode)
+(package! ejc-sql)
+(package! graphql-mode)
 (package! test-simple)
 
-(package! graphql-mode)
+;; ============================
+;; 🤖 AI / Copilot / LLM
+;; ============================
 
-(package! exec-path-from-shell)
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el"))
 
-(package! copilot :recipe (:host github :repo "zerolfx/copilot.el"))
+;; ============================
+;; 🧩 Optional / Disabled
+;; ============================
 
-(package! org-gcal)
+;; Ligature support (enable :ui ligatures)
+;; (package! ligature)
+
+;; Neotree as an alternative to Treemacs
+;; (package! neotree)
+
+;; Vertico + extensions (use instead of Ivy)
+;; (package! vertico)
+;; (package! orderless)
+;; (package! marginalia)
+;; (package! consult)
+;; (package! embark)
+;; (package! embark-consult)
