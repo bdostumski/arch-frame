@@ -8,6 +8,7 @@
 (package! git-messenger)       ; popup commit messages at point
 (package! sudo-edit)           ; open files as root
 (package! wgrep)               ; edit grep results inline
+(package! dirvish)
 
 ;; ============================
 ;; 🧠 Code Intelligence & LSP

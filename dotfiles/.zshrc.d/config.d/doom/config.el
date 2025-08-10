@@ -9,6 +9,39 @@
 (add-to-list 'default-frame-alist '(undecorated . t))
 (solaire-global-mode +1)
 
+(display-time-mode 1)
+
+(use-package! doom-modeline
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-icon t
+        doom-modeline-major-mode-icon t
+        doom-modeline-buffer-encoding t
+        doom-modeline-buffer-file-name-style 'truncate-upto-project
+        doom-modeline-minor-modes nil
+        doom-modeline-lsp t
+        doom-modeline-enable-word-count t))
+
+(after! ivy
+  (require 'ivy-posframe)
+  (setq ivy-posframe-display-functions-alist
+        '((t . ivy-posframe-display-at-frame-center)))  ; you can customize position
+  (setq ivy-posframe-parameters
+        '((left-fringe . 8)
+          (right-fringe . 8)))
+  (ivy-posframe-mode 1))
+
+(setq ispell-program-name "hunspell")
+(setq ispell-dictionary "en_US")
+
+(use-package dirvish
+  :ensure t
+  :config
+  (dirvish-override-dired-mode))
+
+(when (boundp 'pixel-scroll-precision-mode)
+  (pixel-scroll-precision-mode 1))
+
 (setq use-package-always-ensure t)
 
 (setq projectile-auto-discover t)
