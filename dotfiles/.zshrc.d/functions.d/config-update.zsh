@@ -63,7 +63,7 @@ function config_update() {
     # Copy user-specific configs
     config_backup "${LOCATION}/gitconf/.gitconfig" "${HOME}/"
     config_backup "${LOCATION}/vim/.vimrc" "${HOME}/" false
-    config_backup "${LOCATION}/nvim" "${HOME}/.config/" false
+    #config_backup "${LOCATION}/nvim" "${HOME}/.config/" false
     config_backup "${LOCATION}/tmux" "${HOME}/.config/" false
     config_backup "${LOCATION}/ranger" "$HOME/.config/" false
     config_backup "${LOCATION}/env/.env.zsh" "${HOME}/" false
