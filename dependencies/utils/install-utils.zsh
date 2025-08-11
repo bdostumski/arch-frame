@@ -54,7 +54,7 @@ function move_file() {
 
     if [[ ! -d "${SRC}.bak" ]]; then
         log "Moving ${SRC} to ${SRC}.bak"
-        mv "✔ ️${SRC}" "${SRC}.bak"
+        mv "${SRC}" "${SRC}.bak"
     else
         log "⚠️ ${SRC}.bak already exists" ">&2"
         return 1

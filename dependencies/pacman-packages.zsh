@@ -24,14 +24,16 @@ install_packman_packages "${PACMAN_PACKAGES[@]}"
 # -------------------------------------
 # Copy and backup DOTFILES
 # -------------------------------------
-DOTFILES="../dotfiles"
-log "💾 Copying main config file to home root directory..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES="${SCRIPT_DIR}/dotfiles"
 if [[ -d "${DOTFILES}" ]]; then
+
+    log "💾 Copying main config file to home root directory..."
 
     CONFIG_DIR="${HOME}/.zshrc.d/config.d"
 
+    move_file "${HOME}/.config/nvim"
     backup_and_copy "${DOTFILES}/.zshrc" "${HOME}/.zshrc" false
-    backup_and_copy "${CONFIG_DIR}/nvim" "${HOME}/.config/nvim" false
     backup_and_copy "${CONFIG_DIR}/tmux" "${HOME}/.config/tmux" false
     backup_and_copy "${CONFIG_DIR}/ranger" "${HOME}/.config/ranger" false
     backup_and_copy "${CONFIG_DIR}/clamav" "/etc/clamav" true
@@ -57,6 +59,16 @@ config_ufw
 # CLAMAV configuration
 # -------------------------------------
 config_clamav
+
+# -------------------------------------
+# NEOVIM kickstart configuration
+# -------------------------------------
+if [[ ! -d "${HOME}/.config/nvim" ]]; then
+    echo "⚙️  Installing NeoVim kickstart configuration..."
+    git clone https://github.com/nvim-lua/kickstart.nvim.git "${HOME}/.config/nvim"
+else
+    echo "✅ NeoVim configuration already exists at ${HOME}/.config/nvim"
+fi
 
 # -------------------------------------
 # ZSH configuration

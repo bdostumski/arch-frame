@@ -13,6 +13,7 @@ export PACMAN_PACKAGES=(
     direnv sqlite jq wl-clipboard graphviz gnuplot maim scrot plantuml
     shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
     haveged man man-pages man-db bc leiningen libvips gopls hunspell hunspell-en_us
+    unzip
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
@@ -22,4 +23,5 @@ export PACMAN_PACKAGES=(
     # Development Tools
     vim neovim emacs make gcc clang cmake direnv maven gradle nodejs npm yarn spring
     jdk17-openjdk go ruby rust luarocks cabal-install kotlin clojure lighttpd php composer
+    python-pip
 )

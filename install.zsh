@@ -26,11 +26,10 @@ log "Highly recommended is to try it on a virtual machine, or to install it on a
 log "\n"
 log "Install Dependencies 📦"
 log "0) Install dependencies neede for the script [Zsh, Kitty, Fonts, Python]"
-log "1) Install core dependencies [System, Security, Virtualization, Basic Editors]"
+log "1) Install core dependencies [Vim, Neovim, Emacs, System, ClamAV, UFW, Wine, VirtualBox, etc]"
 log "2) Install Dev Tools [Docker, Vagrant, K8s, etc.]"
-log "3) Install as basic editor [LazyVim]"
-log "4) Install IDE for programming [Doom Emacs]"
-log "5) Install System Drivers & Firmware"
+log "3) Install IDE for programming [Doom Emacs]"
+log "4) Install System Drivers & Firmware"
 log "x) Exit"
 log "\n"
 echo -n "Enter your choise: "
@@ -42,7 +41,7 @@ fi
 
 DEPENDENCIES_PATH="$(dirname ${0})/dependencies"
 
-case $CHOICE in
+case "${CHOICE}" in
 0)
     log "\n"
     log "= = = = = = = = = ="
@@ -53,7 +52,7 @@ case $CHOICE in
 1)
     log "\n"
     log "= = = = = = = = = ="
-    log "Starting installation [System, ClamAV, UFW, Wine, VirtualBox, Vim, Neovim, Emacs, etc] . . ."
+    log "Starting installation [Vim, Neovim, Emacs, System, ClamAV, UFW, Wine, VirtualBox, etc] . . ."
     source "${DEPENDENCIES_PATH}/pacman-packages.zsh"
     source "${DEPENDENCIES_PATH}/git-packages.zsh"
     source "${DEPENDENCIES_PATH}/yay-packages.zsh"
@@ -70,16 +69,10 @@ case $CHOICE in
 3)
     log "\n"
     log "= = = = = = = = = ="
-    log "Starting installation [LazyVim] . . ."
-    source "${DEPENDENCIES_PATH}/lazyvim.zsh"
-    ;;
-4)
-    log "\n"
-    log "= = = = = = = = = ="
     log "Starting installation [Doom Emacs] . . ."
     source "${DEPENDENCIES_PATH}/doom-emacs.zsh"
     ;;
-5)
+4)
     log "\n"
     log "= = = = = = = = = ="
     log "Install System Drivers & Firmware . . ."
