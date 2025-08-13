@@ -7,4 +7,4 @@
 # -----------------
 # LOAD ENVIRONMENT VARIABLES FILE
 # -----------------
-[[ -f "${HOME}/.env.sh" ]] && source "${HOME}/.env.sh"
+[[ -f "${HOME}/.zsh.d/.env.zsh" ]] && source "${HOME}/.zsh.d/.env.zsh"

@@ -7,7 +7,7 @@
 # -----------------
 # LOGS CONFIGURATION
 # -----------------
-LOGS="${HOME}/.logs.d"
+LOGS="${HOME}/.zsh.d/.logs"
 # Create .logs.d to store application messages
 [[ ! -d "${LOGS}" ]] && mkdir -p "${LOGS}"
 

@@ -66,7 +66,7 @@ function config_update() {
     #config_backup "${LOCATION}/nvim" "${HOME}/.config/" false
     config_backup "${LOCATION}/tmux" "${HOME}/.config/" false
     config_backup "${LOCATION}/ranger" "$HOME/.config/" false
-    config_backup "${LOCATION}/env/.env.zsh" "${HOME}/" false
+    config_backup "${LOCATION}/env/.env.zsh" "${HOME}/.zsh.d/" false
     config_backup "${LOCATION}/kitty" "${HOME}/.config/" false
     config_backup "${LOCATION}/doom" "${HOME}/.config/" false
 

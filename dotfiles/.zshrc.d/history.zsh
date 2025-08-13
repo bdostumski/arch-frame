@@ -7,14 +7,21 @@
 # -----------------
 # HISTORY CONFIGURATION
 # -----------------
-# Max number of lines in history file
+
+# Max number of lines in history file (in memory)
 HISTSIZE=50000
-# ----------
+# Max number of lines saved in history file (on disk)
+SAVEHIST=50000
+# Location of the history file
+HISTFILE="${HOME}/.logs.d/.zsh_history"
+
 # History options
-setopt appendhistory      # append history insted of overwriting
-setopt sharehistory       # share history across sessions
-setopt inc_append_history # write commands to history imediately
-setopt hist_ignore_dups   # ignore duplicate commands
-setopt hist_find_no_dups  # do not display duplicates when searching history
-setopt hist_ignore_space  # ignore commands starting with space
-setopt hist_verify        # show command before execution
+setopt appendhistory          # Append history instead of overwriting
+setopt sharehistory           # Share history across sessions
+setopt inc_append_history     # Write commands to history immediately
+setopt hist_ignore_dups       # Ignore duplicate commands
+setopt hist_find_no_dups      # Do not show duplicates when searching history
+setopt hist_ignore_space      # Ignore commands starting with a space
+setopt hist_verify            # Show command before execution
+setopt hist_expire_dups_first # Expire duplicate entries first
+setopt hist_reduce_blanks     # Remove superfluous blanks

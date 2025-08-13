@@ -11,6 +11,7 @@
 alias v="/bin/vim"
 alias vi="editor_nvim_vim"
 alias vim="editor_nvim_vim"
+
 # ----------
 # emacs
 alias emacs="emacsclient -c -a 'emacs'"
