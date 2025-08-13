@@ -13,7 +13,7 @@ HISTSIZE=50000
 # Max number of lines saved in history file (on disk)
 SAVEHIST=50000
 # Location of the history file
-HISTFILE="${HOME}/.logs.d/.zsh_history"
+HISTFILE="${HOME}/.zsh.d/.logs/.zsh_history"
 
 # History options
 setopt appendhistory          # Append history instead of overwriting
