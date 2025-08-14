@@ -20,7 +20,30 @@
 (add-to-list 'default-frame-alist '(undecorated . t))
 (solaire-global-mode +1)
 
-(display-time-mode 1)
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
+
+(use-package savehist
+  :ensure nil
+  :hook (after-init . savehist-mode))
+
+(use-package time
+  :ensure nil
+  :hook (after-init . display-time-mode)
+  :custom
+  (display-time-default-load-average nil)
+  (display-time-mail-check-directory nil))
+
+;; ----------------------------------------
+;; System prcesses
+;; ---------------------------------------
+(use-package proced
+  :ensure nil
+  :defer t
+  :custom
+  (proced-enable-color-flag t)
+  (proced-tree-flag t))
 
 ;; ----------------------------------------
 ;; Treemacs and Integrations
@@ -61,7 +84,8 @@
         doom-modeline-buffer-file-name-style 'truncate-upto-project
         doom-modeline-minor-modes nil
         doom-modeline-lsp t
-        doom-modeline-enable-word-count t))
+        doom-modeline-enable-word-count t
+        doom-modeline-battery t))
 
 ;; ----------------------------------------
 ;; Navigation
