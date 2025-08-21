@@ -16,7 +16,8 @@
 ;; Theme and Visual Tweaks
 ;; ----------------------------------------
 
-(setq doom-theme 'doom-wilmersdorf)
+;;(setq doom-theme 'doom-wilmersdorf)
+(setq doom-theme 'doom-ayu-mirage)
 (add-to-list 'default-frame-alist '(undecorated . t))
 (solaire-global-mode +1)
 
@@ -34,6 +35,10 @@
   :custom
   (display-time-default-load-average nil)
   (display-time-mail-check-directory nil))
+
+(use-package battery
+  :ensure nil
+  :hook (after-init . display-battery-mode))
 
 ;; ----------------------------------------
 ;; System prcesses
@@ -78,14 +83,24 @@
   :init
   (doom-modeline-mode 1)
   :config
-  (setq doom-modeline-icon t
+  (setq doom-modeline-height 20
+        doom-modeline-bar-width 4
+        doom-modeline-buffer-file-name t
+        doom-modeline-buffer-state-icon t
         doom-modeline-major-mode-icon t
-        doom-modeline-buffer-encoding t
-        doom-modeline-buffer-file-name-style 'truncate-upto-project
+        doom-modeline-major-mode t
         doom-modeline-minor-modes nil
+        doom-modeline-vcs-max-length 15
+        doom-modeline-github nil
+        doom-modeline-time t
+        doom-modeline-battery t
+        doom-modeline-project-detection 'project
+        doom-modeline-project-name t
+        doom-modeline-format 'main
+        doom-modeline-buffer-encoding t
         doom-modeline-lsp t
         doom-modeline-enable-word-count t
-        doom-modeline-battery t))
+        ))
 
 ;; ----------------------------------------
 ;; Navigation
@@ -125,33 +140,45 @@
 ;; ----------------------------------------
 
 (use-package! hl-todo
-  :hook (prog-mode . hl-todo-mode))
+  :hook (prog-mode . hl-todo-mode)
+  :config
+  (setq hl-todo-keyword-faces
+        '(("TODO" . "#FF6347")
+          ("FIXME" . "#FFFF00")
+          ("BUG" . "#FF4500")
+          ("HACK" . "#8A2BE2"))))
 
 ;; ----------------------------------------
 ;; Indentation Guides
 ;; ----------------------------------------
-
-(use-package! highlight-indent-guides
-  :hook (prog-mode . highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'character))
-
-;; ----------------------------------------
-;; Minimap
-;; ----------------------------------------
-
-(use-package! minimap
-  :commands minimap-mode)
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character
+      highlight-indent-guides-responsive 'stack
+      highlight-indent-guides-auto-enabled t
+      highlight-indent-guides-character ?•
+      ;;highlight-indent-guides-character ?▶
+      highlight-indent-guides-auto-odd-face-perc 5
+      highlight-indent-guides-auto-even-face-perc 10
+      highlight-indent-guides-auto-character-face-perc 15
+      highlight-indent-guides-highlight-current-column t)
+(custom-set-faces
+ '(highlight-indent-guides-odd-face  ((t (:foreground "#3a4454"))))
+ '(highlight-indent-guides-even-face ((t (:foreground "#465163"))))
+ '(highlight-indent-guides-character-face ((t (:foreground "#3a4454"))))
+ '(highlight-indent-guides-current-character-face ((t (:foreground "#A3BE8C")))))
 
 ;; ----------------------------------------
 ;; Smooth Scrolling
 ;; ----------------------------------------
 
-(use-package! smooth-scrolling
-  :config
-  (smooth-scrolling-mode 1))
-
-(when (boundp 'pixel-scroll-precision-mode)
-  (pixel-scroll-precision-mode 1))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (setq-local scroll-margin 10
+                        scroll-conservatively 101
+                        scroll-step 1
+                        mouse-wheel-progressive-speed nil
+                        mouse-wheel-follow-mouse nil
+                        scroll-preserve-screen-position nil
+                        mouse-wheel-scroll-amount '(2 ((shift) . 5) ((control))))))
 
 ;;; ui-config.el ends here

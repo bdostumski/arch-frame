@@ -8,7 +8,7 @@
 # -------------------------------
 # External IMPORTS
 # -------------------------------
-source "$(dirname "${0}")/utils/install-utils.zsh"
+source "$(dirname "${0}")/configurations/config-doom-emacs.zsh"
 
 log "\n⚙️️  Starting Doom Emacs installation...\n"
 
@@ -22,6 +22,11 @@ else
     log "⚠️ Doom Emacs already exists at ~/.config/emacs. Skipping clone."
     exit 1
 fi
+
+# -------------------------
+# Create Directories for Packages 
+# -------------------------
+create-package-directories
 
 # -------------------------
 # Create SYSTEMD service
@@ -44,7 +49,7 @@ config-msmtprc-smtp
 log "Do you want MU4E configuration [y/n]:"
 read -r MAIL
 
-if [[ "${MAIL}" -eq 'y' ]]; then
+if [[ "${MAIL}" = 'y' ]]; then
 
     log "🛠️ Starting mail client configuration for doom-emacs ..."
 
@@ -90,9 +95,6 @@ if [[ -d "dotfiles" ]]; then
 else
     log "⚠️ Dotfiles directory not found. Skipping dotfile setup." ">&2"
 fi
-
-mkdir -p "${HOME}/Maildir"
-mkdir -p "${HOME}/Documents/doom/org/roam/"
 
 log "🧩 Installing Doom Emacs..."
 "${HOME}/.config/emacs/bin/doom install"

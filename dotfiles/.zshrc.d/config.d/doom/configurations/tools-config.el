@@ -30,20 +30,46 @@
 ;; ----------------------------------------
 
 (use-package! lsp-mode
-  :hook ((java-mode . lsp)
-         (js-mode . lsp)
-         (python-mode . lsp))
-  :commands lsp)
+  :commands lsp
+  :hook ((js-mode . lsp)
+         (typescript-mode . lsp)
+         (python-mode . lsp)
+         (java-mode . lsp)
+         (c-mode . lsp)
+         (c++-mode . lsp)
+         (rust-mode . lsp)
+         (go-mode . lsp)
+         (php-mode . lsp)
+         (ruby-mode . lsp)
+         (html-mode . lsp)
+         (css-mode . lsp)
+         (scss-mode . lsp)
+         (less-css-mode . lsp)
+         (json-mode . lsp)
+         (yaml-mode . lsp)
+         (markdown-mode . lsp)
+         (lua-mode . lsp)
+         (sql-mode . lsp)
+         (dockerfile-mode . lsp)
+         (graphql-mode . lsp)
+         (elixir-mode . lsp)
+         (haskell-mode . lsp)
+         (kotlin-mode . lsp)
+         (terraform-mode . lsp)
+         (sh-mode . lsp)
+         (xml-mode . lsp))
+  :config
+  (setq lsp-enable-symbol-highlighting t
+        lsp-enable-snippet t
+        lsp-prefer-flymake nil))
 
+;; LSP UI enhancements
 (use-package! lsp-ui
   :after lsp-mode
-  :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq lsp-ui-doc-enable t
-        lsp-ui-sideline-enable t))
-
-(use-package! lsp-treemacs
-  :after lsp)
+        lsp-ui-doc-position 'at-point
+        lsp-ui-sideline-enable nil))
 
 ;; ----------------------------------------
 ;; Debug Adapter Protocol
@@ -52,7 +78,20 @@
 (use-package! dap-mode
   :after lsp-mode
   :config
-  (dap-auto-configure-mode))
+  ;; Enable UI features
+  (require 'dap-ui)
+  (dap-ui-mode 1)
+
+  ;; Language-specific setup
+  (require 'dap-node)
+  (require 'dap-chrome)
+  (require 'dap-firefox))
+
+;; Optional: enable tooltips and controls
+(use-package! dap-ui
+  :after dap-mode
+  :config
+  (dap-ui-controls-mode 1))
 
 ;; ----------------------------------------
 ;; Build Tools

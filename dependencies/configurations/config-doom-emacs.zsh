@@ -11,6 +11,33 @@
 source "$(dirname "${0}")/../utils/install-utils.zsh"
 
 # -------------------------
+# Create Directories for DEFT
+# -------------------------
+export function create-package-directories() {
+	if [[ ! -d "${HOME}/notes" ]]; then
+		echo "ECHO"
+		mkdir "${HOME}/notes"
+	fi
+	
+	if [[ ! -d "${HOME}/Maildir" ]]; then
+		mkdir "${HOME}/Maildir"
+	fi
+	
+	if [[ ! -d "${HOME}/org/roam" ]]; then
+		mkdir -p "${HOME}/org/roam/"
+	fi
+	
+	if [[ ! -d "${HOME}/.config/emacs/yanist" ]]; then
+		mkdir -p "${HOME}/.config/emacs/yanist"
+	fi
+
+	if [[ ! -d "${HOME}/.config/doom/yanist" ]]; then
+		mkdir -p "${HOME}/.config/doom/yanist"
+	fi
+
+}
+
+# -------------------------
 # Create SYSTEMD service
 # -------------------------
 export function config-doom-emacs-systemd() {

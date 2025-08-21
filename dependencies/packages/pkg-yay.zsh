@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-#
+
 # YAY  packages
 # Export packages for yay-packages.zsh
 #
@@ -24,4 +24,5 @@ export AUR_PACKAGES=(
     gore
     lombok-common
     auto-cpufreq
+    lisp
 )

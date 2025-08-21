@@ -43,7 +43,7 @@
 ;;   :init
 ;;   (setq org-gcal-client-id "your-client-id"
 ;;         org-gcal-client-secret "your-client-secret"
-;;         org-gcal-file-alist '(("your-email@gmail.com" .  "~/org/gcal.org"))))
+;;         org-gcal-file-alist '(("your-email@gmail.com" .  "~/.doom.d/org/gcal.org"))))
 
 (use-package! org-modern
   :hook (org-mode . org-modern-mode))
@@ -68,12 +68,28 @@
 (use-package! bash-completion
   :after shell)
 
+;; ==============================
+;; TypeScript Indent
+;; ==============================
+
+;;(after! typescript-mode
+;;  (setq typescript-indent-level 4))
+
+(setq-default tab-width 4)        ;; display width of a tab
+(setq-default evil-shift-width 4) ;; evil-mode shift commands use 2 spaces
+(setq-default indent-tabs-mode nil) ;; use spaces instead of tabs
+
+
 ;; ----------------------------------------
 ;; JSON and JavaScript
 ;; ----------------------------------------
 
 (use-package! jq-mode
   :mode "\\.jq\\'")
+
+(after! js2-mode
+  ;; Set js2 indent to 2
+  (setq js2-basic-offset 2))
 
 (use-package! prettier-js
   :hook ((js-mode . prettier-js-mode)
