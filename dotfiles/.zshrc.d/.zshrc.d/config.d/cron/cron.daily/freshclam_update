@@ -1,2 +1,0 @@
-#!/bin/zsh
-0 19 * * * /usr/bin/freshclam --quiet

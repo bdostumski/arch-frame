@@ -1,2 +1,0 @@
-#!/bin/zsh
-0 21 * * * clamscan -r --quiet --bell -i /home/$USER
