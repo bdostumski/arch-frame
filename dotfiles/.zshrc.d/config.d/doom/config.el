@@ -32,15 +32,15 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+;;(setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+;;(setq display-line-numbers-type t)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+;;(setq org-directory "~/org/")
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -84,36 +84,57 @@
 ;;; Code:
 
 ;; ----------------------------------------
-;; Core Editor Behavior
+;; Doom Emacs Modular Config Loader
 ;; ----------------------------------------
 
-(load! "configurations/emacs-config.el")
-(load! "configurations/editor-config.el")
+;; Completion Module
+;; Sets up completion frameworks: Company, Vertico, snippets, and related enhancements.
+(load! "module/completion-module.el")
 
-;; ----------------------------------------
-;; UI and Completion
-;; ----------------------------------------
+;; UI Module
+;; Configures visual appearance: themes, modeline, icons, treemacs, dashboard, zen, etc.
+(load! "module/ui-module.el")
 
-(load! "configurations/ui-config.el")
-(load! "configurations/completion-config.el")
+;; Editor Module
+;; Editing behavior: smartparens, multiple-cursors, folds, formatters, snippets, etc.
+(load! "module/editor-module.el")
 
-;; ----------------------------------------
-;; Language & LSP Support
-;; ----------------------------------------
+;; Emacs Module
+;; Core Emacs extensions: dired, ibuffer, undo, electric, file-templates, etc.
+(load! "module/emacs-module.el")
 
-(load! "configurations/tools-config.el")
-(load! "configurations/lang-config.el")
+;; Terminal Module
+;; Integrated terminals: eshell, vterm, tmux, shell configs (zsh, bash, fish).
+(load! "module/term-module.el")
 
-;; ----------------------------------------
-;; Checkers (Spell, Syntax, etc.)
-;; ----------------------------------------
+;; Checkers Module
+;; Spell checking, grammar, and syntax linting.
+(load! "module/checkers-module.el")
 
-(load! "configurations/checkers-config.el")
+;; Tools Module
+;; DevOps & productivity: Magit, Docker, Gist, Lookup, Debugger, PDF, Terraform, etc.
+(load! "module/tools-module.el")
 
-;; ----------------------------------------
-;; Email Client
-;; ----------------------------------------
+;; OS Module
+;; OS-specific integration: Unix tools, macOS support, TTY handling, direnv, etc.
+(load! "module/os-module.el")
 
-(load! "configurations/email-config.el")
+;; Language Module
+;; Programming language support: LSP, tree-sitter, SQL, web, Ruby, Java, C/C++, etc.
+(load! "module/lang-module.el")
+
+;; Email Module
+;; Email clients: mu4e setup with org integration and notifications.
+(load! "module/email-module.el")
+
+;; App Module
+;; Applications: Calendar, RSS, IRC, EMMS, Everywhere, Org-roam, Chat tools.
+(load! "module/app-module.el")
+
+;; Config Module
+;; User-specific config: personal keybindings, variables, environment, secrets.
+(load! "module/config-module.el")
+
+(provide 'config)
 
 ;;; config.el ends here
