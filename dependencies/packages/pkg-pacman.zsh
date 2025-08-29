@@ -13,7 +13,7 @@ export PACMAN_PACKAGES=(
     direnv sqlite jq wl-clipboard graphviz gnuplot maim scrot plantuml
     shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
     haveged man man-pages man-db bc leiningen libvips gopls hunspell hunspell-en_us
-    unzip
+    unzip pandoc
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
