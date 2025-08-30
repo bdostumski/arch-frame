@@ -5,28 +5,30 @@
 
 ;;; Code:
 
-;;(use-package! evil-multiedit
-;;  :commands (evil-multiedit-match-all
-;;             evil-multiedit-match-symbol-and-next
-;;             evil-multiedit-match-symbol-and-prev
-;;             evil-multiedit-restore
-;;             evil-multiedit-ex-match)
-;;  :init
-;;  ;; Enable default evil-multiedit keybindings
-;;  (evil-multiedit-default-keybinds)
-;;  :config
-;;  ;; Smart matching
-;;  (setq evil-multiedit-smart-match-boundaries t
-;;        evil-multiedit-ignore-indent-and-trailing t))
+(use-package! evil-multiedit
+  :after evil
+  :commands (evil-multiedit-match-all
+             evil-multiedit-match-symbol-and-next
+             evil-multiedit-match-symbol-and-prev
+             evil-multiedit-restore
+             evil-multiedit-ex-match
+             evil-multiedit-toggle-marker-here)
+  :config
+  ;; Enable default keybindings (M-d, C-n, C-p, etc.)
+  (evil-multiedit-default-keybinds)
+
+  ;; Tweaks
+  (setq evil-multiedit-smart-match-boundaries t
+        evil-multiedit-ignore-indent-and-trailing t))
 
 ;; Leader keybindings for Doom
 ;;(map! :leader
-;;:prefix ("m" . "multiedit")
-;;:desc "Mark symbol + next" "n" #'evil-multiedit-match-symbol-and-next
-;;:desc "Mark symbol + prev" "p" #'evil-multiedit-match-symbol-and-prev
-;;:desc "Mark all matches" "a" #'evil-multiedit-match-all
-;;:desc "Ex match (regex)" "e" #'evil-multiedit-ex-match
-;;:desc "Restore session" "r" #'evil-multiedit-restore))
+;;      :prefix ("m" . "multiedit")
+;;      :desc "Mark symbol + next" "n" #'evil-multiedit-match-symbol-and-next
+;;      :desc "Mark symbol + prev" "p" #'evil-multiedit-match-symbol-and-prev
+;;      :desc "Mark all matches" "a" #'evil-multiedit-match-all
+;;      :desc "Ex match (regex)" "e" #'evil-multiedit-ex-match
+;;      :desc "Restore session" "r" #'evil-multiedit-restore))
 
 (provide 'editor-multiple-cursors-config)
 

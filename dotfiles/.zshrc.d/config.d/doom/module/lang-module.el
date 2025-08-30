@@ -10,13 +10,13 @@
 (load! "config/lang-config/lang-cc-config.el")
 
 ;; Common Lisp support
-(load! "config/lang-config/lang-common-lisp-config.el")
+;;(load! "config/lang-config/lang-common-lisp-config.el")
 
 ;; Data formats (CSV, XML, etc.)
 (load! "config/lang-config/lang-data-config.el")
 
 ;; Emacs Lisp (with LSP integration)
-(load! "config/lang-config/lang-emacs-lisp-config.el")
+;;(load! "config/lang-config/lang-emacs-lisp-config.el")
 
 ;; Go language support
 (load! "config/lang-config/lang-go-config.el")

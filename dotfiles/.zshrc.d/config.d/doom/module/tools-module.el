@@ -51,7 +51,7 @@
 (load! "config/tools-config/tools-projectile-config.el")
 
 ;; RGB color picker (for UI/UX and CSS editing)
-(load! "config/tools-config/tools-rgb-config.el")
+;;(load! "config/tools-config/tools-rgb-config.el")
 
 ;; Task runner (for npm, yarn, gulp, etc.)
 (load! "config/tools-config/tools-taskrunner-config.el")

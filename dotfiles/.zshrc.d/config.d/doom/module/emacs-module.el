@@ -24,7 +24,7 @@
 (load! "config/emacs-config/emacs-ibuffer-config.el")
 
 ;; Undo system configuration
-(load! "config/emacs-config/emacs-undo-config.el")
+;;(load! "config/emacs-config/emacs-undo-config.el")
 
 ;; Version control integration
 (load! "config/emacs-config/emacs-vc-config.el")

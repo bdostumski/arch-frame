@@ -4,7 +4,7 @@
 
 ;;; Code:
 
-(after! lisp-mode
+(use-package! lisp-mode
   ;; Enable LSP in Lisp buffers
   (add-hook 'lisp-mode-hook #'lsp)
 

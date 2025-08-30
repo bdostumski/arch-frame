@@ -9,7 +9,7 @@
 
 ;; Enable spell-checking automatically
 (add-hook 'text-mode-hook #'flyspell-mode)       ;; check all text
-(add-hook 'prog-mode-hook #'flyspell-prog-mode)  ;; check comments and strings only
+;;(add-hook 'prog-mode-hook #'flyspell-prog-mode)  ;; check comments and strings only
 
 ;; Set dictionary (hunspell or aspell)
 (setq ispell-dictionary "en_US")
