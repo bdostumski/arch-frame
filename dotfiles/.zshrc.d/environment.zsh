@@ -63,7 +63,7 @@ if [[ -d "${HOME}/.config/emacs/bin" ]]; then
 	PATH="${HOME}/.config/emacs/bin:${PATH}"
 fi
 # ----------
-# add Applications to path
+# add applications to path
 if [[ -d "${HOME}/Applications" ]]; then
 	PATH="${HOME}/Applications:${PATH}"
 fi
@@ -73,10 +73,17 @@ if [[ -d "${HOME}/.config/emacs/bin/doom" ]]; then
 	PATH="${HOME}/.config/emacs/bin/doom:${PATH}"
 fi
 # ----------
-# add go lang to path
+# Add go lang to path
 if [[ -d "${HOME}/go" ]]; then
 	PATH="${HOME}/go/bin:${PATH}"
 fi
+# ----------
+# add python anaconda platform for AI/ML to path
+if [[ -d "/opt/anaconda/" ]]; then
+	export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
+	PATH="/opt/anaconda/bin:$PATH"
+fi
+
 # ----------
 # add python to path
 PATH="${PYENV_ROOT}/bin:${PATH}"

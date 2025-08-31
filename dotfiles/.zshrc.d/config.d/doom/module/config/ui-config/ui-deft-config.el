@@ -14,7 +14,7 @@
         :desc "Open Deft" "n d" #'deft)
   :config
   ;; Core settings
-  (setq deft-directory "~/.doom.d/notes"
+  (setq deft-directory "~/Documents/notes"
         deft-extensions '("org" "md" "txt")
         deft-recursive t
         deft-auto-save-interval 1.0

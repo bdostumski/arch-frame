@@ -45,8 +45,9 @@
   (setq +format-on-save-enabled-modes
         '(not emacs-lisp-mode makefile-mode))
   ;; Leader toggle
-  (map! :leader
-        :desc "Toggle format on save" "t f" #'+format/toggle))
+  ;;(map! :leader
+  ;;      :desc "Toggle format on save" "t f" #'+format/toggle)
+  )
 
 ;; ----------------------------
 ;; Helper functions for conditional formatters

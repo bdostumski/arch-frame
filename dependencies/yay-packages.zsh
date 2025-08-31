@@ -16,6 +16,14 @@ source "$(dirname "${0}")/packages/pkg-yay.zsh"
 # -------------------------------------
 install_yay_packages "${AUR_PACKAGES[@]}"
 
+
+# -------------------------------------
+#  Initialize Anaconda AI/ML platform for python
+# -------------------------------------
+if [[ -d "/opt/anaconda/"]]; then
+	conda init zsh
+fi
+
 # -------------------------------------
 # DONE
 # -------------------------------------

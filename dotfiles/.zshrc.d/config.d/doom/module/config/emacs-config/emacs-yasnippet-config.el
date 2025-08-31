@@ -13,7 +13,7 @@
   (yas-snippet-dirs
    '("~/.config/emacs/snippets"           ;; personal snippets
      "~/.local/share/yasnippet-snippets"  ;; community snippets
-     "~/.doom.d/project-specific-snippets")) ;; project-specific snippets
+     "~/.config/emacs/snippets/project-specific-snippets")) ;; project-specific snippets
   (yas-triggers-in-field t)
   (yas-wrap-around-region t)
   :config

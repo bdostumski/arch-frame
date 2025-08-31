@@ -25,4 +25,5 @@ export AUR_PACKAGES=(
     lombok-common
     auto-cpufreq
     lisp
+    anaconda
 )

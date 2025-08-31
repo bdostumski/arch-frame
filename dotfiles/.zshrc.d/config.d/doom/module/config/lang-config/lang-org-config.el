@@ -12,7 +12,7 @@
 ;; ----------------------------
 ;; Global Org settings
 ;; ----------------------------
-(setq org-directory "~/.doom.d/org/"
+(setq org-directory "~/Documents/org/"
       org-startup-indented t
       org-startup-with-inline-images t
       org-hide-emphasis-markers t
@@ -48,7 +48,7 @@
 ;; Org-roam v2
 ;; ----------------------------
 (after! org-roam
-  (setq org-roam-directory "~/org/roam/")
+  (setq org-roam-directory "~/Documents/org/roam/")
   (org-roam-db-autosync-mode))
 
 ;; ----------------------------
@@ -80,7 +80,7 @@
 ;;   :config
 ;;   (setq org-gcal-client-id "your-client-id"
 ;;         org-gcal-client-secret "your-client-secret"
-;;         org-gcal-file-alist '(("your-email@gmail.com" .  "~/.doom.d/org/gcal.org"))))
+;;         org-gcal-file-alist '(("your-email@gmail.com" .  "~/Documents/org/gcal.org"))))
 
 ;; ----------------------------
 ;; Leader keybindings
@@ -93,5 +93,4 @@
 ;;       :desc "Export to Hugo" "h" #'org-hugo-export-wim-to-md))
 
 (provide 'lang-org-config)
-
 ;;; lang-org-config.el ends here

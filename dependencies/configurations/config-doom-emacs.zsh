@@ -14,17 +14,29 @@ source "$(dirname "${0}")/../utils/install-utils.zsh"
 # Create Directories for DEFT
 # -------------------------
 export function create-package-directories() {
-	if [[ ! -d "${HOME}/notes" ]]; then
-		echo "ECHO"
-		mkdir "${HOME}/notes"
+
+	if [[ ! -d "${HOME}/Documents/notes" ]]; then
+		mkdir "${HOME}/Documents/notes"
+	fi
+
+	if [[ ! -d "${HOME}/Documents/diary" ]]; then
+		mkdir "${HOME}/Documents/diary"
 	fi
 	
 	if [[ ! -d "${HOME}/Maildir" ]]; then
 		mkdir "${HOME}/Maildir"
 	fi
+
+	if [[ ! -d "${HOME}/Documents/org" ]]; then
+		mkdir -p "${HOME}/Documents/org"
+	fi
 	
-	if [[ ! -d "${HOME}/org/roam" ]]; then
-		mkdir -p "${HOME}/org/roam/"
+	if [[ ! -d "${HOME}/Documents/org/roam" ]]; then
+		mkdir -p "${HOME}/Documents/org/roam"
+	fi
+
+	if [[ ! -d "${HOME}/Documents/org/feeds.org" ]]; then
+		mkdir -p "${HOME}/Documents/org/feeds.org"
 	fi
 	
 	if [[ ! -d "${HOME}/.config/emacs/yanist" ]]; then
@@ -34,7 +46,6 @@ export function create-package-directories() {
 	if [[ ! -d "${HOME}/.config/doom/yanist" ]]; then
 		mkdir -p "${HOME}/.config/doom/yanist"
 	fi
-
 }
 
 # -------------------------

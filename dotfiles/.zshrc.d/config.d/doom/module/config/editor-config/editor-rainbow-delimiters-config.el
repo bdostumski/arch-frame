@@ -18,14 +18,28 @@
     '(rainbow-delimiters-depth-7-face :foreground "#F78C6C")
     '(rainbow-delimiters-depth-8-face :foreground "#FF5370")
     '(rainbow-delimiters-depth-9-face :foreground "#B0BEC5")
+    '(rainbow-delimiters-unmatched-face :foreground "#FF0000" :weight bold)
+    '(rainbow-delimiters-mismatched-face :foreground "#FF0000" :background "#FFAAAA")
     '(show-paren-match-expression
-      :background "#3B3B3B"
-      :foreground "#FFD700"
+      :background nil
+      :foreground nil
+      :weight bold)
+    '(show-paren-match
+      :background nil
+      :foreground nil
       :weight bold))
 
   ;; Show matching parentheses instantly
-  (setq show-paren-delay 0)
-  (show-paren-mode 1))
+  (setq show-paren-delay 0
+        show-paren-style 'expression  ; Highlight entire expression
+        show-paren-when-point-inside-paren t
+        show-paren-when-point-in-periphery t)
+  (show-paren-mode 1)
+  
+  ;; Optional: Add visual feedback for mismatched delimiters
+  (setq rainbow-delimiters-highlight-braces-p t
+        rainbow-delimiters-highlight-brackets-p t
+        rainbow-delimiters-highlight-parens-p t))
 
 (provide 'editor-rainbow-delimiters-config)
 

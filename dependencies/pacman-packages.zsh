@@ -82,6 +82,19 @@ else
     log "✅ Zsh is already the default shell." >&2
 fi
 
+# -------------------------------------
+# PYENV configuration
+# -------------------------------------
+if command -v pyenv >/dev/null 2>&1; then
+	
+    	log "⚙️ Setting pyenv..."
+	pyenv install 3.11.6
+	pyenv global 3.11.6
+else
+
+	log "pyenv is not installed!"
+fi
+
 chmod +x ~/.zshrc.d/functions.d/*.zsh
 
 log "\n🎉 Setup complete. Your system is ready!"
