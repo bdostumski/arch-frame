@@ -10,8 +10,8 @@
   :commands (deft)
   :init
   ;; Leader keybinding to open Deft
-  (map! :leader
-        :desc "Open Deft" "n d" #'deft)
+  ;;  (map! :leader
+  ;;        :desc "Open Deft" "n d" #'deft)
   :config
   ;; Core settings
   (setq deft-directory "~/Documents/notes"

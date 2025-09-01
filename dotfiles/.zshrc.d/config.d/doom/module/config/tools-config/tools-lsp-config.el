@@ -28,62 +28,46 @@
         lsp-headerline-breadcrumb-enable t
         lsp-modeline-code-actions-enable t
         lsp-signature-auto-activate t
-        lsp-signature-doc-lines 2
-        ;; Disable LSP for Emacs Lisp
-        lsp-language-id-configuration
-        (assq-delete-all 'emacs-lisp-mode lsp-language-id-configuration))
-
-  (add-to-list 'lsp-disabled-clients '(emacs-lisp-mode . nil))
-
-  ;; Enable LSP in programming modes
-  (dolist (hook '(prog-mode-hook
-                  yaml-mode-hook
-                  json-mode-hook
-                  markdown-mode-hook
-                  dockerfile-mode-hook
-                  terraform-mode-hook
-                  sh-mode-hook
-                  xml-mode-hook))
-    (add-hook hook #'lsp-deferred))
-
-  ;; Enable which-key integration
-  (lsp-enable-which-key-integration t))
+        lsp-signature-doc-lines 2))
 
 ;; ----------------------------
-;; LSP-UI (VSCode-like)
+;; LSP-UI
 ;; ----------------------------
 (use-package! lsp-ui
   :after lsp-mode
   :hook (lsp-mode . lsp-ui-mode)
   :config
   ;; Hover docs at bottom
-  (setq lsp-ui-doc-enable t
+  (setq lsp-ui-doc-enable nil ;; disable ui-doc
         lsp-ui-doc-use-childframe t
-        lsp-ui-doc-position 'bottom
-        lsp-ui-doc-show-with-cursor nil
+        lsp-ui-doc-position 'at-point
+        lsp-ui-doc-show-with-cursor t
         lsp-ui-doc-show-with-mouse nil
-        lsp-ui-doc-max-height 13
+        lsp-ui-doc-max-height 20
         lsp-ui-doc-max-width 150
         lsp-ui-doc-border (face-foreground 'default))
 
   ;; Disable sideline clutter
   (setq lsp-ui-sideline-enable t
-        lsp-ui-sideline-show-hover t
-        lsp-ui-sideline-show-diagnostics t
-        lsp-ui-sideline-show-symbol t
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-sideline-show-diagnostics nil
+        lsp-ui-sideline-show-symbol nil
+        lsp-ui-sideline-ignore-duplicate: t
         lsp-ui-sideline-show-code-actions t)
 
   ;; Peek definitions/references
   (setq lsp-ui-peek-enable t
-        lsp-ui-peek-always-show t
+        lsp-ui-peek-always-show nil
         lsp-ui-peek-fontify 'always
-        lsp-ui-peek-list-width 50
+        lsp-ui-peek-list-width 60
         lsp-ui-peek-peek-height 20)
 
   ;; Symbols outline
-  (setq lsp-ui-imenu-enable t
+  (setq lsp-ui-imenu t
+        lsp-ui-imenu-enable t
         lsp-ui-imenu-auto-refresh t
-        lsp-ui-imenu-kind-position 'top))
+        ;;lsp-ui-imenu-kind-position 'top
+        lsp-ui-imenu-buffer-position 'right))
 
 ;; ----------------------------
 ;; Treemacs integration for symbols

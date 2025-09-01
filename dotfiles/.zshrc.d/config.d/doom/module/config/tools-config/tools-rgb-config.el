@@ -7,18 +7,19 @@
 ;;; Code:
 
 ;; ----------------------------
-;; Enable rgb-mode globally
+;; Enable rgb-mode in programming buffers
 ;; ----------------------------
-(add-hook 'prog-mode-hook #'rgb-mode)
-
-;; Optional: configure color step
-(setq rgb-colorscale-step 10) ;; increment/decrement step for color adjustments
+(use-package! rgb
+  :hook (prog-mode . rgb-mode)
+  :config
+  ;; Optional: configure color step
+  (setq rgb-colorscale-step 10)) ;; increment/decrement step for color adjustments
 
 ;; ----------------------------
 ;; Leader keybindings for color adjustments
 ;; ----------------------------
 ;;(map! :leader
-;;      (:prefix-map ("c" . "color")
+;;      (:prefix ("c" . "color")
 ;;       :desc "Increase color" "+" #'rgb-increase-color
 ;;       :desc "Decrease color" "-" #'rgb-decrease-color
 ;;       :desc "Toggle color format" "f" #'rgb-toggle-format))
