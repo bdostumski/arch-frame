@@ -65,6 +65,7 @@
 (package! wgrep)                   ; edit grep results in-place
 (package! dirvish)           ;; Modern Dired replacement
 (package! ranger)            ;; Ranger-style file navigation
+(package! rgb)
 
 ;; ============================
 ;; 🧠 Code Intelligence & LSP

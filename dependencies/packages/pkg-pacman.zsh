@@ -14,6 +14,7 @@ export PACMAN_PACKAGES=(
     shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
     haveged man man-pages man-db bc leiningen libvips gopls hunspell hunspell-en_us
     unzip pandoc python-black python-pyflakes python-isort python-pytest python-nose
+    pass
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp

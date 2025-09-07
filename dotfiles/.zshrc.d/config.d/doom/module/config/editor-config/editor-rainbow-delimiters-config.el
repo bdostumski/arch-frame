@@ -21,12 +21,12 @@
     '(rainbow-delimiters-unmatched-face :foreground "#FF0000" :weight bold)
     '(rainbow-delimiters-mismatched-face :foreground "#FF0000" :background "#FFAAAA")
     '(show-paren-match-expression
-      :background nil
-      :foreground nil
+      :background unspecified
+      :foreground unspecified
       :weight bold)
     '(show-paren-match
-      :background nil
-      :foreground nil
+      :background unspecified
+      :foreground unspecified
       :weight bold))
 
   ;; Show matching parentheses instantly

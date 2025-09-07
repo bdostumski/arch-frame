@@ -69,7 +69,7 @@
   :commands sudo-edit)
 
 (use-package! exec-path-from-shell
-  :if (memq window-system '(mac ns x))
+  :defer 2  ;; delay 2 seconds after startup
   :config
   (exec-path-from-shell-initialize))
 

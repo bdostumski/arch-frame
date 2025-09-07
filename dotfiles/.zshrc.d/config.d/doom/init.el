@@ -93,8 +93,8 @@
        taskrunner        ; this module integrates taskrunner into Doom Emacs, which scraps runnable tasks from build systems like make, gradle, npm and the like.
        make              ; run make tasks from Emacs
        pass              ; password manager for nerds
-       pdf               ; pdf enhancements
-       ;;terraform         ; infrastructure as code
+       pdf      ; pdf enhancements 
+       ;;terraform       ; infrastructure as code
        tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
        rgb               ; highlights color hex values and names with the color itself, and provides tools to easily modify color values or formats.

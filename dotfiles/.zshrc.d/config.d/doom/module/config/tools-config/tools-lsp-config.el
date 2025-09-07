@@ -12,70 +12,52 @@
 ;; - Advanced workspace management and debugging tools
 ;; - Integration with Treemacs, Ivy, Flycheck, and Company
 ;; - Smart LSP activation based on project detection
-;;
-;; KEYBINDINGS:
-;; Leader Key Bindings (SPC):
-;;   SPC L     - Main LSP prefix (workspace management, toggles)
-;;   SPC c L   - Quick LSP start
-;;   SPC c I   - Workspace info
-;;
-;; Local Leader Bindings (SPC m in LSP buffers):
-;;   g - Navigation (goto definition, references, etc.)
-;;   p - Peek operations (definitions, references, implementation)
-;;   h - Help/Documentation (hover, signature, describe)
-;;   a - Actions (code actions, quick fixes, refactoring)
-;;   r - Refactoring (rename, organize imports, etc.)
-;;   f - Formatting (buffer, region)
-;;   s - Symbols/Search (workspace symbols, imenu)
-;;   d - Diagnostics (errors, warnings, buffer diagnostics)
-;;   t - Toggles (lens, breadcrumb, highlighting)
-;;   w - Workspace (restart, shutdown, info)
 
 ;;; Code:
 
 ;; ----------------------------
 ;; State tracking variables
 ;; ----------------------------
-(defvar bdostumski/lsp-initialized nil
+(defvar +lsp/lsp-initialized nil
   "Track if LSP has been properly initialized to prevent double-setup.")
 
-(defvar bdostumski/lsp-performance-applied nil
+(defvar +lsp/lsp-performance-applied nil
   "Track if performance optimizations have been applied.")
 
-(defvar bdostumski/lsp-gc-cons-threshold-original nil
+(defvar +lsp/lsp-gc-cons-threshold-original nil
   "Original gc-cons-threshold value to restore on cleanup.")
 
 ;; Store original values for restoration
-(unless bdostumski/lsp-gc-cons-threshold-original
-  (setq bdostumski/lsp-gc-cons-threshold-original gc-cons-threshold))
+(unless +lsp/lsp-gc-cons-threshold-original
+  (setq +lsp/lsp-gc-cons-threshold-original gc-cons-threshold))
 
 ;; ----------------------------
 ;; Performance optimization functions
 ;; ----------------------------
-(defun bdostumski/lsp-apply-performance-settings ()
+(defun +lsp/lsp-apply-performance-settings ()
   "Apply LSP-specific performance optimizations.
   
 Increases garbage collection threshold and process output buffer size
 to improve LSP responsiveness during heavy operations."
-  (unless bdostumski/lsp-performance-applied
+  (unless +lsp/lsp-performance-applied
     (setq read-process-output-max (* 1024 1024)  ; 1MB for faster LSP communication
           gc-cons-threshold (* 100 1024 1024)    ; 100MB during LSP sessions
-          bdostumski/lsp-performance-applied t)
+          +lsp/lsp-performance-applied t)
     (message "✓ LSP performance optimizations applied")))
 
-(defun bdostumski/lsp-restore-performance-settings ()
+(defun +lsp/lsp-restore-performance-settings ()
   "Restore original Emacs performance settings.
   
 Called automatically on Emacs exit or when LSP is disabled."
-  (when bdostumski/lsp-performance-applied
-    (setq gc-cons-threshold bdostumski/lsp-gc-cons-threshold-original
-          bdostumski/lsp-performance-applied nil)
+  (when +lsp/lsp-performance-applied
+    (setq gc-cons-threshold +lsp/lsp-gc-cons-threshold-original
+          +lsp/lsp-performance-applied nil)
     (message "✓ Original performance settings restored")))
 
 ;; ----------------------------
 ;; Smart LSP activation logic
 ;; ----------------------------
-(defun bdostumski/lsp-maybe-enable ()
+(defun +lsp/lsp-maybe-enable ()
   "Conditionally enable LSP based on project context and file type.
   
 Only activates LSP for:
@@ -84,10 +66,10 @@ Only activates LSP for:
 - Buffers that pass our activation criteria"
   (when (and (buffer-file-name)
              (not (file-remote-p default-directory))
-             (bdostumski/lsp-should-activate-p))
+             (+lsp/lsp-should-activate-p))
     (lsp-deferred)))
 
-(defun bdostumski/lsp-should-activate-p ()
+(defun +lsp/lsp-should-activate-p ()
   "Determine if LSP should be activated for the current buffer.
   
 Returns t if:
@@ -119,8 +101,8 @@ Returns t if:
 (use-package! lsp-mode
   :defer t
   :commands (lsp lsp-mode lsp-deferred)
-  :hook ((prog-mode . bdostumski/lsp-maybe-enable)
-         (lsp-mode . bdostumski/lsp-mode-setup))
+  :hook ((prog-mode . +lsp/lsp-maybe-enable)
+         (lsp-mode . +lsp/lsp-mode-setup))
 
   :init
   ;; Essential pre-load settings
@@ -131,7 +113,7 @@ Returns t if:
 
   :config
   ;; Apply performance optimizations
-  (bdostumski/lsp-apply-performance-settings)
+  (+lsp/lsp-apply-performance-settings)
 
   ;; Core LSP behavior configuration
   (setq 
@@ -171,7 +153,7 @@ Returns t if:
    lsp-server-install-dir (expand-file-name "lsp/servers/" doom-cache-dir))
 
   ;; Mark as initialized
-  (setq bdostumski/lsp-initialized t))
+  (setq +lsp/lsp-initialized t))
 
 ;; In your Doom Emacs config.el
 (after! lsp-headerline
@@ -187,11 +169,9 @@ Returns t if:
 ;; ----------------------------
 ;; LSP mode setup hook
 ;; ----------------------------
-(defun bdostumski/lsp-mode-setup ()
+(defun +lsp/lsp-mode-setup ()
   "Setup hook for LSP mode activation.
-  
-Configures company completion, which-key integration,
-and buffer-local keybindings."
+   Configures company completion, which-key integratand buffer-local keybindings."
   ;; Configure company completion for LSP
   (setq-local company-backends
               (cons 'company-capf
@@ -202,7 +182,7 @@ and buffer-local keybindings."
     (lsp-enable-which-key-integration))
 
   ;; Setup buffer-local keybindings
-  (bdostumski/lsp-setup-buffer-keys))
+  (+lsp/lsp-setup-buffer-keys))
 
 ;; ----------------------------
 ;; Enhanced LSP-UI configuration
@@ -319,7 +299,7 @@ and buffer-local keybindings."
 ;; ----------------------------
 ;; Advanced LSP workspace management
 ;; ----------------------------
-(defun bdostumski/lsp-workspace-restart ()
+(defun +lsp/lsp-workspace-restart ()
   "Restart LSP workspace safely with user feedback."
   (interactive)
   (if (lsp-workspaces)
@@ -329,7 +309,7 @@ and buffer-local keybindings."
         (message "✓ LSP workspace restarted successfully"))
     (message "No active LSP workspace to restart")))
 
-(defun bdostumski/lsp-workspace-cleanup ()
+(defun +lsp/lsp-workspace-cleanup ()
   "Clean up LSP workspace and session data completely."
   (interactive)
   (if (lsp-workspaces)
@@ -340,7 +320,7 @@ and buffer-local keybindings."
         (message "✓ LSP workspace cleaned up"))
     (message "No active LSP workspace to clean up")))
 
-(defun bdostumski/lsp-clear-cache ()
+(defun +lsp/lsp-clear-cache ()
   "Clear LSP cache and restart workspace."
   (interactive)
   (let ((cache-dir (expand-file-name "lsp" doom-cache-dir)))
@@ -354,7 +334,7 @@ and buffer-local keybindings."
 ;; ----------------------------
 ;; UI and feature toggles
 ;; ----------------------------
-(defun bdostumski/lsp-toggle-symbol-highlighting ()
+(defun +lsp/lsp-toggle-symbol-highlighting ()
   "Toggle LSP symbol highlighting with visual feedback."
   (interactive)
   (setq lsp-enable-symbol-highlighting (not lsp-enable-symbol-highlighting))
@@ -362,7 +342,7 @@ and buffer-local keybindings."
   (message "LSP symbol highlighting: %s"
            (if lsp-enable-symbol-highlighting "✓ enabled" "✗ disabled")))
 
-(defun bdostumski/lsp-toggle-lens ()
+(defun +lsp/lsp-toggle-lens ()
   "Toggle LSP code lens display."
   (interactive)
   (setq lsp-lens-enable (not lsp-lens-enable))
@@ -372,7 +352,7 @@ and buffer-local keybindings."
   (message "LSP code lens: %s" 
            (if lsp-lens-enable "✓ enabled" "✗ disabled")))
 
-(defun bdostumski/lsp-toggle-breadcrumb ()
+(defun +lsp/lsp-toggle-breadcrumb ()
   "Toggle LSP headerline breadcrumb navigation."
   (interactive)
   (setq lsp-headerline-breadcrumb-enable (not lsp-headerline-breadcrumb-enable))
@@ -380,7 +360,7 @@ and buffer-local keybindings."
   (message "LSP breadcrumb: %s" 
            (if lsp-headerline-breadcrumb-enable "✓ enabled" "✗ disabled")))
 
-(defun bdostumski/lsp-toggle-diagnostics ()
+(defun +lsp/lsp-toggle-diagnostics ()
   "Toggle LSP diagnostics display in sideline."
   (interactive)
   (setq lsp-ui-sideline-show-diagnostics (not lsp-ui-sideline-show-diagnostics))
@@ -391,7 +371,7 @@ and buffer-local keybindings."
 ;; ----------------------------
 ;; Debugging and diagnostics
 ;; ----------------------------
-(defun bdostumski/lsp-show-workspace-info ()
+(defun +lsp/lsp-show-workspace-info ()
   "Show comprehensive LSP workspace information."
   (interactive)
   (if (lsp-workspaces)
@@ -404,14 +384,14 @@ and buffer-local keybindings."
                  server-id (abbreviate-file-name root) status buffers-count))
     (message "No active LSP workspace")))
 
-(defun bdostumski/lsp-show-buffer-diagnostics ()
+(defun +lsp/lsp-show-buffer-diagnostics ()
   "Show diagnostics for the current buffer in a dedicated buffer."
   (interactive)
   (if (lsp-workspaces)
       (lsp-show-flycheck-buffer)
     (message "No active LSP workspace")))
 
-(defun bdostumski/lsp-performance-report ()
+(defun +lsp/lsp-performance-report ()
   "Show LSP performance report and enable logging."
   (interactive)
   (if (lsp-workspaces)
@@ -424,9 +404,29 @@ and buffer-local keybindings."
     (message "No active LSP workspace")))
 
 ;; ----------------------------
+;; State management and cleanup
+;; ----------------------------
+(defun +lsp/lsp-reset-state ()
+  "Reset LSP state for clean restarts."
+  (interactive)
+  (setq +lsp/lsp-initialized nil)
+  
+  ;; Restore performance settings
+  (+lsp/lsp-restore-performance-settings)
+  
+  ;; Clean up any LSP processes if needed
+  (when (fboundp 'lsp-workspace-shutdown)
+    (condition-case nil
+        (dolist (workspace (lsp-workspaces))
+          (lsp-workspace-shutdown workspace))
+      (error nil)))
+  
+  (message "✓ LSP state reset successfully"))
+
+;; ----------------------------
 ;; Comprehensive keybinding setup
 ;; ----------------------------
-(defun bdostumski/lsp-setup-buffer-keys ()
+(defun +lsp/lsp-setup-buffer-keys ()
   "Setup comprehensive buffer-local LSP keybindings using localleader."
   (map! :localleader
         :map lsp-mode-map
@@ -477,81 +477,64 @@ and buffer-local keybindings."
 
         ;; Diagnostics (d prefix)
         (:prefix ("d" . "diagnostics")
-         :desc "Show diagnostics"        "d" #'bdostumski/lsp-show-buffer-diagnostics
+         :desc "Show diagnostics"        "d" #'+lsp/lsp-show-buffer-diagnostics
          :desc "Next diagnostic"         "n" #'flycheck-next-error
          :desc "Previous diagnostic"     "p" #'flycheck-previous-error)
 
         ;; Toggles (t prefix)
         (:prefix ("t" . "toggles")
-         :desc "Toggle lens"             "l" #'bdostumski/lsp-toggle-lens
-         :desc "Toggle breadcrumb"       "b" #'bdostumski/lsp-toggle-breadcrumb
-         :desc "Toggle highlighting"     "h" #'bdostumski/lsp-toggle-symbol-highlighting
-         :desc "Toggle diagnostics"      "d" #'bdostumski/lsp-toggle-diagnostics)
+         :desc "Toggle lens"             "l" #'+lsp/lsp-toggle-lens
+         :desc "Toggle breadcrumb"       "b" #'+lsp/lsp-toggle-breadcrumb
+         :desc "Toggle highlighting"     "h" #'+lsp/lsp-toggle-symbol-highlighting
+         :desc "Toggle diagnostics"      "d" #'+lsp/lsp-toggle-diagnostics)
 
         ;; Workspace management (w prefix)
         (:prefix ("w" . "workspace")
-         :desc "Restart workspace"       "r" #'bdostumski/lsp-workspace-restart
-         :desc "Shutdown workspace"      "s" #'bdostumski/lsp-workspace-cleanup
-         :desc "Workspace info"          "i" #'bdostumski/lsp-show-workspace-info
-         :desc "Clear cache"             "c" #'bdostumski/lsp-clear-cache)))
+         :desc "Restart workspace"       "r" #'+lsp/lsp-workspace-restart
+         :desc "Shutdown workspace"      "s" #'+lsp/lsp-workspace-cleanup
+         :desc "Workspace info"          "i" #'+lsp/lsp-show-workspace-info
+         :desc "Clear cache"             "c" #'+lsp/lsp-clear-cache)))
 
 ;; ----------------------------
 ;; Global keybindings
 ;; ----------------------------
 (map! :leader
-      (:prefix-map ("L" . "LSP")
-       ;; Workspace management
-       :desc "Start LSP"                "s" #'lsp
-       :desc "Start deferred"           "S" #'lsp-deferred
-       :desc "Restart workspace"        "r" #'bdostumski/lsp-workspace-restart
-       :desc "Shutdown workspace"       "q" #'bdostumski/lsp-workspace-cleanup
-       :desc "Clear cache"              "c" #'bdostumski/lsp-clear-cache
-       :desc "Workspace info"           "i" #'bdostumski/lsp-show-workspace-info
-       :desc "Performance report"       "p" #'bdostumski/lsp-performance-report
-       
-       ;; Treemacs integration
-       :desc "Treemacs symbols"         "t" #'lsp-treemacs-symbols
-       :desc "Treemacs errors"          "e" #'lsp-treemacs-errors-list
-       
-       ;; UI toggles
-       :desc "Toggle sideline"          "u" #'lsp-ui-sideline-mode
-       :desc "Toggle doc mode"          "d" #'lsp-ui-doc-mode
-       :desc "Toggle diagnostics"       "D" #'bdostumski/lsp-toggle-diagnostics
-       :desc "Toggle highlighting"      "h" #'bdostumski/lsp-toggle-symbol-highlighting
-       :desc "Toggle breadcrumb"        "b" #'bdostumski/lsp-toggle-breadcrumb
-       :desc "Toggle lens"              "l" #'bdostumski/lsp-toggle-lens))
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("t" . "tools")
+                                (:prefix ("s" . "lsp")
+                                 ;; Workspace management
+                                 :desc "Start LSP"                "s" #'lsp
+                                 :desc "Start deferred"           "S" #'lsp-deferred
+                                 :desc "Restart workspace"        "r" #'+lsp/lsp-workspace-restart
+                                 :desc "Shutdown workspace"       "q" #'+lsp/lsp-workspace-cleanup
+                                 :desc "Clear cache"              "c" #'+lsp/lsp-clear-cache
+                                 :desc "Workspace info"           "i" #'+lsp/lsp-show-workspace-info
+                                 :desc "Performance report"       "p" #'+lsp/lsp-performance-report
+                                 
+                                 ;; Treemacs integration
+                                 :desc "Treemacs symbols"         "t" #'lsp-treemacs-symbols
+                                 :desc "Treemacs errors"          "e" #'lsp-treemacs-errors-list
+                                 
+                                 ;; UI toggles
+                                 :desc "Toggle sideline"          "u" #'lsp-ui-sideline-mode
+                                 :desc "Toggle doc mode"          "d" #'lsp-ui-doc-mode
+                                 :desc "Toggle diagnostics"       "D" #'+lsp/lsp-toggle-diagnostics
+                                 :desc "Toggle highlighting"      "h" #'+lsp/lsp-toggle-symbol-highlighting
+                                 :desc "Toggle breadcrumb"        "b" #'+lsp/lsp-toggle-breadcrumb
+                                 :desc "Toggle lens"              "l" #'+lsp/lsp-toggle-lens))))
 
 ;; Additional integration with existing Doom keybindings
 (map! :leader
       (:prefix-map ("c" . "code")
        :desc "Start LSP"                "L" #'lsp
-       :desc "LSP workspace info"       "I" #'bdostumski/lsp-show-workspace-info
-       :desc "LSP restart"              "R" #'bdostumski/lsp-workspace-restart))
-
-;; ----------------------------
-;; State management and cleanup
-;; ----------------------------
-(defun bdostumski/lsp-reset-state ()
-  "Reset LSP state for clean restarts."
-  (interactive)
-  (setq bdostumski/lsp-initialized nil)
-  
-  ;; Restore performance settings
-  (bdostumski/lsp-restore-performance-settings)
-  
-  ;; Clean up any LSP processes if needed
-  (when (fboundp 'lsp-workspace-shutdown)
-    (condition-case nil
-        (dolist (workspace (lsp-workspaces))
-          (lsp-workspace-shutdown workspace))
-      (error nil)))
-  
-  (message "✓ LSP state reset successfully"))
+       :desc "LSP workspace info"       "I" #'+lsp/lsp-show-workspace-info
+       :desc "LSP restart"              "R" #'+lsp/lsp-workspace-restart))
 
 ;; Hook for Doom restarts and cleanup
-(add-hook 'doom-after-reload-hook #'bdostumski/lsp-reset-state)
-(add-hook 'kill-emacs-hook #'bdostumski/lsp-restore-performance-settings)
+(add-hook 'doom-after-reload-hook #'+lsp/lsp-reset-state)
+(add-hook 'kill-emacs-hook #'+lsp/lsp-restore-performance-settings)
 
 (provide 'tools-lsp-config)
 
 ;;; tools-lsp-config.el ends here
+

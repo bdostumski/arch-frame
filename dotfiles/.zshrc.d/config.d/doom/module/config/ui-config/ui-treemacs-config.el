@@ -20,10 +20,6 @@
         '("TAGS" "*.pyc" "*.o" "*.class")))
 (projectile-mode +1)
 
-;; Optional keybinding for Projectile commands
-(map! :leader
-      :desc "Projectile command map" "p" #'projectile-command-map)
-
 ;; ----------------------------
 ;; Core Treemacs
 ;; ----------------------------

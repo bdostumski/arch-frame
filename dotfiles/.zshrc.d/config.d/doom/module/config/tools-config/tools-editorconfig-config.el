@@ -1,393 +1,328 @@
 ;;; module/config/tools-config/tools-editorconfig-config.el -*- lexical-binding: t -*-
 
 ;;; Commentary:
-;; Comprehensive EditorConfig integration for Doom Emacs
-;;
-;; FEATURES:
-;; - Automatic code style application from .editorconfig files
-;; - Template system for common .editorconfig setups
-;; - Project-wide consistency enforcement
-;; - Visual feedback and debugging tools
-;; - Integration with project management
-;;
-;; KEYBINDINGS:
-;; Leader Key Bindings (SPC):
-;;   SPC e c     - Show current EditorConfig settings
-;;   SPC f .     - Find/edit .editorconfig file
-;;   
-;; EditorConfig-specific (SPC E):
-;;   SPC E e     - Edit .editorconfig file
-;;   SPC E c     - Show current settings
-;;   SPC E r     - Reload EditorConfig for buffer
-;;   SPC E t     - Create .editorconfig from template
+;; EditorConfig helps maintain consistent coding styles for multiple developers working on the same project across various editors and IDEs.
+;; The EditorConfig project consists of a file format for defining coding styles and a collection of text editor plugins that enable editors to read the file format and adhere to defined styles.
+;; EditorConfig files are easily readable and they work nicely with version control systems.
 
 ;;; Code:
+
+;; Core deps
+(require 'cl-lib)
+(when (not (fboundp 'string-trim))
+  (require 'subr-x)) ;; string-trim, string-empty-p for older Emacs
+
+(defgroup +editorconfig/editorconfig nil
+  "EditorConfig helpers."
+  :group 'convenience)
 
 ;; ----------------------------
 ;; State tracking and configuration
 ;; ----------------------------
-(defvar bdostumski/editorconfig-initialized nil
-  "Track if EditorConfig has been properly initialized.")
+(defvar +editorconfig/editorconfig-initialized nil
+  "Non-nil when EditorConfig integration has been initialized.")
 
-(defvar bdostumski/editorconfig-debug-mode nil
-  "When t, enables verbose EditorConfig debugging.")
+(defvar +editorconfig/editorconfig-debug-mode nil
+  "When non-nil, prints verbose EditorConfig debug messages.")
 
-(defvar bdostumski/editorconfig-auto-apply t
-  "When t, automatically applies EditorConfig settings to new buffers.")
+(defvar +editorconfig/editorconfig-auto-apply t
+  "When non-nil, automatically applies EditorConfig settings to suitable buffers.")
 
-(defvar bdostumski/editorconfig-templates
-  '(("web-frontend" . 
+(defvar +editorconfig/editorconfig-templates
+  '(("web-frontend" .
      "# EditorConfig for Web Frontend Projects\nroot = true\n\n[*]\ncharset = utf-8\ninsert_final_newline = true\ntrim_trailing_whitespace = true\nend_of_line = lf\n\n[*.{js,ts,jsx,tsx,vue,svelte}]\nindent_style = space\nindent_size = 2\nmax_line_length = 100\n\n[*.{html,css,scss,sass,less}]\nindent_style = space\nindent_size = 2\n\n[*.{json,yaml,yml}]\nindent_style = space\nindent_size = 2\n\n[*.md]\ntrim_trailing_whitespace = false\nmax_line_length = 120\n")
-    
+
     ("backend-api" .
-     "# EditorConfig for Backend API Projects\nroot = true\n\n[*]\ncharset = utf-8\ninsert_final_newline = true\ntrim_trailing_whitespace = true\nend_of_line = lf\n\n[*.{py,rb,php}]\nindent_style = space\nindent_size = 4\nmax_line_length = 88\n\n[*.{js,ts}]\nindent_style = space\nindent_size = 2\nmax_line_length = 100\n\n[*.{java,kt,scala}]\nindent_style = space\nindent_size = 4\nmax_line_length = 120\n\n[*.{go}]\nindent_style = tab\ntab_width = 4\nmax_line_length = 100\n")
-    
+     "# EditorConfig for Backend API Projects\nroot = true\n\n[*]\ncharset = utf-8\ninsert_final_newline = true\ntrim_trailing_whitespace = true\nend_of_line = lf\n\n[*.{py,rb,php}]\nindent_style = space\nindent_size = 4\nmax_line_length = 88\n\n[*.{js,ts}]\nindent_style = space\nindent_size = 2\nmax_line_length = 100\n\n[*.{java,kt,scala}]\nindent_style = space\nindent_size = 4\nmax_line_length = 120\n\n[*.go]\nindent_style = tab\ntab_width = 4\nmax_line_length = 100\n")
+
     ("python-data" .
      "# EditorConfig for Python/Data Science Projects\nroot = true\n\n[*]\ncharset = utf-8\ninsert_final_newline = true\ntrim_trailing_whitespace = true\nend_of_line = lf\n\n[*.py]\nindent_style = space\nindent_size = 4\nmax_line_length = 88\n\n[*.{yml,yaml}]\nindent_style = space\nindent_size = 2\n\n[requirements*.txt]\ninsert_final_newline = true\n")
-    
+
     ("minimal" .
      "# Minimal EditorConfig\nroot = true\n\n[*]\ncharset = utf-8\ninsert_final_newline = true\ntrim_trailing_whitespace = true\nend_of_line = lf\nindent_style = space\nindent_size = 2\n"))
   "Templates for common EditorConfig configurations.")
 
-(defvar bdostumski/editorconfig-current-settings nil
-  "Cache of current EditorConfig settings for quick reference.")
+(defvar +editorconfig/editorconfig-current-settings nil
+  "Cache (hash table) of last-read EditorConfig properties for the current buffer.")
 
 ;; ----------------------------
-;; Helper functions (defined before use)
+;; Small helpers
 ;; ----------------------------
-(defun bdostumski/editorconfig-get-properties-safe ()
-  "Safely get EditorConfig properties for current buffer."
-  (when (buffer-file-name)
+(defun +editorconfig/editorconfig--msg (fmt &rest args)
+  "Log an editorconfig message if debug mode or always for important messages.
+FMT and ARGS like `message'."
+  (when (or +editorconfig/editorconfig-debug-mode t)
+    (apply #'message (concat "[editorconfig] " fmt) args)))
+
+;; Safe wrappers around editorconfig functions (only call if available)
+(defun +editorconfig/editorconfig-get-properties-safe ()
+  "Return EditorConfig properties for current buffer or nil.
+Wraps `editorconfig-get-properties' safely (checks for function)."
+  (when (and (buffer-file-name) (fboundp 'editorconfig-get-properties))
     (condition-case err
         (editorconfig-get-properties (buffer-file-name))
-      (error 
-       (when bdostumski/editorconfig-debug-mode
-         (message "EditorConfig error: %s" (error-message-string err)))
+      (error
+       (when +editorconfig/editorconfig-debug-mode
+         (message "[editorconfig] error in get-properties: %s" (error-message-string err)))
        nil))))
 
-(defun bdostumski/editorconfig-maybe-enable ()
-  "Conditionally enable EditorConfig for appropriate buffers."
-  (when (and bdostumski/editorconfig-auto-apply
-             (buffer-file-name)
-             (not (file-remote-p (buffer-file-name)))
-             (not (string-match-p "\\*.*\\*" (buffer-name))))
-    ;; Cache settings for quick access
-    (setq bdostumski/editorconfig-current-settings 
-          (bdostumski/editorconfig-get-properties-safe))))
-
-(defun bdostumski/editorconfig-after-apply (props)
-  "Hook function called after EditorConfig properties are applied."
-  (when bdostumski/editorconfig-debug-mode
-    (message "EditorConfig applied: %s properties" 
-             (if (hash-table-p props) (hash-table-count props) "unknown")))
-  
-  ;; Update cached settings
-  (setq bdostumski/editorconfig-current-settings props))
-
-(defun bdostumski/editorconfig-setup-custom-properties ()
-  "Setup custom EditorConfig property handlers for enhanced functionality."
-  ;; Max line length integration with fill-column
-  (when (boundp 'editorconfig-indentation-alist)
-    (add-to-list 'editorconfig-indentation-alist
-                 '(fill-column . max_line_length))))
+(defun +editorconfig/editorconfig-apply-safe ()
+  "Call `editorconfig-apply' if available, return t on success, nil otherwise."
+  (when (fboundp 'editorconfig-apply)
+    (condition-case err
+        (progn (editorconfig-apply) t)
+      (error
+       (when +editorconfig/editorconfig-debug-mode
+         (message "[editorconfig] error in apply: %s" (error-message-string err)))
+       nil))))
 
 ;; ----------------------------
-;; Enhanced EditorConfig package configuration
+;; Syncing variables
+;; ----------------------------
+(defun +editorconfig/editorconfig-sync-vars (props)
+  "Sync Emacs buffer-local vars with EditorConfig PROPS (hash table)."
+  (when (hash-table-p props)
+    (let ((indent (gethash 'indent_size props))
+          (style  (gethash 'indent_style props))
+          (len    (gethash 'max_line_length props)))
+      (when indent
+        (setq-local tab-width (if (stringp indent) (string-to-number indent) indent)))
+      (when style
+        (setq-local indent-tabs-mode (string= (if (stringp style) style (format "%s" style)) "tab")))
+      (when len
+        (setq-local fill-column (if (stringp len) (string-to-number len) len))))))
+
+(defun +editorconfig/editorconfig-after-apply (props)
+  "Hook: called after editorconfig properties are applied with PROPS."
+  (when +editorconfig/editorconfig-debug-mode
+    (message "[editorconfig] after-apply: %s properties"
+             (if (hash-table-p props) (hash-table-count props) "unknown")))
+  (setq +editorconfig/editorconfig-current-settings props)
+  (+editorconfig/editorconfig-sync-vars props))
+
+(defun +editorconfig/editorconfig-maybe-enable ()
+  "Auto-load .editorconfig settings for buffers when appropriate."
+  (when (and +editorconfig/editorconfig-auto-apply
+             (buffer-file-name)
+             (not (file-remote-p (buffer-file-name)))
+             (not (string-prefix-p "*" (buffer-name))))
+    (setq +editorconfig/editorconfig-current-settings
+          (+editorconfig/editorconfig-get-properties-safe))))
+
+(defun +editorconfig/editorconfig-setup-custom-properties ()
+  "Register custom EditorConfig property handlers, if supported."
+  (when (boundp 'editorconfig-indentation-alist)
+    (add-to-list 'editorconfig-indentation-alist '(fill-column . max_line_length))))
+
+;; ----------------------------
+;; Use-package for the real package (defensive)
 ;; ----------------------------
 (use-package! editorconfig
   :diminish editorconfig-mode
-  :hook ((prog-mode text-mode) . bdostumski/editorconfig-maybe-enable)
-  
+  :hook (find-file . +editorconfig/editorconfig-maybe-enable)
   :init
-  ;; Pre-configuration settings
+  ;; prefer ws-butler if present for trimming behaviour
   (when (boundp 'editorconfig-trim-whitespaces-mode)
-    (setq editorconfig-trim-whitespaces-mode 'ws-butler-mode))  ; Use ws-butler for whitespace
-  
+    (setq editorconfig-trim-whitespaces-mode 'ws-butler-mode))
   :config
-  ;; Enable EditorConfig globally
-  (editorconfig-mode 1)
-  
-  ;; Core EditorConfig settings
-  (when (boundp 'editorconfig-exclude-modes)
-    (setq editorconfig-exclude-modes '(emacs-lisp-mode       ; Modes to exclude
-                                       lisp-mode
-                                       scheme-mode)))
+  ;; enable mode if possible
+  (condition-case err
+      (editorconfig-mode 1)
+    (error
+     (message "[editorconfig] failed to enable editorconfig-mode: %s" (error-message-string err))))
 
-  (when (boundp 'editorconfig-exclude-regexps)
-    (setq editorconfig-exclude-regexps '("\\.log$"           ; Files to exclude
-                                         "\\.tmp$"
-                                         "/node_modules/"
-                                         "/vendor/"
-                                         "\\.min\\.")))
+  ;; safe registration of after-apply hook (some editorconfig versions define this)
+  (with-eval-after-load 'editorconfig
+    (when (boundp 'editorconfig-after-apply-functions)
+      (add-hook 'editorconfig-after-apply-functions #'+editorconfig/editorconfig-after-apply)))
 
-  ;; Set up hooks for enhanced integration
-  (add-hook 'editorconfig-after-apply-functions #'bdostumski/editorconfig-after-apply)
-  
-  ;; Custom property extensions
-  (bdostumski/editorconfig-setup-custom-properties)
-  
-  (setq bdostumski/editorconfig-initialized t)
-  (message "✓ EditorConfig integration enabled"))
+  ;; exclude modes/files
+  (setq editorconfig-exclude-modes '(emacs-lisp-mode lisp-mode scheme-mode org-mode)
+        editorconfig-exclude-regexps '("\\.log$" "\\.tmp$" "/node_modules/" "/vendor/" "\\.min\\."))
+
+  (+editorconfig/editorconfig-setup-custom-properties)
+  (setq +editorconfig/editorconfig-initialized t)
+  (+editorconfig/editorconfig--msg "✓ EditorConfig integration enabled"))
+
+;; If the package is not present on load, warn the user (but do not fail)
+(unless (or (featurep 'editorconfig) (locate-library "editorconfig"))
+  (+editorconfig/editorconfig--msg "EditorConfig package not found; install `editorconfig' package for full behaviour."))
 
 ;; ----------------------------
-;; File management functions
+;; File management functions (safe)
 ;; ----------------------------
-(defun bdostumski/editorconfig-find-file ()
+(defun +editorconfig/editorconfig-find-file ()
   "Find and open the nearest .editorconfig file."
   (interactive)
-  (let* ((project-root (or (projectile-project-root) default-directory))
-         (config-file (locate-dominating-file project-root ".editorconfig")))
-    (if config-file
-        (find-file (expand-file-name ".editorconfig" config-file))
+  (let* ((project-root (or (when (fboundp 'projectile-project-root) (projectile-project-root))
+                           default-directory))
+         (config-dir (locate-dominating-file project-root ".editorconfig")))
+    (if config-dir
+        (find-file (expand-file-name ".editorconfig" config-dir))
       (if (y-or-n-p "No .editorconfig found. Create one? ")
-          (bdostumski/editorconfig-create-file)
+          (+editorconfig/editorconfig-create-file)
         (message "No .editorconfig file found")))))
 
-(defun bdostumski/editorconfig-create-file ()
-  "Create a new .editorconfig file with template selection."
+(defun +editorconfig/editorconfig-create-file ()
+  "Create a new .editorconfig file from a template."
   (interactive)
-  (let* ((project-root (or (projectile-project-root) default-directory))
-         (template-name (completing-read "EditorConfig template: " 
-                                         (mapcar #'car bdostumski/editorconfig-templates)
+  (let* ((project-root (or (when (fboundp 'projectile-project-root) (projectile-project-root))
+                           default-directory))
+         (template-name (completing-read "EditorConfig template: "
+                                         (mapcar #'car +editorconfig/editorconfig-templates)
                                          nil t "minimal"))
-         (template-content (cdr (assoc template-name bdostumski/editorconfig-templates)))
+         (template-content (cdr (assoc template-name +editorconfig/editorconfig-templates)))
          (config-path (expand-file-name ".editorconfig" project-root)))
-    
     (if (file-exists-p config-path)
-        (if (y-or-n-p ".editorconfig already exists. Overwrite? ")
-            (bdostumski/editorconfig-write-file config-path template-content)
+        (if (y-or-n-p ".editorconfig exists. Overwrite? ")
+            (+editorconfig/editorconfig-write-file config-path template-content)
           (message "Cancelled"))
-      (bdostumski/editorconfig-write-file config-path template-content))
-    
+      (+editorconfig/editorconfig-write-file config-path template-content))
     (find-file config-path)))
 
-(defun bdostumski/editorconfig-write-file (path content)
-  "Write .editorconfig file with given content."
+(defun +editorconfig/editorconfig-write-file (path content)
+  "Write PATH with CONTENT and append a generator footer."
   (with-temp-file path
     (insert content)
-    (insert (format "\n# Generated by %s on %s\n" 
-                    user-login-name 
+    (insert (format "\n# Generated by %s on %s\n"
+                    user-login-name
                     (format-time-string "%Y-%m-%d %H:%M:%S"))))
   (message "✓ Created .editorconfig: %s" (abbreviate-file-name path)))
 
 ;; ----------------------------
-;; Settings and debugging functions
+;; Commands & utilities
 ;; ----------------------------
-(defun bdostumski/editorconfig-show-current-settings ()
-  "Show current EditorConfig settings for the buffer."
+(defun +editorconfig/editorconfig-show-current-settings ()
+  "Show current EditorConfig settings (cached or freshly-read)."
   (interactive)
-  (let ((props (or bdostumski/editorconfig-current-settings
-                   (bdostumski/editorconfig-get-properties-safe))))
+  (let ((props (or +editorconfig/editorconfig-current-settings
+                   (+editorconfig/editorconfig-get-properties-safe))))
     (if (and props (hash-table-p props) (> (hash-table-count props) 0))
         (with-current-buffer (get-buffer-create "*EditorConfig Settings*")
           (erase-buffer)
-          (insert (format "EditorConfig Settings for: %s\n" 
+          (insert (format "EditorConfig Settings for: %s\n"
                           (or (buffer-file-name) (buffer-name))))
           (insert "=========================================\n\n")
-          
-          ;; Show active settings
-          (insert "Active Settings:\n")
-          (insert "----------------\n")
-          (maphash (lambda (key value)
-                     (insert (format "%-20s = %s\n" key value)))
-                   props)
-          
-          ;; Show derived Emacs variables
-          (insert "\nDerived Emacs Variables:\n")
-          (insert "------------------------\n")
-          (insert (format "indent-tabs-mode     = %s\n" indent-tabs-mode))
-          (insert (format "tab-width           = %s\n" tab-width))
-          (insert (format "fill-column         = %s\n" fill-column))
-          (insert (format "require-final-newline = %s\n" require-final-newline))
-          
+          (insert "Active Settings:\n----------------\n")
+          (maphash (lambda (k v) (insert (format "%-20s = %s\n" k v))) props)
+          (insert "\nDerived Emacs Variables:\n------------------------\n")
+          (insert (format "indent-tabs-mode       = %s\n" indent-tabs-mode))
+          (insert (format "tab-width              = %s\n" tab-width))
+          (insert (format "fill-column            = %s\n" fill-column))
+          (insert (format "require-final-newline  = %s\n" require-final-newline))
           (display-buffer (current-buffer)))
       (message "No EditorConfig settings found for this buffer"))))
 
-(defun bdostumski/editorconfig-reload-buffer ()
+(defun +editorconfig/editorconfig-reload-buffer ()
   "Reload EditorConfig settings for the current buffer."
   (interactive)
-  (when (buffer-file-name)
-    (condition-case err
-        (progn
-          (editorconfig-apply)
-          (setq bdostumski/editorconfig-current-settings 
-                (bdostumski/editorconfig-get-properties-safe))
-          (message "✓ EditorConfig settings reloaded"))
-      (error
-       (message "Error reloading EditorConfig: %s" (error-message-string err))))))
+  (if (+editorconfig/editorconfig-apply-safe)
+      (progn
+        (setq +editorconfig/editorconfig-current-settings (+editorconfig/editorconfig-get-properties-safe))
+        (message "✓ EditorConfig settings reloaded"))
+    (message "EditorConfig apply not available (is the editorconfig package installed?)")))
 
-(defun bdostumski/editorconfig-apply-to-project ()
-  "Apply EditorConfig settings to all open project buffers."
+(defun +editorconfig/editorconfig-apply-to-project ()
+  "Apply EditorConfig to all open buffers in the current projectile project, or all buffers."
   (interactive)
-  (let* ((project-root (projectile-project-root))
-         (project-buffers (if project-root
-                              (projectile-project-buffers)
-                            (buffer-list)))
+  (let* ((project-root (and (fboundp 'projectile-project-root) (projectile-project-root)))
+         (buffers (if project-root (when (fboundp 'projectile-project-buffers) (projectile-project-buffers)) (buffer-list)))
          (count 0))
-    
-    (dolist (buffer project-buffers)
-      (with-current-buffer buffer
+    (dolist (buf (or buffers (buffer-list)))
+      (with-current-buffer buf
         (when (and (buffer-file-name)
-                   (string-prefix-p (or project-root default-directory) 
-                                    (buffer-file-name)))
-          (condition-case err
-              (progn
-                (editorconfig-apply)
-                (setq count (1+ count)))
-            (error
-             (when bdostumski/editorconfig-debug-mode
-               (message "Error applying EditorConfig to %s: %s" 
-                        (buffer-name) (error-message-string err))))))))
-    
+                   (string-prefix-p (or project-root default-directory) (buffer-file-name)))
+          (when (+editorconfig/editorconfig-apply-safe)
+            (cl-incf count)))))
     (message "✓ Applied EditorConfig to %d buffer(s)" count)))
 
-(defun bdostumski/editorconfig-validate-file ()
-  "Validate .editorconfig file syntax."
+(defun +editorconfig/editorconfig-validate-file ()
+  "Validate nearest .editorconfig file with simple checks or external checker."
   (interactive)
-  (let ((config-file (locate-dominating-file default-directory ".editorconfig")))
-    (if config-file
-        (let ((config-path (expand-file-name ".editorconfig" config-file)))
-          ;; Basic syntax validation
-          (with-temp-buffer
-            (insert-file-contents config-path)
-            (let ((issues '())
-                  (line-num 1))
-              (goto-char (point-min))
-              (while (not (eobp))
-                (let ((line (buffer-substring-no-properties 
-                             (line-beginning-position) (line-end-position))))
-                  ;; Check for common syntax issues
-                  (cond
-                   ((and (string-match "^\\[.*\\]$" line)
-                         (string-match "\\[.*[^]]+$" line))
-                    (push (format "Line %d: Unclosed section bracket" line-num) issues))
-                   ((and (string-match "=" line)
-                         (not (string-match "^[[:space:]]*[^=]+=[^=]*$" line)))
-                    (push (format "Line %d: Invalid property format" line-num) issues)))
+  (let ((config-dir (locate-dominating-file default-directory ".editorconfig")))
+    (if config-dir
+        (let ((path (expand-file-name ".editorconfig" config-dir)))
+          (if (executable-find "editorconfig-checker")
+              (compile (format "editorconfig-checker %s" path))
+            (with-temp-buffer
+              (insert-file-contents path)
+              (let ((issues '()) (ln 1))
+                (goto-char (point-min))
+                (while (not (eobp))
+                  (let ((line (string-trim (buffer-substring-no-properties (line-beginning-position) (line-end-position)))))
+                    (when (and (not (string-empty-p line))
+                               (string-match-p "\\[.*[^]]+$" line))
+                      (push (format "Line %d: Unclosed section bracket" ln) issues))
+                    (when (and (string-match "=" line)
+                               (not (string-match "^[[:space:]]*[^=]+=[^=]*$" line)))
+                      (push (format "Line %d: Invalid property format" ln) issues)))
                   (forward-line 1)
-                  (setq line-num (1+ line-num))))
-              
-              ;; Report results
-              (if issues
-                  (with-current-buffer (get-buffer-create "*EditorConfig Validation*")
-                    (erase-buffer)
-                    (insert "EditorConfig Validation Issues\n")
-                    (insert "===============================\n\n")
-                    (dolist (issue (reverse issues))
-                      (insert "⚠ " issue "\n"))
-                    (display-buffer (current-buffer)))
-                (message "✓ .editorconfig file syntax is valid")))))
+                  (setq ln (1+ ln)))
+                (if issues
+                    (with-current-buffer (get-buffer-create "*EditorConfig Validation*")
+                      (erase-buffer)
+                      (insert "EditorConfig Validation Issues\n===============================\n\n")
+                      (dolist (i (reverse issues)) (insert "⚠ " i "\n"))
+                      (display-buffer (current-buffer)))
+                  (message "✓ .editorconfig syntax appears valid"))))))
       (message "No .editorconfig file found"))))
 
-(defun bdostumski/editorconfig-show-debug-info ()
-  "Show detailed EditorConfig debug information."
+(defun +editorconfig/editorconfig-show-debug-info ()
+  "Show detailed debug information about editorconfig integration."
   (interactive)
   (with-current-buffer (get-buffer-create "*EditorConfig Debug*")
     (erase-buffer)
-    (insert "EditorConfig Debug Information\n")
-    (insert "==============================\n\n")
-    
-    ;; System information
-    (insert "System Info:\n")
-    (insert "------------\n")
-    (insert (format "EditorConfig mode: %s\n" 
-                    (if (bound-and-true-p editorconfig-mode) "enabled" "disabled")))
-    (insert (format "Auto-apply: %s\n" 
-                    (if bdostumski/editorconfig-auto-apply "enabled" "disabled")))
-    (insert (format "Debug mode: %s\n" 
-                    (if bdostumski/editorconfig-debug-mode "enabled" "disabled")))
-    
-    ;; File information
-    (insert "\nCurrent Buffer:\n")
-    (insert "---------------\n")
-    (insert (format "File: %s\n" (or (buffer-file-name) "No file")))
-    (insert (format "Mode: %s\n" major-mode))
-    
-    ;; Configuration file location
-    (let ((config-file (locate-dominating-file default-directory ".editorconfig")))
-      (insert (format "Config file: %s\n" 
-                      (if config-file 
-                          (expand-file-name ".editorconfig" config-file)
-                        "Not found"))))
+    (insert "EditorConfig Debug Info\n=======================\n\n")
+    (insert (format "Buffer file: %s\n" (or (buffer-file-name) "none")))
+    (insert (format "Major mode: %s\n" major-mode))
+    (insert (format "editorconfig package present: %s\n" (if (or (featurep 'editorconfig) (locate-library "editorconfig")) "yes" "no")))
+    (insert (format "editorconfig-mode: %s\n" (if (bound-and-true-p editorconfig-mode) "enabled" "disabled")))
+    (insert (format "Auto-apply: %s\n" (if +editorconfig/editorconfig-auto-apply "enabled" "disabled")))
+    (insert (format "Debug mode: %s\n" (if +editorconfig/editorconfig-debug-mode "enabled" "disabled")))
+    (when +editorconfig/editorconfig-current-settings
+      (insert "\nCurrent settings:\n-----------------\n")
+      (maphash (lambda (k v) (insert (format "%s = %s\n" k v))) +editorconfig/editorconfig-current-settings)))
+  (display-buffer (current-buffer)))
 
-    ;; Current settings
-    (when (and bdostumski/editorconfig-current-settings
-               (hash-table-p bdostumski/editorconfig-current-settings))
-      (insert "\nCurrent Settings:\n")
-      (insert "-----------------\n")
-      (maphash (lambda (key value)
-                 (insert (format "%s = %s\n" key value)))
-               bdostumski/editorconfig-current-settings))
-    
-    (display-buffer (current-buffer))))
-
-;; ----------------------------
-;; Toggle and utility functions
-;; ----------------------------
-(defun bdostumski/editorconfig-toggle-debug-mode ()
-  "Toggle EditorConfig debug mode."
+(defun +editorconfig/editorconfig-toggle-debug-mode ()
+  "Toggle debug mode for this module."
   (interactive)
-  (setq bdostumski/editorconfig-debug-mode (not bdostumski/editorconfig-debug-mode))
-  (message "EditorConfig debug mode: %s" 
-           (if bdostumski/editorconfig-debug-mode "enabled" "disabled")))
+  (setq +editorconfig/editorconfig-debug-mode (not +editorconfig/editorconfig-debug-mode))
+  (message "EditorConfig debug mode: %s" (if +editorconfig/editorconfig-debug-mode "enabled" "disabled")))
 
-(defun bdostumski/editorconfig-toggle-auto-apply ()
-  "Toggle automatic EditorConfig application."
+(defun +editorconfig/editorconfig-toggle-auto-apply ()
+  "Toggle automatic application of EditorConfig settings."
   (interactive)
-  (setq bdostumski/editorconfig-auto-apply (not bdostumski/editorconfig-auto-apply))
-  (message "EditorConfig auto-apply: %s" 
-           (if bdostumski/editorconfig-auto-apply "enabled" "disabled")))
+  (setq +editorconfig/editorconfig-auto-apply (not +editorconfig/editorconfig-auto-apply))
+  (message "EditorConfig auto-apply: %s" (if +editorconfig/editorconfig-auto-apply "enabled" "disabled")))
 
 ;; ----------------------------
-;; Comprehensive keybinding setup
+;; Keybindings (map!)
 ;; ----------------------------
 (map! :leader
-      ;; Quick access (existing binding enhanced)
-      :desc "Show EditorConfig settings" "e c" #'bdostumski/editorconfig-show-current-settings
-      
-      ;; File management integration
-      (:prefix-map ("f" . "file")
-       :desc "Find .editorconfig"       "." #'bdostumski/editorconfig-find-file)
-      
-      ;; Main EditorConfig prefix
-      (:prefix-map ("E" . "EditorConfig")
-       ;; File operations
-       :desc "Edit .editorconfig"       "e" #'bdostumski/editorconfig-find-file
-       :desc "Create from template"     "t" #'bdostumski/editorconfig-create-file
-       :desc "Validate syntax"          "v" #'bdostumski/editorconfig-validate-file
-       
-       ;; Settings and application
-       :desc "Show current settings"    "c" #'bdostumski/editorconfig-show-current-settings
-       :desc "Reload buffer settings"   "r" #'bdostumski/editorconfig-reload-buffer
-       :desc "Apply to project"         "a" #'bdostumski/editorconfig-apply-to-project
-       
-       ;; Information and debugging
-       :desc "Debug information"        "d" #'bdostumski/editorconfig-show-debug-info
-       :desc "Toggle debug mode"        "D" #'bdostumski/editorconfig-toggle-debug-mode
-       
-       ;; Configuration
-       :desc "Toggle auto-apply"        "A" #'bdostumski/editorconfig-toggle-auto-apply
-       
-       ;; Help and documentation
-       :desc "Help"                     "h" (lambda () (interactive)
-                                              (browse-url "https://editorconfig.org/"))))
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("t" . "tools")
+                                (:prefix ("e" . "editor-config")
+                                 :desc "Edit .editorconfig"    "e" #'+editorconfig/editorconfig-find-file
+                                 :desc "Create from template"  "t" #'+editorconfig/editorconfig-create-file
+                                 :desc "Validate syntax"       "v" #'+editorconfig/editorconfig-validate-file
+                                 :desc "Show settings"         "c" #'+editorconfig/editorconfig-show-current-settings
+                                 :desc "Reload buffer"         "r" #'+editorconfig/editorconfig-reload-buffer
+                                 :desc "Apply to project"      "a" #'+editorconfig/editorconfig-apply-to-project
+                                 :desc "Debug info"            "d" #'+editorconfig/editorconfig-show-debug-info
+                                 :desc "Toggle debug mode"     "D" #'+editorconfig/editorconfig-toggle-debug-mode
+                                 :desc "Toggle auto-apply"     "A" #'+editorconfig/editorconfig-toggle-auto-apply
+                                 :desc "Help"                  "h" (lambda () (interactive) (browse-url "https://editorconfig.org/"))))))
 
-;; ----------------------------
-;; Integration with other packages
-;; ----------------------------
-(after! projectile
-  ;; Add .editorconfig to project root indicators
+;; Integrations
+(with-eval-after-load 'projectile
   (add-to-list 'projectile-project-root-files ".editorconfig"))
 
-(after! which-key
-  (which-key-add-key-based-replacements
-    "SPC E" "EditorConfig"))
+(with-eval-after-load 'which-key
+  (which-key-add-key-based-replacements "SPC E" "EditorConfig"))
 
-;; Integration with ws-butler for better whitespace handling
-(after! ws-butler
-  (when (boundp 'ws-butler-keep-whitespace-indent-mode)
-    (setq ws-butler-keep-whitespace-indent-mode t)))
+(with-eval-after-load 'ws-butler
+  (setq ws-butler-keep-whitespace-indent-mode t))
 
 (provide 'tools-editorconfig-config)
-
 ;;; tools-editorconfig-config.el ends here

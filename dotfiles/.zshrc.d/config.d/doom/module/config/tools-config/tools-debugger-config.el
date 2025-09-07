@@ -23,49 +23,31 @@
 ;; - PHP (via Xdebug)
 ;; - .NET (via netcoredbg)
 ;; - Ruby (via rdbg)
-;;
-;; KEYBINDINGS:
-;; Leader Key Bindings (SPC):
-;;   SPC d     - Main debug prefix
-;;   SPC d d   - Start debugging
-;;   SPC d l   - Debug last/recent session
-;;   SPC d r   - Restart current session
-;;   SPC d q   - Quit debugging session
-;;   SPC d k   - Kill all debug sessions
-;;
-;;   SPC d b   - Breakpoint management
-;;   SPC d s   - Step operations (over, into, out)
-;;   SPC d e   - Expression evaluation
-;;   SPC d v   - Variable inspection
-;;   SPC d w   - Watch expressions
-;;   SPC d u   - UI toggles and windows
-;;   SPC d t   - Test debugging
-;;   SPC d c   - Configuration management
 
 ;;; Code:
 
 ;; ----------------------------
 ;; State tracking and configuration
 ;; ----------------------------
-(defvar bdostumski/dap-initialized nil
+(defvar +dap/dap-initialized nil
   "Track if DAP has been properly initialized.")
 
-(defvar bdostumski/dap-debug-templates nil
+(defvar +dap/dap-debug-templates nil
   "List of custom debug templates for quick access.")
 
-(defvar bdostumski/dap-last-session-config nil
+(defvar +dap/dap-last-session-config nil
   "Configuration of the last debug session for quick restart.")
 
-(defvar bdostumski/dap-ui-layout-saved nil
+(defvar +dap/dap-ui-layout-saved nil
   "Saved window layout before debugging session.")
 
-(defvar bdostumski/dap-auto-configure-breakpoints t
+(defvar +dap/dap-auto-configure-breakpoints t
   "Whether to automatically configure common breakpoints.")
 
 ;; ----------------------------
 ;; Language adapter loading (defined before use-package)
 ;; ----------------------------
-(defun bdostumski/dap-load-language-adapters ()
+(defun +dap/dap-load-language-adapters ()
   "Load debug adapters for supported languages."
   (message "Loading DAP language adapters...")
 
@@ -107,9 +89,9 @@
 ;; ----------------------------
 ;; Debug templates and configurations
 ;; ----------------------------
-(defun bdostumski/dap-setup-debug-templates ()
+(defun +dap/dap-setup-debug-templates ()
   "Setup custom debug templates for common scenarios."
-  (setq bdostumski/dap-debug-templates
+  (setq +dap/dap-debug-templates
         '(;; Java templates
           (:java-main
            :type "java"
@@ -182,7 +164,7 @@
 ;; ----------------------------
 ;; Helper functions (defined before use)
 ;; ----------------------------
-(defun bdostumski/dap-detect-project-type ()
+(defun +dap/dap-detect-project-type ()
   "Detect project type for smart debugging."
   (cond
    ((file-exists-p "pom.xml") "java")
@@ -197,28 +179,28 @@
         (file-exists-p "Makefile")) "cpp")
    (t nil)))
 
-(defun bdostumski/dap-mode-setup ()
+(defun +dap/dap-mode-setup ()
   "Setup hook for DAP mode activation."
   (message "DAP debugging mode activated")
-  (bdostumski/dap-save-window-layout)
+  (+dap/dap-save-window-layout)
 
   ;; Auto-configure common breakpoints if enabled
-  (when bdostumski/dap-auto-configure-breakpoints
-    (bdostumski/dap-auto-set-breakpoints)))
+  (when +dap/dap-auto-configure-breakpoints
+    (+dap/dap-auto-set-breakpoints)))
 
-(defun bdostumski/dap-ui-setup ()
+(defun +dap/dap-ui-setup ()
   "Setup DAP UI when activated."
   (message "DAP UI activated"))
 
-(defun bdostumski/dap-save-window-layout ()
+(defun +dap/dap-save-window-layout ()
   "Save current window layout before debugging."
-  (setq bdostumski/dap-ui-layout-saved (current-window-configuration)))
+  (setq +dap/dap-ui-layout-saved (current-window-configuration)))
 
-(defun bdostumski/dap-restore-window-layout ()
+(defun +dap/dap-restore-window-layout ()
   "Restore window layout from before debugging."
-  (when bdostumski/dap-ui-layout-saved
-    (set-window-configuration bdostumski/dap-ui-layout-saved)
-    (setq bdostumski/dap-ui-layout-saved nil)
+  (when +dap/dap-ui-layout-saved
+    (set-window-configuration +dap/dap-ui-layout-saved)
+    (setq +dap/dap-ui-layout-saved nil)
     (message "Window layout restored")))
 
 ;; ----------------------------
@@ -232,8 +214,8 @@
              dap-ui-mode
              dap-ui-many-windows-mode)
 
-  :hook ((dap-mode . bdostumski/dap-mode-setup)
-         (dap-ui-mode . bdostumski/dap-ui-setup))
+  :hook ((dap-mode . +dap/dap-mode-setup)
+         (dap-ui-mode . +dap/dap-ui-setup))
 
   :init
   ;; Pre-configuration settings
@@ -253,55 +235,55 @@
   (tooltip-mode 1)
 
   ;; Load language-specific adapters (now defined before this point)
-  (bdostumski/dap-load-language-adapters)
+  (+dap/dap-load-language-adapters)
 
   ;; Setup custom debug templates
-  (bdostumski/dap-setup-debug-templates)
+  (+dap/dap-setup-debug-templates)
 
   ;; Mark as initialized
-  (setq bdostumski/dap-initialized t))
+  (setq +dap/dap-initialized t))
 
 ;; ----------------------------
 ;; Session management
 ;; ----------------------------
-(defun bdostumski/dap-debug-smart ()
+(defun +dap/dap-debug-smart ()
   "Smart debug function that chooses appropriate method based on context."
   (interactive)
   (cond
    ;; If there's a recent session, offer to restart
-   (bdostumski/dap-last-session-config
+   (+dap/dap-last-session-config
     (if (y-or-n-p "Restart last debug session? ")
-        (dap-debug bdostumski/dap-last-session-config)
+        (dap-debug +dap/dap-last-session-config)
       (call-interactively #'dap-debug)))
 
    ;; If in a known project type, suggest appropriate template
-   ((bdostumski/dap-detect-project-type)
-    (let ((project-type (bdostumski/dap-detect-project-type)))
+   ((+dap/dap-detect-project-type)
+    (let ((project-type (+dap/dap-detect-project-type)))
       (if (y-or-n-p (format "Debug as %s project? " project-type))
-          (bdostumski/dap-debug-with-template (intern (format ":%s-main" project-type)))
+          (+dap/dap-debug-with-template (intern (format ":%s-main" project-type)))
         (call-interactively #'dap-debug))))
 
    ;; Default to interactive debug
    (t (call-interactively #'dap-debug))))
 
-(defun bdostumski/dap-debug-with-template (template-key)
+(defun +dap/dap-debug-with-template (template-key)
   "Start debugging with a specific template."
   (interactive
    (list (intern (completing-read "Debug template: "
                                   (mapcar (lambda (tmpl)
                                             (symbol-name (car tmpl)))
-                                          (seq-partition bdostumski/dap-debug-templates 2))
+                                          (seq-partition +dap/dap-debug-templates 2))
                                   nil t))))
-  (let ((template (plist-get bdostumski/dap-debug-templates template-key)))
+  (let ((template (plist-get +dap/dap-debug-templates template-key)))
     (if template
         (progn
           ;; Fill in missing values interactively
-          (bdostumski/dap-configure-template template)
-          (setq bdostumski/dap-last-session-config template)
+          (+dap/dap-configure-template template)
+          (setq +dap/dap-last-session-config template)
           (dap-debug template))
       (message "Template not found: %s" template-key))))
 
-(defun bdostumski/dap-configure-template (template)
+(defun +dap/dap-configure-template (template)
   "Interactively configure a debug template."
   (when (null (plist-get template :program))
     (plist-put template :program
@@ -333,20 +315,20 @@
                  (read-directory-name "Go package directory: "
                                       (or (projectile-project-root) default-directory)))))))
 
-(defun bdostumski/dap-kill-all-sessions ()
+(defun +dap/dap-kill-all-sessions ()
   "Kill all active debug sessions."
   (interactive)
   (if (and (fboundp 'dap--get-sessions) (dap--get-sessions))
       (progn
         (dap-delete-all-sessions)
-        (bdostumski/dap-restore-window-layout)
+        (+dap/dap-restore-window-layout)
         (message "✓ All debug sessions terminated"))
     (message "No active debug sessions")))
 
 ;; ----------------------------
 ;; Breakpoint management
 ;; ----------------------------
-(defun bdostumski/dap-toggle-breakpoint-with-condition ()
+(defun +dap/dap-toggle-breakpoint-with-condition ()
   "Toggle breakpoint with optional condition."
   (interactive)
   (if current-prefix-arg
@@ -354,7 +336,7 @@
         (dap-breakpoint-condition condition))
     (dap-breakpoint-toggle)))
 
-(defun bdostumski/dap-clear-all-breakpoints ()
+(defun +dap/dap-clear-all-breakpoints ()
   "Clear all breakpoints in current session."
   (interactive)
   (when (y-or-n-p "Clear all breakpoints? ")
@@ -364,14 +346,14 @@
 ;; ----------------------------
 ;; Expression evaluation
 ;; ----------------------------
-(defun bdostumski/dap-eval-region-or-symbol ()
+(defun +dap/dap-eval-region-or-symbol ()
   "Evaluate region if selected, otherwise symbol at point."
   (interactive)
   (if (use-region-p)
       (dap-eval-region (region-beginning) (region-end))
     (dap-eval-thing-at-point)))
 
-(defun bdostumski/dap-add-watch-expression ()
+(defun +dap/dap-add-watch-expression ()
   "Add expression to watch list."
   (interactive)
   (let ((expression (if (use-region-p)
@@ -384,13 +366,13 @@
 ;; ----------------------------
 ;; UI management
 ;; ----------------------------
-(defun bdostumski/dap-ui-many-windows ()
+(defun +dap/dap-ui-many-windows ()
   "Open debug UI with many windows layout."
   (interactive)
   (dap-ui-many-windows-mode 1)
   (message "DAP UI many windows mode enabled"))
 
-(defun bdostumski/dap-ui-hide-all ()
+(defun +dap/dap-ui-hide-all ()
   "Hide all debug UI windows."
   (interactive)
   (dap-ui-many-windows-mode -1)
@@ -399,17 +381,17 @@
 ;; ----------------------------
 ;; Stepping and execution control
 ;; ----------------------------
-(defun bdostumski/dap-continue-or-start ()
+(defun +dap/dap-continue-or-start ()
   "Continue debugging if active, otherwise start debugging."
   (interactive)
   (if (and (fboundp 'dap--get-sessions) (dap--get-sessions))
       (dap-continue)
-    (bdostumski/dap-debug-smart)))
+    (+dap/dap-debug-smart)))
 
 ;; ----------------------------
 ;; Auto-breakpoint configuration
 ;; ----------------------------
-(defun bdostumski/dap-auto-set-breakpoints ()
+(defun +dap/dap-auto-set-breakpoints ()
   "Automatically set common breakpoints based on file type."
   (cond
    ;; Java: Set breakpoint on main method
@@ -440,53 +422,55 @@
 ;; Comprehensive keybinding setup
 ;; ----------------------------
 (map! :leader
-      (:prefix-map ("d" . "debug")
-       ;; Core debugging operations
-       :desc "Debug smart/start"        "d" #'bdostumski/dap-debug-smart
-       :desc "Debug with template"      "t" #'bdostumski/dap-debug-with-template
-       :desc "Debug last session"       "l" #'dap-debug-last
-       :desc "Restart session"          "r" #'dap-debug-restart
-       :desc "Quit/disconnect"          "q" #'dap-disconnect
-       :desc "Kill all sessions"        "k" #'bdostumski/dap-kill-all-sessions
-       :desc "Continue execution"       "c" #'bdostumski/dap-continue-or-start
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("t" . "tools")
+                                (:prefix-map ("d" . "debug")
+                                 ;; Core debugging operations
+                                 :desc "Debug smart/start"        "d" #'+dap/dap-debug-smart
+                                 :desc "Debug with template"      "t" #'+dap/dap-debug-with-template
+                                 :desc "Debug last session"       "l" #'dap-debug-last
+                                 :desc "Restart session"          "r" #'dap-debug-restart
+                                 :desc "Quit/disconnect"          "q" #'dap-disconnect
+                                 :desc "Kill all sessions"        "k" #'+dap/dap-kill-all-sessions
+                                 :desc "Continue execution"       "c" #'+dap/dap-continue-or-start
 
-       ;; Breakpoint management
-       (:prefix ("b" . "breakpoints")
-        :desc "Toggle breakpoint"       "b" #'dap-breakpoint-toggle
-        :desc "Conditional breakpoint"  "c" #'bdostumski/dap-toggle-breakpoint-with-condition
-        :desc "Delete all breakpoints"  "D" #'bdostumski/dap-clear-all-breakpoints
-        :desc "List breakpoints"        "l" #'dap-ui-breakpoints)
+                                 ;; Breakpoint management
+                                 (:prefix ("b" . "breakpoints")
+                                  :desc "Toggle breakpoint"       "b" #'dap-breakpoint-toggle
+                                  :desc "Conditional breakpoint"  "c" #'+dap/dap-toggle-breakpoint-with-condition
+                                  :desc "Delete all breakpoints"  "D" #'+dap/dap-clear-all-breakpoints
+                                  :desc "List breakpoints"        "l" #'dap-ui-breakpoints)
 
-       ;; Stepping operations
-       (:prefix ("s" . "step")
-        :desc "Step over"               "o" #'dap-next
-        :desc "Step into"               "i" #'dap-step-in
-        :desc "Step out"                "u" #'dap-step-out
-        :desc "Continue"                "c" #'dap-continue)
+                                 ;; Stepping operations
+                                 (:prefix ("s" . "step")
+                                  :desc "Step over"               "o" #'dap-next
+                                  :desc "Step into"               "i" #'dap-step-in
+                                  :desc "Step out"                "u" #'dap-step-out
+                                  :desc "Continue"                "c" #'dap-continue)
 
-       ;; Expression evaluation
-       (:prefix ("e" . "eval")
-        :desc "Eval at point"           "e" #'dap-eval-thing-at-point
-        :desc "Eval region/symbol"      "r" #'bdostumski/dap-eval-region-or-symbol
-        :desc "Eval expression"         "E" #'dap-eval)
+                                 ;; Expression evaluation
+                                 (:prefix ("e" . "eval")
+                                  :desc "Eval at point"           "e" #'dap-eval-thing-at-point
+                                  :desc "Eval region/symbol"      "r" #'+dap/dap-eval-region-or-symbol
+                                  :desc "Eval expression"         "E" #'dap-eval)
 
-       ;; Watch expressions
-       (:prefix ("w" . "watch")
-        :desc "Add watch"               "a" #'bdostumski/dap-add-watch-expression
-        :desc "Show expressions"        "w" #'dap-ui-expressions)
+                                 ;; Watch expressions
+                                 (:prefix ("w" . "watch")
+                                  :desc "Add watch"               "a" #'+dap/dap-add-watch-expression
+                                  :desc "Show expressions"        "w" #'dap-ui-expressions)
 
-       ;; UI and windows
-       (:prefix ("u" . "ui")
-        :desc "Show many windows"       "m" #'bdostumski/dap-ui-many-windows
-        :desc "Hide windows"            "h" #'bdostumski/dap-ui-hide-all
-        :desc "Show locals"             "l" #'dap-ui-locals
-        :desc "Show breakpoints"        "b" #'dap-ui-breakpoints
-        :desc "Show expressions"        "e" #'dap-ui-expressions
-        :desc "Show sessions"           "s" #'dap-ui-sessions
-        :desc "Restore layout"          "R" #'bdostumski/dap-restore-window-layout)))
+                                 ;; UI and windows
+                                 (:prefix ("u" . "ui")
+                                  :desc "Show many windows"       "m" #'+dap/dap-ui-many-windows
+                                  :desc "Hide windows"            "h" #'+dap/dap-ui-hide-all
+                                  :desc "Show locals"             "l" #'dap-ui-locals
+                                  :desc "Show breakpoints"        "b" #'dap-ui-breakpoints
+                                  :desc "Show expressions"        "e" #'dap-ui-expressions
+                                  :desc "Show sessions"           "s" #'dap-ui-sessions
+                                  :desc "Restore layout"          "R" #'+dap/dap-restore-window-layout)))))
 
 ;; Global quick access for debugging
-(map! "C-<f5>"   #'bdostumski/dap-debug-smart
+(map! "C-<f5>"   #'+dap/dap-debug-smart
       "<f5>"     #'dap-continue
       "S-<f5>"   #'dap-disconnect
       "<f9>"     #'dap-breakpoint-toggle
@@ -497,14 +481,14 @@
 ;; ----------------------------
 ;; Cleanup and state management
 ;; ----------------------------
-(defun bdostumski/dap-cleanup-on-exit ()
+(defun +dap/dap-cleanup-on-exit ()
   "Clean up DAP sessions on Emacs exit."
   (when (and (fboundp 'dap--get-sessions) (dap--get-sessions))
     (dap-delete-all-sessions)
     (message "DAP sessions cleaned up on exit")))
 
 ;; Register cleanup hook
-(add-hook 'kill-emacs-hook #'bdostumski/dap-cleanup-on-exit)
+(add-hook 'kill-emacs-hook #'+dap/dap-cleanup-on-exit)
 
 (provide 'tools-debugger-config)
 

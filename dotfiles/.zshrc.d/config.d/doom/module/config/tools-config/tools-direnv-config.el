@@ -22,19 +22,19 @@
 ;; ----------------------------
 ;; Performance-focused configuration
 ;; ----------------------------
-(defvar bdostumski/direnv-cache-timeout 300
+(defvar +direnv/direnv-cache-timeout 300
   "Cache timeout in seconds (5 minutes) to prevent excessive direnv calls.")
 
-(defvar bdostumski/direnv-last-check-time nil
+(defvar +direnv/direnv-last-check-time nil
   "Timestamp of last direnv check to implement caching.")
 
-(defvar bdostumski/direnv-last-directory nil
+(defvar +direnv/direnv-last-directory nil
   "Last directory where direnv was checked to detect changes.")
 
-(defvar bdostumski/direnv-update-timer nil
+(defvar +direnv/direnv-update-timer nil
   "Timer for debounced direnv updates.")
 
-(defvar bdostumski/direnv-performance-mode t
+(defvar +direnv/direnv-performance-mode t
   "When t, enables aggressive performance optimizations.")
 
 ;; ----------------------------
@@ -52,57 +52,57 @@
 
   :config
   ;; Only enable in manual mode to prevent automatic slowdowns
-  (when (not bdostumski/direnv-performance-mode)
+  (when (not +direnv/direnv-performance-mode)
     (envrc-global-mode 1))
 
   ;; Remove the problematic hooks that cause performance issues
-  (remove-hook 'envrc-mode-hook #'bdostumski/direnv-mode-setup)
+  (remove-hook 'envrc-mode-hook #'+direnv/direnv-mode-setup)
 
   (message "✓ Direnv (envrc) loaded in performance mode"))
 
 ;; ----------------------------
 ;; Performance-optimized helper functions
 ;; ----------------------------
-(defun bdostumski/direnv-should-update-p ()
+(defun +direnv/direnv-should-update-p ()
   "Check if direnv should update based on cache and directory changes."
   (let ((current-time (current-time))
         (current-dir default-directory))
     (or
      ;; Directory changed
-     (not (string= current-dir (or bdostumski/direnv-last-directory "")))
+     (not (string= current-dir (or +direnv/direnv-last-directory "")))
      ;; Cache expired
-     (not bdostumski/direnv-last-check-time)
-     (> (float-time (time-subtract current-time bdostumski/direnv-last-check-time))
-        bdostumski/direnv-cache-timeout))))
+     (not +direnv/direnv-last-check-time)
+     (> (float-time (time-subtract current-time +direnv/direnv-last-check-time))
+        +direnv/direnv-cache-timeout))))
 
-(defun bdostumski/direnv-update-cache ()
+(defun +direnv/direnv-update-cache ()
   "Update direnv cache timestamps."
-  (setq bdostumski/direnv-last-check-time (current-time)
-        bdostumski/direnv-last-directory default-directory))
+  (setq +direnv/direnv-last-check-time (current-time)
+        +direnv/direnv-last-directory default-directory))
 
-(defun bdostumski/direnv-debounced-update ()
-  "Update direnv with debouncing to prevent excessive calls."
-  (when bdostumski/direnv-update-timer
-    (cancel-timer bdostumski/direnv-update-timer))
+;;(defun +direnv/direnv-debounced-update ()
+;;  "Update direnv with debouncing to prevent excessive calls."
+;;  (when +direnv/direnv-update-timer
+;;    (cancel-timer +direnv/direnv-update-timer))
+;;
+;;  (setq +direnv/direnv-update-timer
+;;        (run-with-timer 0.5 nil #'+direnv/direnv-update-now)))
 
-  (setq bdostumski/direnv-update-timer
-        (run-with-timer 0.5 nil #'bdostumski/direnv-update-now)))
-
-(defun bdostumski/direnv-update-now ()
-  "Perform actual direnv update with performance checks."
-  (when (and (bdostumski/direnv-should-update-p)
-             (locate-dominating-file default-directory ".envrc"))
-    (let ((start-time (current-time)))
-      (envrc-reload)
-      (bdostumski/direnv-update-cache)
-      (let ((elapsed (float-time (time-subtract (current-time) start-time))))
-        (when (> elapsed 1.0)
-          (message "Direnv update took %.2fs - consider performance mode" elapsed))))))
+;;(defun +direnv/direnv-update-now ()
+;;  "Perform actual direnv update with performance checks."
+;;  (when (and (+direnv/direnv-should-update-p)
+;;             (locate-dominating-file default-directory ".envrc"))
+;;    (let ((start-time (current-time)))
+;;      (envrc-reload)
+;;      (+direnv/direnv-update-cache)
+;;      (let ((elapsed (float-time (time-subtract (current-time) start-time))))
+;;        (when (> elapsed 1.0)
+;;          (message "Direnv update took %.2fs - consider performance mode" elapsed))))))
 
 ;; ----------------------------
 ;; Minimal essential functions only
 ;; ----------------------------
-(defun bdostumski/direnv-find-envrc ()
+(defun +direnv/direnv-find-envrc ()
   "Find and open the nearest .envrc file."
   (interactive)
   (let* ((default-directory (or (projectile-project-root) default-directory))
@@ -110,10 +110,10 @@
     (if envrc-file
         (find-file (expand-file-name ".envrc" envrc-file))
       (if (y-or-n-p "No .envrc found. Create basic one? ")
-          (bdostumski/direnv-create-basic-envrc)
+          (+direnv/direnv-create-basic-envrc)
         (message "No .envrc file found")))))
 
-(defun bdostumski/direnv-create-basic-envrc ()
+(defun +direnv/direnv-create-basic-envrc ()
   "Create a minimal .envrc file."
   (interactive)
   (let* ((project-root (or (projectile-project-root) default-directory))
@@ -134,7 +134,7 @@
       (find-file envrc-path)
       (message "✓ Created basic .envrc. Remember to run 'direnv allow'"))))
 
-(defun bdostumski/direnv-manual-reload ()
+(defun +direnv/direnv-manual-reload ()
   "Manually reload direnv environment (performance-safe)."
   (interactive)
   (let ((envrc-file (locate-dominating-file default-directory ".envrc")))
@@ -142,11 +142,11 @@
         (progn
           (message "Reloading direnv environment...")
           (envrc-reload)
-          (bdostumski/direnv-update-cache)
+          (+direnv/direnv-update-cache)
           (message "✓ Direnv environment reloaded"))
       (message "No .envrc file found in current directory tree"))))
 
-(defun bdostumski/direnv-allow ()
+(defun +direnv/direnv-allow ()
   "Allow/trust the current .envrc file."
   (interactive)
   (let ((envrc-file (locate-dominating-file default-directory ".envrc")))
@@ -156,7 +156,7 @@
           (message "✓ .envrc file allowed/trusted"))
       (message "No .envrc file found"))))
 
-(defun bdostumski/direnv-deny ()
+(defun +direnv/direnv-deny ()
   "Deny/untrust the current .envrc file."
   (interactive)
   (let ((envrc-file (locate-dominating-file default-directory ".envrc")))
@@ -166,11 +166,11 @@
           (message "✓ .envrc file denied/untrusted"))
       (message "No .envrc file found"))))
 
-(defun bdostumski/direnv-toggle-performance-mode ()
+(defun +direnv/direnv-toggle-performance-mode ()
   "Toggle between performance mode and full auto mode."
   (interactive)
-  (setq bdostumski/direnv-performance-mode (not bdostumski/direnv-performance-mode))
-  (if bdostumski/direnv-performance-mode
+  (setq +direnv/direnv-performance-mode (not +direnv/direnv-performance-mode))
+  (if +direnv/direnv-performance-mode
       (progn
         (envrc-global-mode -1)
         (message "✓ Direnv performance mode ON - manual updates only"))
@@ -178,7 +178,7 @@
       (envrc-global-mode 1)
       (message "⚠ Direnv auto mode ON - may impact performance"))))
 
-(defun bdostumski/direnv-status ()
+(defun +direnv/direnv-status ()
   "Show simple direnv status."
   (interactive)
   (let* ((envrc-file (locate-dominating-file default-directory ".envrc"))
@@ -186,36 +186,34 @@
     (message "Direnv: %s | .envrc: %s | Performance mode: %s"
              (if auto-mode "auto" "manual")
              (if envrc-file "found" "none")
-             (if bdostumski/direnv-performance-mode "ON" "OFF"))))
+             (if +direnv/direnv-performance-mode "ON" "OFF"))))
 
 ;; ----------------------------
 ;; Minimal keybindings - only essential functions
 ;; ----------------------------
 (map! :leader
-      ;; File management integration
-      (:prefix-map ("f" . "file")
-       :desc "Find .envrc file"         "e" #'bdostumski/direnv-find-envrc)
-
-      ;; Minimal direnv prefix - only essential commands
-      (:prefix-map ("e" . "environment")
-       :desc "Edit .envrc"              "e" #'bdostumski/direnv-find-envrc
-       :desc "Reload (manual)"          "r" #'bdostumski/direnv-manual-reload
-       :desc "Allow .envrc"             "a" #'bdostumski/direnv-allow
-       :desc "Deny .envrc"              "d" #'bdostumski/direnv-deny
-       :desc "Toggle performance mode"  "p" #'bdostumski/direnv-toggle-performance-mode
-       :desc "Status"                   "s" #'bdostumski/direnv-status))
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("t" . "tools")
+                                ;; Minimal direnv prefix - only essential commands
+                                (:prefix ("e" . "environment")
+                                 :desc "Edit .envrc"              "e" #'+direnv/direnv-find-envrc
+                                 :desc "Reload (manual)"          "r" #'+direnv/direnv-manual-reload
+                                 :desc "Allow .envrc"             "a" #'+direnv/direnv-allow
+                                 :desc "Deny .envrc"              "d" #'+direnv/direnv-deny
+                                 :desc "Toggle performance mode"  "p" #'+direnv/direnv-toggle-performance-mode
+                                 :desc "Status"                   "s" #'+direnv/direnv-status))))
 
 ;; ----------------------------
 ;; Performance monitoring
 ;; ----------------------------
-(defun bdostumski/direnv-performance-warning ()
+(defun +direnv/direnv-performance-warning ()
   "Show performance tips if direnv is slow."
-  (when (and (not bdostumski/direnv-performance-mode)
+  (when (and (not +direnv/direnv-performance-mode)
              (> (string-to-number (format-time-string "%S")) 2))
-    (message "💡 Tip: Use SPC e p to enable direnv performance mode for speed")))
+    (message "💡 Tip: Use SPC e t v p to enable direnv performance mode for speed")))
 
 ;; Show performance tip after startup
-(run-with-timer 5 nil #'bdostumski/direnv-performance-warning)
+(run-with-timer 5 nil #'+direnv/direnv-performance-warning)
 
 ;; ----------------------------
 ;; Disable problematic integrations that cause slowdown
@@ -226,23 +224,18 @@
 (setq exec-path-from-shell-arguments '("-l"))          ; Use minimal shell arguments
 
 ;; Don't automatically refresh LSP on direnv changes (do manually when needed)
-(defun bdostumski/direnv-lsp-refresh ()
+(defun +direnv/direnv-lsp-refresh ()
   "Manually refresh LSP workspace after direnv changes."
   (interactive)
   (when (and (featurep 'lsp-mode) (lsp-workspaces))
     (lsp-restart-workspace)
     (message "✓ LSP workspace refreshed")))
 
-;; Add LSP refresh to the environment menu
-(map! :leader
-      (:prefix-map ("e" . "environment")
-       :desc "Refresh LSP"              "l" #'bdostumski/direnv-lsp-refresh))
-
 ;; ----------------------------
 ;; Startup message
 ;; ----------------------------
-(message "✓ Direnv loaded in PERFORMANCE MODE - use SPC e r for manual reload")
-(message "💡 Use SPC e p to toggle auto-mode (may impact performance)")
+(message "✓ Direnv loaded in PERFORMANCE MODE - use SPC e t v r for manual reload")
+(message "💡 Use SPC e t v p to toggle auto-mode (may impact performance)")
 
 (provide 'tools-direnv-config)
 
