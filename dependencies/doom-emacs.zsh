@@ -96,6 +96,18 @@ else
     log "⚠️ Dotfiles directory not found. Skipping dotfile setup." ">&2"
 fi
 
+if [[ ! -d "${HOME}/.config/emacs/snippets" ]]; then
+	mkdir -p "${HOME}/.config/emacs/snippets"
+fi
+
+if [[ ! -d "${HOME}/.local/share/yasnippet-snippets" ]]; then
+	mkdir -p "${HOME}/.local/share/yasnippet-snippets"
+fi
+
+if [[ ! -d "${HOME}/.config/emacs/snippets/project-specific-snippets" ]]; then
+	mkdir -p "${HOME}/.config/emacs/snippets/project-specific-snippets"
+fi
+
 log "🧩 Installing Doom Emacs..."
 "${HOME}/.config/emacs/bin/doom install"
 
