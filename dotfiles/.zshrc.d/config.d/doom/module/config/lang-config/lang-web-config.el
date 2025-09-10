@@ -18,11 +18,13 @@
 ;; ----------------------------
 ;; Leader keybindings for Web
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("w" . "web")
-;;       :desc "Format buffer"      "f" #'lsp-format-buffer
-;;       :desc "Go to definition"   "d" #'lsp-find-definition
-;;       :desc "Run project"        "r" #'npm-run-current-project))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("w" . "web")
+                                 :desc "Format buffer"      "f" #'lsp-format-buffer
+                                 :desc "Go to definition"   "d" #'lsp-find-definition
+                                 :desc "Run project"        "r" #'npm-run-current-project))))
 
 (provide 'lang-web-config)
 

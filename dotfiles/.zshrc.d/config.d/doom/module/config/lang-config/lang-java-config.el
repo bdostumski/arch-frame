@@ -13,11 +13,13 @@
         c-default-style "java"))
 
 ;; Leader keybindings for Java
-;;(map! :leader
-;;      (:prefix-map ("j" . "java")
-;;       :desc "Compile project" "c" #'compile
-;;       :desc "Run debugger"   "d" #'dap-debug
-;;       :desc "Run tests"      "t" #'lsp-java-run-test))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("j" . "java")
+                                 :desc "Compile project" "c" #'compile
+                                 :desc "Run debugger"   "d" #'dap-debug
+                                 :desc "Run tests"      "t" #'lsp-java-run-test))))
 
 (provide 'lang-java-config)
 

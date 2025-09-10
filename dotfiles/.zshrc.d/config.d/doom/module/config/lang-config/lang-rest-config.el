@@ -13,10 +13,12 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("r" . "rest")
-;;       :desc "Send request at point" "s" #'restclient-http-send-current
-;;       :desc "View last response" "v" #'restclient-show-response))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("r" . "rest")
+                                 :desc "Send request at point" "s" #'restclient-http-send-current
+                                 :desc "View last response" "v" #'restclient-show-response))))
 
 (provide 'lang-rest-config)
 

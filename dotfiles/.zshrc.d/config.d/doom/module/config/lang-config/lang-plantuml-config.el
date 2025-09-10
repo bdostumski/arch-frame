@@ -14,10 +14,12 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("u" . "uml")
-;;       :desc "Preview diagram" "p" #'plantuml-preview
-;;       :desc "Export diagram" "e" #'plantuml-export-buffer))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("u" . "uml")
+                                 :desc "Preview diagram" "p" #'plantuml-preview
+                                 :desc "Export diagram" "e" #'plantuml-export-buffer))))
 
 (provide 'lang-plantuml-config)
 

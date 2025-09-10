@@ -12,11 +12,13 @@
   (setq lua-indent-level 2))
 
 ;; Leader keybindings
-;;(map! :leader
-;;      (:prefix-map ("l" . "lua")
-;;       :desc "Evaluate buffer" "b" #'lua-send-buffer
-;;       :desc "Evaluate region" "r" #'lua-send-region
-;;       :desc "Run REPL" "s" #'lua-start-process))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("l" . "lua")
+                                 :desc "Evaluate buffer" "b" #'lua-send-buffer
+                                 :desc "Evaluate region" "r" #'lua-send-region
+                                 :desc "Run REPL" "s" #'lua-start-process))))
 
 (provide 'lang-lua-config)
 

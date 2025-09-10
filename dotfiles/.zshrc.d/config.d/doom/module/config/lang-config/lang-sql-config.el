@@ -21,11 +21,13 @@
 ;; ----------------------------
 ;; Leader keybindings for SQL
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("s" . "sql")
-;;       :desc "Connect to DB"           "c" #'sql-connect
-;;       :desc "Execute buffer/query"    "e" #'sql-send-buffer
-;;       :desc "Execute region/query"    "r" #'sql-send-region))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("s" . "sql")
+                                 :desc "Connect to DB"           "c" #'sql-connect
+                                 :desc "Execute buffer/query"    "e" #'sql-send-buffer
+                                 :desc "Execute region/query"    "r" #'sql-send-region))))
 
 (provide 'lang-sql-config)
 

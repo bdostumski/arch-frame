@@ -9,10 +9,12 @@
   (setq graphviz-dot-command "dot"))
 
 ;; Leader keybindings for Graphviz
-;;(map! :leader
-;;      (:prefix-map ("g" . "graphviz")
-;;       :desc "Preview graph" "p" #'graphviz-dot-preview
-;;       :desc "Export graph"  "e" #'graphviz-dot-export-buffer))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("g" . "graphviz")
+                                 :desc "Preview graph" "p" #'graphviz-dot-preview
+                                 :desc "Export graph"  "e" #'graphviz-dot-export-buffer))))
 
 (provide 'lang-graphviz-config)
 

@@ -14,11 +14,13 @@
         c-basic-offset 4))
 
 ;; Leader keybindings for C/C++
-;;(map! :leader
-;;      (:prefix-map ("c" . "C/C++")
-;;       :desc "Compile project" "c" #'compile
-;;       :desc "Run debugger" "d" #'gdb
-;;       :desc "Switch header/source" "s" #'ff-find-other-file))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("c" . "C/C++")
+                                 :desc "Compile project" "c" #'compile
+                                 :desc "Run debugger" "d" #'gdb
+                                 :desc "Switch header/source" "s" #'ff-find-other-file))))
 
 (provide 'lang-cc-config)
 

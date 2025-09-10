@@ -11,13 +11,15 @@
   (setq lisp-indent-offset 2))
 
 ;; Leader keybindings for Emacs Lisp
-;;(map! :leader
-;;      (:prefix-map ("e" . "elisp")
-;;       :desc "Evaluate buffer"       "b" #'eval-buffer
-;;       :desc "Evaluate expression"   "e" #'eval-last-sexp
-;;       :desc "Evaluate region"       "r" #'eval-region
-;;       :desc "Describe function"     "f" #'describe-function
-;;       :desc "Describe variable"     "v" #'describe-variable))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("e" . "elisp")
+                                 :desc "Evaluate buffer"       "b" #'eval-buffer
+                                 :desc "Evaluate expression"   "e" #'eval-last-sexp
+                                 :desc "Evaluate region"       "r" #'eval-region
+                                 :desc "Describe function"     "f" #'describe-function
+                                 :desc "Describe variable"     "v" #'describe-variable))))
 
 (provide 'lang-emacs-lisp-config)
 

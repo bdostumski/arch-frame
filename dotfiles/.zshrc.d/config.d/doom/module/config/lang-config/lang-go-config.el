@@ -12,11 +12,13 @@
   (add-hook 'before-save-hook 'gofmt-before-save))
 
 ;; Leader keybindings for Go
-;;(map! :leader
-;;      (:prefix-map ("g" . "go")
-;;       :desc "Run go build"          "b" #'compile
-;;       :desc "Run go test"           "t" #'go-test-current-project
-;;       :desc "Go to definition"      "d" #'godef-jump))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("g" . "go")
+                                 :desc "Run go build"          "b" #'compile
+                                 :desc "Run go test"           "t" #'go-test-current-project
+                                 :desc "Go to definition"      "d" #'godef-jump))))
 
 (provide 'lang-go-config)
 

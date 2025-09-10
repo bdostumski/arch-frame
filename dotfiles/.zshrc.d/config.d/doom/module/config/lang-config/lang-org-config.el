@@ -85,12 +85,14 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("o" . "org")
-;;       :desc "Open agenda" "a" #'org-agenda
-;;       :desc "Capture note" "c" #'org-capture
-;;       :desc "Roam buffer" "r" #'org-roam-buffer-toggle
-;;       :desc "Export to Hugo" "h" #'org-hugo-export-wim-to-md))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("o" . "org")
+                                 :desc "Open agenda" "a" #'org-agenda
+                                 :desc "Capture note" "c" #'org-capture
+                                 :desc "Roam buffer" "r" #'org-roam-buffer-toggle
+                                 :desc "Export to Hugo" "h" #'org-hugo-export-wim-to-md))))
 
 (provide 'lang-org-config)
 ;;; lang-org-config.el ends here

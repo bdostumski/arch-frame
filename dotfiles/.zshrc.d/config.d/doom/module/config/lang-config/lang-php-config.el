@@ -17,12 +17,14 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("p" . "php")
-;;       :desc "Run PHP script" "r" #'php-execute-file
-;;       :desc "Format buffer" "f" #'lsp-format-buffer
-;;       :desc "Go to definition" "d" #'lsp-find-definition
-;;       :desc "Run tests" "t" #'phpunit))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("p" . "php")
+                                 :desc "Run PHP script" "r" #'php-execute-file
+                                 :desc "Format buffer" "f" #'lsp-format-buffer
+                                 :desc "Go to definition" "d" #'lsp-find-definition
+                                 :desc "Run tests" "t" #'phpunit))))
 
 (provide 'lang-php-config)
 

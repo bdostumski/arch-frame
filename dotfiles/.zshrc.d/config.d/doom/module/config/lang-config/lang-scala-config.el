@@ -16,12 +16,14 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("s" . "scala")
-;;       :desc "Run REPL" "r" #'scala-run-repl
-;;       :desc "Run tests" "t" #'sbt-test
-;;       :desc "Go to definition" "d" #'lsp-find-definition
-;;       :desc "Format buffer" "f" #'lsp-format-buffer))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "lang")
+                                (:prefix-map ("s" . "scala")
+                                 :desc "Run REPL" "r" #'scala-run-repl
+                                 :desc "Run tests" "t" #'sbt-test
+                                 :desc "Go to definition" "d" #'lsp-find-definition
+                                 :desc "Format buffer" "f" #'lsp-format-buffer))))
 
 (provide 'lang-scala-config)
 
