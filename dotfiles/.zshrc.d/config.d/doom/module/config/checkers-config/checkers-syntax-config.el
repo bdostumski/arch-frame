@@ -1,4 +1,5 @@
 ;;; module/config/checkers-config/checkers-syntax-config.el -*- lexical-binding: t; -*-
+
 ;;; Commentary:
 ;; Flycheck configuration with optional posframe integration for syntax checking.
 ;; Only enables Flycheck in text modes and org-mode, not programming modes.
@@ -53,11 +54,13 @@
 ;; ----------------------------
 ;; Keybindings for Flycheck
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("c" . "check")
-;;       :desc "List errors" "x" #'flycheck-list-errors
-;;       :desc "Next error" "n" #'flycheck-next-error
-;;       :desc "Previous error" "p" #'flycheck-previous-error))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("c" . "checkers")
+                                (:prefix-map ("s" . "syntax")
+                                 :desc "List errors" "x" #'flycheck-list-errors
+                                 :desc "Next error" "n" #'flycheck-next-error
+                                 :desc "Previous error" "p" #'flycheck-previous-error))))
 
 (provide 'checkers-syntax-config)
 

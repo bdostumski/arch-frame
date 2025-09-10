@@ -32,7 +32,10 @@
 ;; Vim-style keybinding to toggle Zen mode
 ;; ----------------------------------------
 (map! :leader
-      :desc "Toggle Zen Mode" "t z" #'writeroom-mode)
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("u" . "ui")
+                                (:prefix ("z" . "zen")
+                                 :desc "Toggle Zen Mode" "t" #'writeroom-mode))))
 
 ;; ----------------------------------------
 ;; Visual-fill-column integration

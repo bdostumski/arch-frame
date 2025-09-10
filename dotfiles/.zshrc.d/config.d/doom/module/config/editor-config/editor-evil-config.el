@@ -1,4 +1,5 @@
 ;;; module/config/editor-config/ui-evil-config.el -*- lexical-binding: t; -*-
+
 ;;; Commentary:
 ;; Optimized Evil mode setup for Doom Emacs.
 ;; Provides Vim-like behavior everywhere, with quality-of-life tweaks,
@@ -25,8 +26,8 @@
         :v "v" #'er/expand-region)                             ;; better visual selection
 
   ;; Optional: more ergonomic navigation
-  ;; (map! :n "H" #'evil-first-non-blank
-  ;;       :n "L" #'evil-end-of-line)
+  (map! :n "H" #'evil-first-non-blank
+        :n "L" #'evil-end-of-line)
   )
 
 ;; ----------------------------

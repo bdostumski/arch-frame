@@ -1,4 +1,5 @@
 ;;; module/config/default-config/config-default-config.el -*- lexical-binding: t; -*-
+
 ;;; Commentary:
 ;; Default configuration for global editor enhancements.
 ;; Enables smartparens globally with useful keybindings.
@@ -20,13 +21,15 @@
 ;; ----------------------------
 ;; Keybindings for smartparens
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("s" . "smartparens")
-;;       :desc "Wrap region in parentheses" "w" #'sp-wrap-round
-;;       :desc "Slurp forward" "f" #'sp-forward-slurp-sexp
-;;       :desc "Barf forward" "b" #'sp-forward-barf-sexp
-;;       :desc "Slurp backward" "F" #'sp-backward-slurp-sexp
-;;       :desc "Barf backward" "B" #'sp-backward-barf-sexp))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("e" . "emacs")
+                                (:prefix-map ("s" . "smartparens")
+                                 :desc "Wrap region in parentheses" "w" #'sp-wrap-round
+                                 :desc "Slurp forward" "N" #'sp-forward-slurp-sexp
+                                 :desc "Slurp backward" "B" #'sp-backward-slurp-sexp
+                                 :desc "Barf forward" "n" #'sp-forward-barf-sexp
+                                 :desc "Barf backward" "b" #'sp-backward-barf-sexp))))
 
 (provide 'config-default-config)
 

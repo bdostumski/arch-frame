@@ -50,13 +50,15 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;(:prefix-map ("i" . "irc")
-;;:desc "Connect to IRC"      "c" #'rcirc
-;;:desc "Switch IRC buffer"   "b" #'rcirc-switch-to-buffer
-;;:desc "Disconnect"          "q" #'rcirc-cmd-quit
-;;:desc "Reconnect"           "r" #'rcirc-reconnect-all
-;;:desc "List channels"       "l" #'rcirc-cmd-list))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("a" . "applications")
+                                (:prefix-map ("i" . "irc")
+                                 :desc "Connect to IRC"      "c" #'rcirc
+                                 :desc "Switch IRC buffer"   "b" #'rcirc-switch-to-buffer
+                                 :desc "Disconnect"          "q" #'rcirc-cmd-quit
+                                 :desc "Reconnect"           "r" #'rcirc-reconnect-all
+                                 :desc "List channels"       "l" #'rcirc-cmd-list))))
 
 (provide 'app-irc-config)
 

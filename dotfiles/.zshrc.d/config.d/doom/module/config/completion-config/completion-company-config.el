@@ -1,4 +1,5 @@
 ;;; module/config/completion-config/completion-company-config.el -*- lexical-binding: t; -*-
+
 ;;; Commentary:
 ;; Optimized Company setup for auto-completion with enhanced UI features.
 ;; Includes company-box icons and quick, responsive completions.

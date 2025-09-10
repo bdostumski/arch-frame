@@ -38,13 +38,15 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("e" . "everywhere")
-;;       :desc "Edit file with emacsclient (server-edit)" "f" #'server-edit
-;;       :desc "Start server"  "s" #'server-start
-;;       :desc "Stop server"   "k" #'server-force-delete
-;;       :desc "Show server running status" "r" (lambda () (interactive)
-;;                                                (message "Server running: %s" (server-running-p)))))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("a" . "applications")
+                                (:prefix-map ("e" . "everywhere")
+                                 :desc "Edit file with emacsclient (server-edit)" "f" #'server-edit
+                                 :desc "Start server"  "s" #'server-start
+                                 :desc "Stop server"   "k" #'server-force-delete
+                                 :desc "Show server running status" "r" (lambda () (interactive)
+                                                                          (message "Server running: %s" (server-running-p)))))))
 
 (provide 'app-everywhere-config)
 

@@ -22,13 +22,15 @@
         evil-multiedit-ignore-indent-and-trailing t))
 
 ;; Leader keybindings for Doom
-;;(map! :leader
-;;      :prefix ("m" . "multiedit")
-;;      :desc "Mark symbol + next" "n" #'evil-multiedit-match-symbol-and-next
-;;      :desc "Mark symbol + prev" "p" #'evil-multiedit-match-symbol-and-prev
-;;      :desc "Mark all matches" "a" #'evil-multiedit-match-all
-;;      :desc "Ex match (regex)" "e" #'evil-multiedit-ex-match
-;;      :desc "Restore session" "r" #'evil-multiedit-restore))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+               (:prefix-map ("e" . "emacs")
+                (:prefix-map ("m" . "multiedit")
+                :desc "Mark symbol + next" "n" #'evil-multiedit-match-symbol-and-next
+                :desc "Mark symbol + prev" "p" #'evil-multiedit-match-symbol-and-prev
+                :desc "Mark all matches" "a" #'evil-multiedit-match-all
+                :desc "Ex match (regex)" "e" #'evil-multiedit-ex-match
+                :desc "Restore session" "r" #'evil-multiedit-restore))))
 
 (provide 'editor-multiple-cursors-config)
 

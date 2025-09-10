@@ -1,4 +1,5 @@
 ;;; module/config/editor-config/editor-rainbow-delimiters-config.el -*- lexical-binding: t; -*-
+
 ;;; Commentary:
 ;; Rainbow delimiters with custom colors and enhanced parentheses highlighting.
 

@@ -47,14 +47,16 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("r" . "rss")
-;;       :desc "Open RSS reader" "o" #'elfeed
-;;       :desc "Update feeds"    "u" #'elfeed-update
-;;       :desc "Search feeds"    "s" #'elfeed-search-set-filter
-;;       :desc "Show entry"      "e" #'elfeed-show-entry
-;;       :desc "Mark as read"    "m" #'elfeed-search-untag-all-unread
-;;       :desc "Save entry to Org" "S" #'elfeed-org-save-entry))
+(map! :leader
+      (:prefix-map ("e" . "editor") 
+                   (:prefix-map ("a" . "applications")
+                                (:prefix-map ("r" . "rss")
+                                 :desc "Open RSS reader" "o" #'elfeed
+                                 :desc "Update feeds"    "u" #'elfeed-update
+                                 :desc "Search feeds"    "s" #'elfeed-search-set-filter
+                                 :desc "Show entry"      "e" #'elfeed-show-entry
+                                 :desc "Mark as read"    "m" #'elfeed-search-untag-all-unread
+                                 :desc "Save entry to Org" "S" #'elfeed-org-save-entry))))
 
 (provide 'app-rss-config)
 

@@ -94,15 +94,17 @@
 
 ;; Keybindings
 (map! :leader
-      (:prefix-map ("c" . "calendar")
-       :desc "Open calendar"        "o" #'calendar
-       :desc "Go to today"          "t" #'calendar-goto-today
-       :desc "View holidays"        "h" #'calendar-list-holidays
-       :desc "View phases of moon"  "m" #'calendar-phases-of-moon
-       :desc "View sunrise/sunset"  "s" #'calendar-sunrise-sunset
-       :desc "List diary entries"   "d" #'diary-list-entries
-       :desc "Show org agenda"      "a" #'org-agenda
-       :desc "Create appointment"   "A" #'appt-add))
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("a" . "applications")
+                                (:prefix-map ("c" . "calendar")
+                                 :desc "Open calendar"        "o" #'calendar
+                                 :desc "Go to today"          "t" #'calendar-goto-today
+                                 :desc "View holidays"        "h" #'calendar-list-holidays
+                                 :desc "View phases of moon"  "m" #'calendar-phases-of-moon
+                                 :desc "View sunrise/sunset"  "s" #'calendar-sunrise-sunset
+                                 :desc "List diary entries"   "d" #'diary-list-entries
+                                 :desc "Show org agenda"      "a" #'org-agenda
+                                 :desc "Create appointment"   "A" #'appt-add))))
 
 (provide 'app-calendar-config)
 

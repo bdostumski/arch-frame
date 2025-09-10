@@ -13,9 +13,12 @@
         langtool-default-language "en-US"))
 
 ;; Keybindings for grammar checking
-;;(map! :leader
-;;      :desc "Grammar check buffer" "S g" #'langtool-check
-;;      :desc "Grammar clear buffer" "S G" #'langtool-correct-buffer)
+(map! :leader
+      (:prefix-map ("e" . "editor")
+       (:prefix-map ("c" . "checkers")
+        (:prefix-map ("g" . "grammar")
+         :desc "Grammar check buffer" "g" #'langtool-check
+         :desc "Grammar clear buffer" "G" #'langtool-correct-buffer))))
 
 (provide 'checkers-grammar-config)
 

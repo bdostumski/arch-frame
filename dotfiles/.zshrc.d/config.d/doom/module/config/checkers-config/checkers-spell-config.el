@@ -16,9 +16,11 @@
 
 ;; Keybindings for spell checking
 (map! :leader
-      (:prefix ("C" . "Checkers")
-      :desc "Spell check word"   "S c" #'flyspell-correct-word-before-point
-      :desc "Spell check buffer" "S b" #'flyspell-buffer))
+      (:prefix-map ("e" . "editor")
+       (:prefix-map ("c" . "checkers")
+        (:prefix-map ("f" . "flyspell")
+         :desc "Spell check word"   "c" #'flyspell-correct-word-before-point
+         :desc "Spell check buffer" "b" #'flyspell-buffer))))
 
 (provide 'checkers-spell-config)
 

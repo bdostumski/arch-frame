@@ -1,4 +1,5 @@
 ;;; module/config/editor-config/editor-format-config.el -*- lexical-binding: t; -*-
+ 
 ;;; Commentary:
 ;; Combined configuration for Tree-sitter and smart auto-formatting in Doom Emacs.
 ;; Provides:
@@ -30,10 +31,13 @@
 ;; ----------------------------
 ;; Tree-sitter keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("t" . "tree-sitter")
-;;       :desc "Go to function start" "f" #'tree-sitter-goto-function-start
-;;       :desc "Go to function end" "e" #'tree-sitter-goto-function-end))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("e" . "emacs")
+                                (:prefix-map ("t" . "tree-sitter")
+                                 :desc "Toggle format on save" "f" #'+format/toggle
+                                 :desc "Go to function start" "n" #'tree-sitter-goto-function-start
+                                 :desc "Go to function end" "b" #'tree-sitter-goto-function-end))))
 
 ;; ----------------------------
 ;; Smart auto-formatting
@@ -43,11 +47,7 @@
   (setq +format-with-lsp t)
   ;; Disable auto-format for certain modes
   (setq +format-on-save-enabled-modes
-        '(not emacs-lisp-mode makefile-mode))
-  ;; Leader toggle
-  ;;(map! :leader
-  ;;      :desc "Toggle format on save" "t f" #'+format/toggle)
-  )
+        '(not emacs-lisp-mode makefile-mode)))
 
 ;; ----------------------------
 ;; Helper functions for conditional formatters

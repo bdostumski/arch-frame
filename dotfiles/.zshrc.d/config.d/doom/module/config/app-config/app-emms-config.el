@@ -51,12 +51,12 @@
               (emms-track-simple-description track)))))
 
   ;; Keybindings in playlist mode
-  ;;(map!
-  ;;:map emms-playlist-mode-map
-  ;;"RET" #'emms-playlist-mode-play-smart
-  ;;"d" #'emms-playlist-mode-kill-track
-  ;;"u" #'emms-playlist-mode-undo
-  ;;"s" #'emms-shuffle)
+  (map!
+   :map emms-playlist-mode-map
+   "RET" #'emms-playlist-mode-play-smart
+   "d" #'emms-playlist-mode-kill-track
+   "u" #'emms-playlist-mode-undo
+   "s" #'emms-shuffle)
 
   ;; Optionally, auto-save playlist
   (setq emms-playlist-default-major-mode 'emms-playlist-mode)
@@ -66,24 +66,26 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("m" . "music")
-;;       :desc "Play/Pause"         "p" #'emms-pause
-;;       :desc "Play file/directory""f" #'emms-play-directory-tree
-;;       :desc "Next track"         "n" #'emms-next
-;;       :desc "Previous track"     "b" #'emms-previous
-;;       :desc "Stop"               "s" #'emms-stop
-;;       :desc "Show playlist"      "l" #'emms-playlist-mode-go
-;;       :desc "Show browser"       "B" #'emms-browser
-;;       :desc "Add file"           "a" #'emms-add-file
-;;       :desc "Add directory"      "d" #'emms-add-directory
-;;       :desc "Add playlist"       "P" #'emms-add-playlist
-;;       :desc "Shuffle playlist"   "S" #'emms-shuffle
-;;       :desc "Show current info"  "i" #'emms-show
-;;       :desc "Seek forward"       ">" #'emms-seek-forward
-;;       :desc "Seek backward"      "<" #'emms-seek-backward
-;;       :desc "Volume up"          "+" #'emms-volume-raise
-;;       :desc "Volume down"        "-" #'emms-volume-lower))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("a" . "applications")
+                                (:prefix-map ("m" . "emms")
+                                 :desc "Play/Pause"         "p" #'emms-pause
+                                 :desc "Play file/directory""f" #'emms-play-directory-tree
+                                 :desc "Next track"         "n" #'emms-next
+                                 :desc "Previous track"     "b" #'emms-previous
+                                 :desc "Stop"               "s" #'emms-stop
+                                 :desc "Show playlist"      "l" #'emms-playlist-mode-go
+                                 :desc "Show browser"       "B" #'emms-browser
+                                 :desc "Add file"           "a" #'emms-add-file
+                                 :desc "Add directory"      "d" #'emms-add-directory
+                                 :desc "Add playlist"       "P" #'emms-add-playlist
+                                 :desc "Shuffle playlist"   "S" #'emms-shuffle
+                                 :desc "Show current info"  "i" #'emms-show
+                                 :desc "Seek forward"       ">" #'emms-seek-forward
+                                 :desc "Seek backward"      "<" #'emms-seek-backward
+                                 :desc "Volume up"          "+" #'emms-volume-raise
+                                 :desc "Volume down"        "-" #'emms-volume-lower))))
 
 (provide 'app-emms-config)
 

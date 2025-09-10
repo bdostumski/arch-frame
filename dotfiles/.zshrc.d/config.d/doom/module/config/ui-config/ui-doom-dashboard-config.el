@@ -35,11 +35,11 @@
            :action (lambda ()
                      (find-file (concat doom-private-dir "config.org"))))
           ;; Uncomment to add Magit shortcut
-          ;; ("Magit Status" :icon "git" :action magit-status)
+          ;;("Magit Status" :icon "git" :action magit-status)
           ;; Uncomment to add Deft notes
-          ;; ("Deft Notes" :icon "sticky-note" :action deft)
+          ;;("Deft Notes" :icon "sticky-note" :action deft)
           ;; Uncomment to add Org-Roam
-          ;; ("Org-Roam" :icon "book" :action org-roam)
+          ;;("Org-Roam" :icon "book" :action org-roam)
           ))
 
   ;; ----------------------------------------

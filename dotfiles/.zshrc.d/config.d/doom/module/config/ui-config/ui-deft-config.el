@@ -1,4 +1,5 @@
 ;;; module/config/ui-config/ui-deft-config.el -*- lexical-binding: t -*-
+
 ;;; Commentary:
 ;; Optimized Deft configuration for Doom Emacs.
 ;; Supports Org, Markdown, and plain text files with recursive search.
@@ -6,12 +7,16 @@
 ;;; Code:
 
 (use-package! deft
+
   :defer t
   :commands (deft)
   :init
   ;; Leader keybinding to open Deft
-  ;;  (map! :leader
-  ;;        :desc "Open Deft" "n d" #'deft)
+    (map! :leader
+          (:prefix-map ("e" . "editor")
+           (:prefix-map ("u" . "ui")
+            (:prefix ("d" . "deft")
+             :desc "deft-notes" "d" #'deft))))
   :config
   ;; Core settings
   (setq deft-directory "~/Documents/notes"

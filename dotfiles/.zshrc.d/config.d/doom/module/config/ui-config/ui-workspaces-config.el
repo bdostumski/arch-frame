@@ -18,13 +18,15 @@
         (lambda (buffer) (not (string-match-p "^\\*" (buffer-name buffer)))))
 
   ;; Vim-like workspace navigation keybindings
-  ;; (map! :leader
-  ;;       :desc "Next workspace"      "TAB"    #'+workspace/switch-right
-  ;;       :desc "Previous workspace"  "S-TAB"  #'+workspace/switch-left
-  ;;       :desc "Switch workspace"    "w"      #'+workspace/switch-to
-  ;;       :desc "New workspace"       "W"      #'+workspace/new
-  ;;       :desc "Delete workspace"    "C-w"    #'+workspace/delete)
-  )
+   (map! :leader
+          (:prefix-map ("e" . "editor")
+                (:prefix-map ("u" . "ui")
+                       (:prefix ("w" . "workspace")
+                        :desc "Next workspace"      "n"  #'+workspace/switch-right
+                        :desc "Previous workspace"  "b"  #'+workspace/switch-left
+                        :desc "Switch workspace"    "w"  #'+workspace/switch-to
+                        :desc "New workspace"       "W"  #'+workspace/new
+                        :desc "Delete workspace"    "D"  #'+workspace/delete)))))
 
 (provide 'ui-workspaces-config)
 

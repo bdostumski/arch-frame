@@ -16,11 +16,13 @@
   (setq vc-handled-backends '(Git Hg)))
 
 ;; Optional keybindings for VC actions
-;;(map! :leader
-;;      (:prefix-map ("v" . "version control")
-;;       :desc "VC Status"       "s" #'vc-dir
-;;       :desc "Next VC Hunk"    "] c" #'vc-next-action
-;;       :desc "Previous VC Hunk" "[ c" #'vc-previous-action))
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("e" . "emacs")
+                                (:prefix-map ("v" . "version control")
+                                 :desc "VC Status"       "s" #'vc-dir
+                                 :desc "Next VC Hunk"    "n" #'vc-next-action
+                                 :desc "Previous VC Hunk" "b" #'vc-previous-action))))
 
 (provide 'emacs-vc-config)
 

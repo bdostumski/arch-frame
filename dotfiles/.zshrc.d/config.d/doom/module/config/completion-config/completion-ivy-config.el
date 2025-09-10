@@ -1,4 +1,5 @@
 ;;; module/config/completion-config/completion-ivy-config.el -*- lexical-binding: t; -*-
+
 ;;; Commentary:
 ;; Ivy-based completion setup with rich UI enhancements, icons, sorting/persisting,
 ;; and posframe support for a modern Emacs experience.
