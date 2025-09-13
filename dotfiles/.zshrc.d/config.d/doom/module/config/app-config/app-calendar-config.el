@@ -1,110 +1,206 @@
 ;;; app-calendar-config.el -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Simplified Doom Emacs calendar config:
-;; - Week starts on Monday
-;; - International, Bulgarian, and Christian holidays, including Orthodox Easter
-;; - Highlight today
-;; - Appointment notifications
-;; - Org agenda integration
-;; - Keybindings for quick access
+;; Doom Emacs calendar configuration
 
 ;;; Code:
 
-(after! calendar
-  ;; Week starts on Monday
-  (setq calendar-week-start-day 1
-        calendar-mark-today t
-        calendar-latitude 42.6977
+(use-package! calendar
+  :commands (calendar)  ; Only load when explicitly called
+  :config
+  ;; Basic calendar settings
+  (setq calendar-week-start-day 1                    ; Monday
+        calendar-mark-today t                        ; Highlight today
+        calendar-date-style 'iso                     ; ISO date format
+        calendar-mark-holidays-flag t                ; Mark holidays
+        calendar-mark-diary-entries-flag nil         ; DON'T auto-mark diary entries
+        calendar-view-holidays-initially-flag nil    ; Don't show holidays initially
+        calendar-view-diary-initially-flag nil)      ; Don't show diary initially
+
+  ;; Location settings for Sofia, Bulgaria
+  (setq calendar-latitude 42.6977
         calendar-longitude 23.3219
-        calendar-location-name "Sofia, Bulgaria"
-        calendar-date-style 'iso
-        calendar-view-holidays-initially-flag t
-        calendar-view-diary-initially-flag t
-        calendar-view-phases-of-moon-initially-flag t
-        calendar-view-sunrise-sunset-initially-flag t)
+        calendar-location-name "Sofia, Bulgaria")
 
-  ;; Define custom holiday lists
-  (setq holiday-international-holidays
+  ;; Use a safe date display function instead
+  (setq calendar-date-echo-text
+        (lambda (date)
+          (format "%04d-%02d-%02d" 
+                  (nth 2 date)    ; year
+                  (nth 0 date)    ; month  
+                  (nth 1 date)))) ; day
+
+  ;; HOLIDAYS - Simplified and safe
+  (setq holiday-general-holidays
         '((holiday-fixed 1 1 "New Year's Day")
-          (holiday-fixed 3 8 "International Women's Day")
           (holiday-fixed 5 1 "Labour Day")
-          (holiday-fixed 6 1 "Children's Day")
-          (holiday-fixed 10 1 "International Day of Older Persons")
-          (holiday-fixed 12 10 "Human Rights Day")))
+          (holiday-fixed 12 25 "Christmas Day")))
 
-  (setq holiday-bulgarian-holidays
-        '((holiday-fixed 1 1 "Нова година (New Year)")
-          (holiday-fixed 3 3 "Освобождение на България (Liberation Day)")
-          (holiday-fixed 5 1 "Ден на труда (Labour Day)")
-          (holiday-fixed 5 6 "Гергьовден (St. George's Day, Army Day)")
-          (holiday-fixed 5 24 "Ден на Славянската писменост (Cyrillic Alphabet Day)")
-          (holiday-fixed 9 6 "Съединението на България (Unification Day)")
-          (holiday-fixed 9 22 "Ден на независимостта (Independence Day)")
-          (holiday-fixed 12 24 "Бъдни вечер (Christmas Eve)")
-          (holiday-fixed 12 25 "Рождество Христово (Christmas)")
-          (holiday-fixed 12 26 "Втори ден на Рождество Христово (2nd Christmas Day)")))
+  (setq holiday-local-holidays
+        '((holiday-fixed 1 1 "Нова година")
+          (holiday-fixed 3 3 "Ден на Освобождението")
+          (holiday-fixed 5 1 "Ден на труда")
+          (holiday-fixed 5 6 "Гергьовден")
+          (holiday-fixed 5 24 "Ден на културата")
+          (holiday-fixed 9 6 "Ден на Съединението")
+          (holiday-fixed 9 22 "Ден на Независимостта")
+          (holiday-fixed 12 24 "Бъдни вечер")
+          (holiday-fixed 12 25 "Рождество Христово")))
 
-  ;; Define Orthodox Easter and related holidays
-  (setq holiday-orthodox-holidays
-        '((holiday-greek-orthodox-easter)
-          (holiday-fixed 1 6 "Богоявление (Epiphany)")
-          (holiday-easter-etc -48 "Месни заговезни (Meat Shrovetide)")
-          (holiday-easter-etc -7 "Цветница (Palm Sunday)")
-          (holiday-easter-etc 0 "Великден (Orthodox Easter)")
-          (holiday-easter-etc 1 "Великденски понеделник (Easter Monday)")
-          (holiday-easter-etc 39 "Спасовден (Ascension Day)")
-          (holiday-easter-etc 49 "Духовден (Whit Sunday)")
-          (holiday-easter-etc 50 "Духовски понеделник (Whit Monday)")))
+  ;; Simple Orthodox holidays
+  (setq holiday-christian-holidays
+        '((holiday-fixed 1 6 "Богоявление")
+          (holiday-easter-etc 0 "Великден")
+          (holiday-easter-etc 1 "Втори ден на Великден")))
 
-  ;; Combine all holidays
+  ;; Combine holidays
   (setq calendar-holidays
-        (append holiday-international-holidays
-                holiday-bulgarian-holidays
-                holiday-orthodox-holidays
-                holiday-general-holidays    ; Built-in general holidays
-                holiday-local-holidays))    ; Any local holidays you might define
+        (append holiday-general-holidays
+                holiday-local-holidays
+                holiday-christian-holidays))
 
-  ;; Week number display
+  ;; Week number display 
   (setq calendar-intermonth-text
-        '(propertize
-          (format "%2d"
-                  (car
-                   (calendar-iso-from-absolute
-                    (calendar-absolute-from-gregorian
-                     (list month day year)))))
-          'font-lock-face 'font-lock-function-name-face))
+        '(condition-case nil
+             (let ((week-num (car (calendar-iso-from-absolute
+                                   (calendar-absolute-from-gregorian
+                                    (list month day year))))))
+               (when (and week-num (numberp week-num))
+                 (propertize (format "W%02d" week-num)
+                             'font-lock-face 'font-lock-comment-face)))
+           (error "")))  ; Return empty string on any error
 
-  ;; Appointment configuration
-  (use-package! appt
-    :config
-    (appt-activate 1)
-    (setq appt-message-warning-time 15
-          appt-display-mode-line t
-          appt-display-format 'window))
+  ;; Safe header for week numbers
+  (setq calendar-intermonth-header
+        (propertize "Week" 'font-lock-face 'font-lock-keyword-face)))
 
-  ;; Org integration
-  (after! org
-    (setq org-agenda-include-diary t))
+;; Appointment configuration - DISABLED by default
+(use-package! appt
+  :commands (appt-activate appt-add appt-delete)  ; Only load when needed
+  :config
+  ;; Don't automatically activate appointments
+  (setq appt-audible nil                    ; Disable by default
+        appt-message-warning-time 15
+        appt-display-mode-line nil          ; Don't show in mode line
+        appt-display-format 'ignore))       ; Don't display
 
-  ;; Diary settings
-  (setq mark-diary-entries-in-calendar t
-        mark-holidays-in-calendar t
-        diary-file "~/Documents/diary"))
+;; Manual function to enable appointments when wanted
+(defun +calendar/enable-appointments ()
+  "Manually enable appointment reminders."
+  (interactive)
+  (require 'appt)
+  (appt-activate 1)
+  (setq appt-audible t
+        appt-display-mode-line t
+        appt-display-format 'window)
+  (message "Appointment reminders enabled"))
 
-;; Keybindings
+(defun +calendar/disable-appointments ()
+  "Disable appointment reminders."
+  (interactive)
+  (when (featurep 'appt)
+    (appt-activate -1)
+    (setq appt-audible nil
+          appt-display-mode-line nil
+          appt-display-format 'ignore)
+    (message "Appointment reminders disabled")))
+
+;; Org integration with error protection - but don't auto-include diary
+(after! org
+  (condition-case nil
+      (setq org-agenda-include-diary nil          ; DON'T auto-include diary
+            org-agenda-insert-diary-extract-time t)
+    (error nil)))
+
+;; Manual function to include diary in org-agenda when wanted
+(defun +calendar/toggle-org-diary-integration ()
+  "Toggle diary integration with org-agenda."
+  (interactive)
+  (setq org-agenda-include-diary (not org-agenda-include-diary))
+  (message "Org-agenda diary integration: %s" 
+           (if org-agenda-include-diary "enabled" "disabled")))
+
+;; Safe helper functions
+(defun +calendar/calendar-goto-today-safe ()
+  "Safely go to today's date."
+  (interactive)
+  (condition-case nil
+      (calendar-goto-today)
+    (error (message "Could not go to today's date"))))
+
+(defun +calendar/calendar-view-holidays-safe ()
+  "Safely view holidays."
+  (interactive)
+  (condition-case nil
+      (calendar-cursor-holidays)
+    (error (message "Could not display holidays"))))
+
+(defun +calendar/calendar-view-diary-safe ()
+  "Safely view diary entries."
+  (interactive)
+  (condition-case nil
+      (progn
+        (require 'diary-lib)  ; Only load when explicitly requested
+        (diary-view-entries))
+    (error (message "Could not display diary entries"))))
+
+;; Basic keybindings
+(map! :leader
+      (:prefix ("o" . "open")
+       :desc "Calendar" "c" #'calendar))
+
+(map! :leader
+      (:prefix-map ("n" . "notes")
+       (:prefix-map ("c" . "calendar")
+        :desc "Open calendar" "c" #'calendar
+        :desc "Enable appointments" "a" #'+calendar/enable-appointments
+        :desc "Disable appointments" "d" #'+calendar/disable-appointments
+        :desc "Toggle org diary" "o" #'+calendar/toggle-org-diary-integration)))
+
 (map! :leader
       (:prefix-map ("e" . "editor")
-                   (:prefix-map ("a" . "applications")
-                                (:prefix-map ("c" . "calendar")
-                                 :desc "Open calendar"        "o" #'calendar
-                                 :desc "Go to today"          "t" #'calendar-goto-today
-                                 :desc "View holidays"        "h" #'calendar-list-holidays
-                                 :desc "View phases of moon"  "m" #'calendar-phases-of-moon
-                                 :desc "View sunrise/sunset"  "s" #'calendar-sunrise-sunset
-                                 :desc "List diary entries"   "d" #'diary-list-entries
-                                 :desc "Show org agenda"      "a" #'org-agenda
-                                 :desc "Create appointment"   "A" #'appt-add))))
+      (:prefix-map ("a" . "applications")
+       (:prefix-map ("c" . "calendar")
+        :desc "Open calendar" "c" #'calendar
+        :desc "Enable appointments" "a" #'+calendar/enable-appointments
+        :desc "Disable appointments" "d" #'+calendar/disable-appointments
+        :desc "Toggle org diary" "o" #'+calendar/toggle-org-diary-integration))))
+
+(map! :map calendar-mode-map
+      :n "q" #'calendar-exit
+      :n "r" #'calendar-redraw
+      :n "g" #'+calendar/calendar-goto-today-safe
+      :n "." #'+calendar/calendar-goto-today-safe
+      :n "j" #'calendar-forward-day
+      :n "k" #'calendar-backward-day
+      :n "h" #'calendar-backward-day
+      :n "l" #'calendar-forward-day
+      :n "H" #'+calendar/calendar-view-holidays-safe
+      :n "d" #'+calendar/calendar-view-diary-safe
+      :n "TAB" #'calendar-forward-month
+      :n "S-TAB" #'calendar-backward-month
+      :n "<" #'calendar-scroll-left
+      :n ">" #'calendar-scroll-right)
+
+;; Additional safe customizations
+(after! calendar
+  ;; Ensure proper encoding
+  (set-language-environment "UTF-8")
+  
+  ;; Safe hook additions - but don't auto-mark diary
+  (condition-case nil
+      (progn
+        (add-hook 'calendar-today-visible-hook 'calendar-mark-today)
+        (add-hook 'calendar-today-invisible-hook 'calendar-mark-today))
+    (error nil)))
+
+;; Optional: Simple faces (only if no errors)
+(after! calendar
+  (condition-case nil
+      (custom-set-faces!
+       '(calendar-today :inherit highlight :weight bold)
+       '(holiday :inherit font-lock-string-face :weight bold))
+    (error nil)))
 
 (provide 'app-calendar-config)
 

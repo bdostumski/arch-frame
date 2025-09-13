@@ -2,18 +2,22 @@
 
 ;;; Commentary:
 ;; Full configuration for Emacs server and everywhere editing in Doom Emacs.
-;; - Starts Emacs server automatically if not running
-;; - Provides leader keybindings for emacsclient functions and server management
 
 ;;; Code:
 
-(after! server
-  ;; Start Emacs server if not already running
+(use-package! server
+  :defer 1  ; Load after 1 second to avoid startup conflicts
+  :config
+  ;; Start Emacs server if not already running (with error handling)
   (unless (server-running-p)
-    (server-start)))
-
-;; Optionally, you can enable server-mode everywhere
-;; (add-hook 'after-init-hook #'server-mode)
+    (condition-case err
+        (server-start)
+      (file-already-exists
+       (message "Server socket file already exists, attempting to delete and restart...")
+       (server-force-delete)
+       (server-start))
+      (error
+       (message "Failed to start Emacs server: %s" (error-message-string err))))))
 
 ;; ----------------------------
 ;; Auto-save and auto-kill behavior for emacsclient
@@ -24,19 +28,32 @@
       server-switch-hook nil
       server-kill-buffer-on-quit t)
 
-;; Optional: confirmation before killing buffers from emacsclient
-;; (setq server-kill-buffer-query nil)
-
-;; Optional: ask before killing Emacs if there are active clients
+;; Ask before killing Emacs if there are active clients
 (setq confirm-kill-emacs 'yes-or-no-p)
 
-;; Optional: show a message when server starts
-(defun app/everywhere-server-start-message ()
-  (message "Emacs server is running. Use 'emacsclient' to edit files from the shell!"))
-(add-hook 'server-after-make-frame-hook #'app/everywhere-server-start-message)
+;; Optimized server start message (runs only once, with delay)
+(defvar +everywhere/server-message-shown nil
+  "Flag to track if server message has been shown.")
+
+(defun +everywhere/everywhere-server-start-message ()
+  "Show server start message once."
+  (unless +everywhere/server-message-shown
+    (setq +everywhere/server-message-shown t)
+    (run-with-timer 1.0 nil 
+      (lambda () 
+        (message "Emacs server is running. Use 'emacsclient' to edit files!")))))
+
+(add-hook 'server-after-make-frame-hook #'+everywhere/everywhere-server-start-message)
+
+;; Helper function for server status
+(defun +everywhere/server-status ()
+  "Display server running status."
+  (interactive)
+  (message "Server running: %s" 
+           (if (server-running-p) "Yes" "No")))
 
 ;; ----------------------------
-;; Leader keybindings
+;; Leader keybindings (KEEPING YOUR EXACT STRUCTURE)
 ;; ----------------------------
 (map! :leader
       (:prefix-map ("e" . "editor")
@@ -45,8 +62,7 @@
                                  :desc "Edit file with emacsclient (server-edit)" "f" #'server-edit
                                  :desc "Start server"  "s" #'server-start
                                  :desc "Stop server"   "k" #'server-force-delete
-                                 :desc "Show server running status" "r" (lambda () (interactive)
-                                                                          (message "Server running: %s" (server-running-p)))))))
+                                 :desc "Show server running status" "r" #'+everywhere/server-status))))
 
 (provide 'app-everywhere-config)
 

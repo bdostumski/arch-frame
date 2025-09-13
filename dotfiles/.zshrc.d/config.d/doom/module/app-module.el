@@ -9,6 +9,9 @@
 ;; Calendar integration for scheduling and agenda management
 (load! "config/app-config/app-calendar-config.el")
 
+;; Diary file configuration
+(load! "config/app-config/app-diary-lib-config.el")
+
 ;; EMMS (Emacs Multimedia System) - play audio/music inside Emacs
 (load! "config/app-config/app-emms-config.el")
 

@@ -139,7 +139,7 @@
        (json +lsp)              ; At least it ain't XML
        ;;janet             ; Fun fact: Janet is me!
        (java +lsp)       ; the poster child for carpal tunnel syndrome
-       (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
+       (javascript +lsp +tree-sitter)        ; all(hope(abandon(ye(who(enter(here))))))
        (typescript +lsp)   ; enable typescript
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -154,7 +154,7 @@
        (org +dragndrop +noter +present +roam2 +pandoc +gnuplot +journal +hugo)  ; organize your plain life in plain text
        (php +lsp)               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
-       graphviz          ; diagrams for confusing yourself even more
+       ;;graphviz          ; diagrams for confusing yourself even more
        ;;purescript        ; javascript, but functional
        (python +lsp +conda +poetry +pyenv +pyright)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
