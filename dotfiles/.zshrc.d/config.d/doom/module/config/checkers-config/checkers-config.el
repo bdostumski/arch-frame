@@ -45,7 +45,7 @@
 (checkers--detect-spell-checker)
 
 ;; Performance optimization: set personal dictionary
-(setq ispell-personal-dictionary (expand-file-name "~/.emacs.d/.aspell.en.pws"))
+(setq ispell-personal-dictionary (expand-file-name "~/.config/emacs/.aspell.en.pws"))
 
 ;; Create personal dictionary file if it doesn't exist
 (unless (file-exists-p ispell-personal-dictionary)
