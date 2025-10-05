@@ -407,32 +407,6 @@
           ;; Implementation would require parsing and applying layout
           )))))
 
-;; ----------------------------
-;; Smart Keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix ("e" . "editor")
-               (:prefix ("t" . "tools")
-                        (:prefix ("x" . "tmux")  ;; Using capital T to avoid conflicts
-                         ;; Core session management
-                         :desc "New session" "n" #'+tmux/new-session
-                         :desc "Switch session" "s" #'+tmux/switch-session
-                         :desc "Kill session" "k" #'+tmux/kill-session
-                         :desc "Session info" "i" #'+tmux/session-info
-                         
-                         ;; Project integration
-                         :desc "Create project session" "p" #'+tmux/create-project-session
-                         :desc "Development workflow" "w" #'+tmux/development-workflow
-                         :desc "Quick command" "q" #'+tmux/quick-command
-                         
-                         ;; Advanced operations
-                         :desc "Send command" "c" #'+tmux/send-command
-                         :desc "Send region" "r" #'+tmux/send-region-to-pane
-                         :desc "Attach session" "a" #'+tmux/attach-to-session
-                         :desc "List panes" "l" #'+tmux/list-all-panes
-                         :desc "Save layout" "S" #'+tmux/save-session-layout
-                         :desc "Restore layout" "R" #'+tmux/restore-session-layout))))
-
 (provide 'tools-tmux-config)
 
 ;;; tools-tmux-config.el ends here

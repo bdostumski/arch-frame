@@ -9,15 +9,20 @@
   :defer t
   :init
   ;; Define RSS feed sources
-(setq elfeed-feeds
-      '("https://planet.emacslife.com/atom.xml"       ; Emacs blogs
-        "https://www.reddit.com/r/emacs/.rss"        ; Reddit Emacs
-        "https://hackernoon.com/feed/rss"            ; Hackernoon articles
-        "https://kubernetes.io/feed.xml"             ; Kubernetes blog
-        "https://www.docker.com/blog/feed/"          ; Docker blog
-        "https://programmingdigest.net/rss"))          ; Programming Digest
-        
+  (setq elfeed-feeds
+        '("https://planet.emacslife.com/atom.xml"       ; Emacs blogs
+          "https://www.reddit.com/r/emacs/.rss"        ; Reddit Emacs
+          "https://hackernoon.com/feed/rss"            ; Hackernoon articles
+          "https://kubernetes.io/feed.xml"             ; Kubernetes blog
+          "https://www.docker.com/blog/feed/"          ; Docker blog
+          "https://programmingdigest.net/rss"))        ; Programming Digest
+
   :config
+  ;; Ensure database directory exists
+  (setq elfeed-db-directory (expand-file-name "elfeed" doom-cache-dir))
+  (unless (file-directory-p elfeed-db-directory)
+    (make-directory elfeed-db-directory t))
+
   ;; Display settings
   (setq elfeed-search-title-max-width 100
         elfeed-search-title-min-width 30
@@ -26,13 +31,16 @@
         elfeed-search-filter "@1-week-ago +unread"
         elfeed-show-refresh-function #'elfeed-show-refresh--mail-style)
 
-  ;; Database location (optional - for better organization)
-  (setq elfeed-db-directory (expand-file-name "elfeed" doom-cache-dir))
+  ;; Browser configuration - use system default or eww
+  (setq browse-url-browser-function
+        (if (display-graphic-p)
+            'browse-url-default-browser
+          'eww-browse-url))
 
   ;; Auto-update configuration
   (defvar elfeed-update-timer nil
     "Timer for auto-updating elfeed feeds.")
-  
+
   (defun elfeed-setup-auto-update ()
     "Set up automatic feed updates."
     (when elfeed-update-timer
@@ -47,39 +55,14 @@
   (setq elfeed-show-entry-switch 'pop-to-buffer
         elfeed-show-entry-delete #'delete-window)
 
-  ;; Browser configuration - use system default or eww
-  (setq browse-url-browser-function 
-        (if (display-graphic-p)
-            'browse-url-default-browser
-          'eww-browse-url)))
-
-;; Org integration (conditional loading)
-(use-package! elfeed-org
-  :after elfeed
-  :when (featurep! :lang org)
-  :config
-  (setq rmh-elfeed-org-files (list (expand-file-name "feeds.org" org-directory)))
-  (elfeed-org))
-
-;; Protocol handler (optional - only load if needed)
-(use-package! elfeed-protocol
-  :after elfeed
-  :when (and (featurep! :app rss +protocol) ; Only if explicitly enabled
-             (not (eq system-type 'windows-nt))) ; Skip on Windows due to potential issues
-  :config
-  (setq elfeed-use-curl t
-        elfeed-curl-max-connections 10
-        elfeed-protocol-feeds '())
-  (elfeed-protocol-enable))
-
-;; Enhanced functionality
-(after! elfeed
+  ;; Enhanced functionality
   ;; Mark all as read function
   (defun elfeed-mark-all-as-read ()
     "Mark all entries as read."
     (interactive)
-    (mark-whole-buffer)
-    (elfeed-search-untag-all-unread))
+    (when (eq major-mode 'elfeed-search-mode)
+      (mark-whole-buffer)
+      (elfeed-search-untag-all-unread)))
 
   ;; Smart entry opening
   (defun elfeed-show-visit-or-external ()
@@ -92,7 +75,7 @@
           (elfeed-show-visit)))))
 
   ;; Save entry to org (if org is available)
-  (when (featurep! :lang org)
+  (when (modulep! :lang org)
     (defun elfeed-save-entry-to-org ()
       "Save current entry to an org file."
       (interactive)
@@ -104,34 +87,53 @@
              (date (format-time-string "%Y-%m-%d" (elfeed-entry-date entry)))
              (org-file (expand-file-name "rss-articles.org" org-directory)))
         (when entry
+          (unless (file-exists-p org-file)
+            (with-temp-file org-file
+              (insert "#+TITLE: RSS Articles\n\n")))
           (with-temp-buffer
             (insert (format "* [[%s][%s]]\n  :PROPERTIES:\n  :DATE: %s\n  :END:\n\n"
-                           url title date))
+                            url title date))
             (append-to-file (point-min) (point-max) org-file))
           (message "Entry saved to %s" org-file)))))
 
-  ;; Keybinding enhancements for elfeed modes
-  (map! :map elfeed-search-mode-map
-        :n "R" #'elfeed-mark-all-as-read
-        :n "g r" #'elfeed-search-update--force)
-  
-  (map! :map elfeed-show-mode-map
-        :n "o" #'elfeed-show-visit-or-external
-        :n "y" #'elfeed-show-yank))
+  ;; Fix potential evil-mode conflicts
+  (add-hook 'elfeed-search-mode-hook
+            (lambda ()
+              (setq-local evil-move-cursor-back nil)))
 
-;; ----------------------------
-;; Leader keybindings (PRESERVED)
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor") 
-                   (:prefix-map ("a" . "applications")
-                                (:prefix-map ("r" . "rss")
-                                 :desc "Open RSS reader" "o" #'elfeed
-                                 :desc "Update feeds"    "u" #'elfeed-update
-                                 :desc "Search feeds"    "s" #'elfeed-search-set-filter
-                                 :desc "Show entry"      "e" #'elfeed-show-entry
-                                 :desc "Mark as read"    "m" #'elfeed-search-untag-all-unread
-                                 :desc "Save entry to Org" "S" #'elfeed-save-entry-to-org))))
+  (add-hook 'elfeed-show-mode-hook
+            (lambda ()
+              (setq-local evil-move-cursor-back nil))))
+
+;; Org integration (conditional loading)
+(use-package! elfeed-org
+  :after elfeed
+  :when (modulep! :lang org)
+  :config
+  (setq rmh-elfeed-org-files (list (expand-file-name "feeds.org" org-directory)))
+  (elfeed-org))
+
+;; Protocol handler (optional - only load if needed)
+(use-package! elfeed-protocol
+  :after elfeed
+  :when (and (modulep! :app rss +protocol) ; Only if explicitly enabled
+             (not (eq system-type 'windows-nt))) ; Skip on Windows due to potential issues
+  :config
+  (setq elfeed-use-curl t
+        elfeed-curl-max-connections 10
+        elfeed-protocol-feeds '())
+  (elfeed-protocol-enable))
+
+;; Database cleanup function (helps with SQLite issues)
+(defun elfeed-reset-database ()
+  "Reset the elfeed database."
+  (interactive)
+  (when (and elfeed-db-directory (file-directory-p elfeed-db-directory))
+    (delete-directory elfeed-db-directory t)
+    (make-directory elfeed-db-directory t))
+  (setq elfeed-db nil)
+  (elfeed-db-load)
+  (message "Elfeed database reset"))
 
 (provide 'app-rss-config)
 

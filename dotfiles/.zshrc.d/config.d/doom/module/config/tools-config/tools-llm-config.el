@@ -626,29 +626,6 @@
     (markdown-mode)
     (display-buffer (current-buffer))))
 
-;; ----------------------------
-;; Keybindings (Safe - No External Dependencies)
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix ("a" . "ai-tools")
-                                         ;; Code assistance
-                                         (:prefix ("c" . "code")
-                                          :desc "Explain code" "e" #'+ai/explain-code
-                                          :desc "Function docs" "d" #'+ai/create-function-docs
-                                          :desc "Smart commit" "c" #'+ai/smart-commit-message)
-                                         
-                                         ;; Learning tools
-                                         (:prefix ("l" . "learning")
-                                          :desc "Learning notes" "n" #'+ai/create-learning-notes
-                                          :desc "Practice exercises" "e" #'+ai/generate-practice-exercises)
-                                         
-                                         ;; Project tools
-                                         (:prefix ("p" . "project")
-                                          :desc "Analyze project" "a" #'+ai/analyze-project-structure)))))
-
-
 (provide 'tools-llm-config)
 
 ;;; tools-llm-config.el ends here

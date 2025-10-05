@@ -419,66 +419,6 @@
         (message "Auto-breakpoint set on first function"))))))
 
 ;; ----------------------------
-;; Comprehensive keybinding setup
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix-map ("d" . "debug")
-                                 ;; Core debugging operations
-                                 :desc "Debug smart/start"        "d" #'+dap/dap-debug-smart
-                                 :desc "Debug with template"      "t" #'+dap/dap-debug-with-template
-                                 :desc "Debug last session"       "l" #'dap-debug-last
-                                 :desc "Restart session"          "r" #'dap-debug-restart
-                                 :desc "Quit/disconnect"          "q" #'dap-disconnect
-                                 :desc "Kill all sessions"        "k" #'+dap/dap-kill-all-sessions
-                                 :desc "Continue execution"       "c" #'+dap/dap-continue-or-start
-
-                                 ;; Breakpoint management
-                                 (:prefix ("b" . "breakpoints")
-                                  :desc "Toggle breakpoint"       "b" #'dap-breakpoint-toggle
-                                  :desc "Conditional breakpoint"  "c" #'+dap/dap-toggle-breakpoint-with-condition
-                                  :desc "Delete all breakpoints"  "D" #'+dap/dap-clear-all-breakpoints
-                                  :desc "List breakpoints"        "l" #'dap-ui-breakpoints)
-
-                                 ;; Stepping operations
-                                 (:prefix ("s" . "step")
-                                  :desc "Step over"               "o" #'dap-next
-                                  :desc "Step into"               "i" #'dap-step-in
-                                  :desc "Step out"                "u" #'dap-step-out
-                                  :desc "Continue"                "c" #'dap-continue)
-
-                                 ;; Expression evaluation
-                                 (:prefix ("e" . "eval")
-                                  :desc "Eval at point"           "e" #'dap-eval-thing-at-point
-                                  :desc "Eval region/symbol"      "r" #'+dap/dap-eval-region-or-symbol
-                                  :desc "Eval expression"         "E" #'dap-eval)
-
-                                 ;; Watch expressions
-                                 (:prefix ("w" . "watch")
-                                  :desc "Add watch"               "a" #'+dap/dap-add-watch-expression
-                                  :desc "Show expressions"        "w" #'dap-ui-expressions)
-
-                                 ;; UI and windows
-                                 (:prefix ("u" . "ui")
-                                  :desc "Show many windows"       "m" #'+dap/dap-ui-many-windows
-                                  :desc "Hide windows"            "h" #'+dap/dap-ui-hide-all
-                                  :desc "Show locals"             "l" #'dap-ui-locals
-                                  :desc "Show breakpoints"        "b" #'dap-ui-breakpoints
-                                  :desc "Show expressions"        "e" #'dap-ui-expressions
-                                  :desc "Show sessions"           "s" #'dap-ui-sessions
-                                  :desc "Restore layout"          "R" #'+dap/dap-restore-window-layout)))))
-
-;; Global quick access for debugging
-(map! "C-<f5>"   #'+dap/dap-debug-smart
-      "<f5>"     #'dap-continue
-      "S-<f5>"   #'dap-disconnect
-      "<f9>"     #'dap-breakpoint-toggle
-      "<f10>"    #'dap-next
-      "<f11>"    #'dap-step-in
-      "S-<f11>"  #'dap-step-out)
-
-;; ----------------------------
 ;; Cleanup and state management
 ;; ----------------------------
 (defun +dap/dap-cleanup-on-exit ()

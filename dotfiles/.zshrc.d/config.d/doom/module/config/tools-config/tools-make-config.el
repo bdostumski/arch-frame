@@ -196,39 +196,6 @@
     (message "Created Makefile template")))
 
 ;; ----------------------------
-;; Keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix-map ("m" . "make")
-                                 :desc "Smart command" "r" #'+make/smart-command
-                                 :desc "Run make" "m" #'+make/run
-                                 :desc "Run last" "l" #'+make/run-last
-                                 :desc "View buffer" "v" #'+make/view-buffer
-                                 :desc "Project info" "i" #'+make/show-project-info
-                                 :desc "Create Makefile" "c" #'+make/create-makefile))))
-
-;; Project-specific keybindings (only show when in relevant projects)
-(when (and (featurep 'projectile) (projectile-project-name))
-  (let ((project (projectile-project-name)))
-    (cond
-     ((string-match-p "arch-frame" project)
-      (map! :leader
-            (:prefix "c m"
-             :desc "Install config" "I" #'+make/arch-install)))
-     
-     ((string-match-p "learning-javascript" project)
-      (map! :leader
-            (:prefix "c m"
-             :desc "Dev server" "d" #'+make/js-dev)))
-     
-     ((string-match-p "bdostumski\\.github\\.io" project)
-      (map! :leader
-            (:prefix "c m"
-             :desc "Serve site" "s" #'+make/serve-site))))))
-
-;; ----------------------------
 ;; Project Setup Hook
 ;; ----------------------------
 (defun +make/setup-project ()

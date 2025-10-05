@@ -271,46 +271,6 @@
   (setq doom-modeline-format '(...other-segments... crdt-status)))
 
 ;; ----------------------------
-;; Comprehensive keybinding setup
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix ("c" . "collaboration")
-                                 ;; Core session management
-                                 :desc "Share buffer"             "s" #'+crt/crdt-share-buffer-enhanced
-                                 :desc "Connect to session"      "c" #'+crt/crdt-connect-enhanced
-                                 :desc "Disconnect/Stop"          "d" #'+crt/crdt-stop-all-sessions
-                                 :desc "Reconnect last"           "r" #'+crt/crdt-reconnect-last
-                                 :desc "Kill all sessions"        "k" #'+crt/crdt-stop-all-sessions
-
-                                 ;; Information and monitoring
-                                 :desc "List sessions"            "l" #'+crt/crdt-list-active-sessions
-                                 :desc "Show users"               "u" #'+crt/crdt-show-connected-users
-                                 :desc "Session status"           "i" #'+crt/crdt-status
-                                 :desc "Health check"             "h" #'+crt/crdt-health-check
-
-                                 ;; UI and preferences
-                                 :desc "Toggle user cursors"      "t" #'+crt/crdt-toggle-user-cursors
-                                 :desc "Send message"             "m" #'+crt/crdt-send-message
-
-                                 ;; Utilities
-                                 (:prefix ("o" . "options")
-                                  :desc "Set default port"        "p" (lambda () (interactive)
-                                                                        (setq +crt/crdt-default-port
-                                                                              (read-number "Default port: " +crt/crdt-default-port))
-                                                                        (message "Default port set to %d" +crt/crdt-default-port))
-                                  :desc "Set default address"     "a" (lambda () (interactive)
-                                                                        (setq +crt/crdt-default-address
-                                                                              (read-string "Default address: " +crt/crdt-default-address))
-                                                                        (message "Default address set to %s" +crt/crdt-default-address))
-                                  :desc "Toggle auto-save"        "s" (lambda () (interactive)
-                                                                        (setq +crt/crdt-auto-save-enabled
-                                                                              (not +crt/crdt-auto-save-enabled))
-                                                                        (message "Auto-save for shared buffers: %s"
-                                                                                 (if +crt/crdt-auto-save-enabled "✓ enabled" "✗ disabled"))))))))
-
-;; ----------------------------
 ;; Security and safety features
 ;; ----------------------------
 (defun +crt/crdt-security-warning ()

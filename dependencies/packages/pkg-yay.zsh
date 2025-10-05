@@ -26,4 +26,5 @@ export AUR_PACKAGES=(
     auto-cpufreq
     lisp
     anaconda
+    aur/eww
 )

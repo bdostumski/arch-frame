@@ -62,7 +62,7 @@
         flycheck-indication-mode 'left-fringe    ;; Show indicators in left fringe
         flycheck-emacs-lisp-load-path 'inherit   ;; Inherit load path
         flycheck-global-modes '(not prog-mode))  ;; Disable globally in prog modes
-  
+
   ;; Custom error navigation with better feedback
   (defun checkers-syntax-next-error-with-message ()
     "Go to next error and show its message."
@@ -70,14 +70,14 @@
     (flycheck-next-error)
     (when-let ((errors (flycheck-overlay-errors-at (point))))
       (message "%s" (flycheck-error-message (car errors)))))
-  
+
   (defun checkers-syntax-previous-error-with-message ()
     "Go to previous error and show its message."
     (interactive)
     (flycheck-previous-error)
     (when-let ((errors (flycheck-overlay-errors-at (point))))
       (message "%s" (flycheck-error-message (car errors)))))
-  
+
   ;; Function to toggle Flycheck
   (defun checkers-syntax-toggle ()
     "Toggle Flycheck mode."
@@ -87,7 +87,7 @@
       (if (checkers-syntax--should-enable-p)
           (flycheck-mode 1)
         (message "Flycheck not enabled in this mode"))))
-  
+
   ;; Clear all errors
   (defun checkers-syntax-clear-errors ()
     "Clear all Flycheck errors in current buffer."
@@ -105,7 +105,7 @@
         flycheck-posframe-border-width 2
         flycheck-posframe-inhibit-functions
         '((lambda (&rest _) (bound-and-true-p company-backend))))
-  
+
   ;; Better styling
   (custom-set-faces!
     '(flycheck-posframe-face :inherit tooltip)
@@ -113,26 +113,11 @@
     '(flycheck-posframe-info-face :foreground "#88C0D0")
     '(flycheck-posframe-warning-face :foreground "#EBCB8B")
     '(flycheck-posframe-error-face :foreground "#BF616A"))
-  
+
   ;; Don't show posframe for certain error types
   (setq flycheck-posframe-error-prefix "⚠ "
         flycheck-posframe-warning-prefix "⚠ "
         flycheck-posframe-info-prefix "ℹ "))
-
-;; ----------------------------
-;; Keybindings (preserving your existing structure)
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-       (:prefix-map ("c" . "checkers")
-        (:prefix-map ("s" . "syntax")
-         :desc "List errors" "x" #'flycheck-list-errors
-         :desc "Next error" "n" #'checkers-syntax-next-error-with-message
-         :desc "Previous error" "p" #'checkers-syntax-previous-error-with-message
-         :desc "Toggle flycheck" "t" #'checkers-syntax-toggle
-         :desc "Clear errors" "c" #'checkers-syntax-clear-errors
-         :desc "Verify setup" "v" #'flycheck-verify-setup
-         :desc "Error at point" "." #'flycheck-display-error-at-point))))
 
 (provide 'checkers-syntax-config)
 

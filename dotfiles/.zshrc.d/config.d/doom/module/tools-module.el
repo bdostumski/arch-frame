@@ -1,72 +1,112 @@
 ;;; module/tools-module.el -*- lexical-binding: t; -*-
 ;;; Commentary:
-;; This module loads configurations for development tools and integrations.
-;; It covers collaboration, debugging, code evaluation, project management,
-;; version control, build tools, containerization, testing, and more.
+;; This module loads configurations for development and productivity tools in Emacs.
+;; It covers project management, collaboration, debugging, LSP/AI, version control,
+;; containerization, testing, and other utilities.
+;;
+;; Safety/load order rationale:
+;; 1. Lightweight or foundational integrations are loaded first.
+;; 2. Tools that depend on external processes or other packages (LSP, DAP, Docker) are loaded after.
+;; 3. Optional or heavy integrations (PDF tools, RGB picker) are loaded last.
+;; 4. Load order ensures dependencies are initialized before consumers (e.g., Git before Magit, Projectile before LSP).
 
 ;;; Code:
 
-;; Collaboration tools (e.g., Gist, Forge, etc.)
+;; ---------------------------------------------------------------------------
+;; 1. Collaboration tools
+;; ---------------------------------------------------------------------------
+;; Gist, Forge, and other collaboration utilities. Low-risk, foundational.
 (load! "config/tools-config/tools-collab-config.el")
 
-;; Debugging (DAP mode, GDB, etc.)
-(load! "config/tools-config/tools-debugger-config.el")
-
-;; Direnv integration (per-project environment variables)
-(load! "config/tools-config/tools-direnv-config.el")
-
-;; Docker integration (manage containers and images from Emacs)
-(load! "config/tools-config/tools-docker-config.el")
-
-;; EditorConfig support (consistent coding styles across projects)
-(load! "config/tools-config/tools-editorconfig-config.el")
-
-;; Eval tools (REPLs, code evaluation, inline results, etc.)
-(load! "config/tools-config/tools-eval-config.el")
-
-;; LLM/AI tools (integrations with AI coding assistants)
-(load! "config/tools-config/tools-llm-config.el")
-
-;; Lookup tools (documentation lookup, symbol search, etc.)
-(load! "config/tools-config/tools-lookup-config.el")
-
-;; Language Server Protocol (LSP) support
-(load! "config/tools-config/tools-lsp-config.el")
-
-;; Magit and Git integrations (best-in-class VCS interface)
+;; ---------------------------------------------------------------------------
+;; 2. Version control
+;; ---------------------------------------------------------------------------
+;; Git backend and Magit interface loaded early so other tools can rely on VCS info.
+(load! "config/tools-config/tools-git-config.el")
 (load! "config/tools-config/tools-magit-config.el")
 
-(load! "config/tools-config/tools-git-config.el")
-
-;; Makefile integration (run builds inside Emacs)
-(load! "config/tools-config/tools-make-config.el")
-
-;; Pass (password manager integration)
-(load! "config/tools-config/tools-pass-config.el")
-
-;; PDF tools (reading, annotating, syncing with LaTeX, etc.)
-;;(load! "config/tools-config/tools-pdf-config.el")
-
-;; Projectile (project management, navigation, search, etc.)
+;; ---------------------------------------------------------------------------
+;; 3. Project management & environment
+;; ---------------------------------------------------------------------------
+;; Projectile for project navigation
+;; Direnv for per-project environment variables
+;; EditorConfig for consistent coding style
 (load! "config/tools-config/tools-projectile-config.el")
+(load! "config/tools-config/tools-direnv-config.el")
+(load! "config/tools-config/tools-editorconfig-config.el")
 
-;; RGB color picker (for UI/UX and CSS editing)
-(load! "config/tools-config/tools-rgb-config.el")
+;; ---------------------------------------------------------------------------
+;; 4. Language Server Protocol & evaluation
+;; ---------------------------------------------------------------------------
+;; LSP integration and evaluation/repl tools
+(load! "config/tools-config/tools-lsp-config.el")
+(load! "config/tools-config/tools-eval-config.el")
 
-;; Task runner (for npm, yarn, gulp, etc.)
+;; ---------------------------------------------------------------------------
+;; 5. Debugging
+;; ---------------------------------------------------------------------------
+;; DAP mode, GDB, and other debugger configurations
+(load! "config/tools-config/tools-debugger-config.el")
+
+;; ---------------------------------------------------------------------------
+;; 6. Containerization
+;; ---------------------------------------------------------------------------
+;; Docker integration for managing containers/images
+(load! "config/tools-config/tools-docker-config.el")
+
+;; ---------------------------------------------------------------------------
+;; 7. AI / LLM tools
+;; ---------------------------------------------------------------------------
+;; Integration with AI coding assistants (Codeium, Copilot, etc.)
+(load! "config/tools-config/tools-llm-config.el")
+
+;; ---------------------------------------------------------------------------
+;; 8. Lookup / documentation tools
+;; ---------------------------------------------------------------------------
+(load! "config/tools-config/tools-lookup-config.el")
+
+;; ---------------------------------------------------------------------------
+;; 9. Build & automation
+;; ---------------------------------------------------------------------------
+;; Make, task runners (npm, yarn, gulp, etc.)
+(load! "config/tools-config/tools-make-config.el")
 (load! "config/tools-config/tools-taskrunner-config.el")
 
-;; Testing framework integration (unit tests, runners, etc.)
-(load! "config/tools-config/tools-testing-config.el")
+;; ---------------------------------------------------------------------------
+;; 10. Password management
+;; ---------------------------------------------------------------------------
+;; Pass or other password manager integration
+(load! "config/tools-config/tools-pass-config.el")
 
-;; Tmux integration (synchronize shells and panes with Emacs)
-(load! "config/tools-config/tools-tmux-config.el")
+;; ---------------------------------------------------------------------------
+;; 11. PDF tools
+;; ---------------------------------------------------------------------------
+;; PDF reading, annotating, and syncing (LaTeX, org-pdf)
+(load! "config/tools-config/tools-pdf-config.el")
 
-;; Tree-sitter (advanced syntax parsing and highlighting)
+;; ---------------------------------------------------------------------------
+;; 12. Syntax & highlighting enhancements
+;; ---------------------------------------------------------------------------
+;; Tree-sitter advanced parsing and highlighting
 (load! "config/tools-config/tools-tree-sitter-config.el")
 
-;; Upload tools (FTP, SSH, SFTP file transfers)
+;; ---------------------------------------------------------------------------
+;; 13. Terminal & synchronization
+;; ---------------------------------------------------------------------------
+;; Tmux integration
+(load! "config/tools-config/tools-tmux-config.el")
+
+;; ---------------------------------------------------------------------------
+;; 14. File transfer & upload
+;; ---------------------------------------------------------------------------
+;; FTP, SFTP, SSH upload tools
 (load! "config/tools-config/tools-upload-config.el")
+
+;; ---------------------------------------------------------------------------
+;; 15. Optional / heavy integrations
+;; ---------------------------------------------------------------------------
+;; RGB color picker (for UI/CSS editing), loaded last
+(load! "config/tools-config/tools-rgb-config.el")
 
 (provide 'tools-module)
 

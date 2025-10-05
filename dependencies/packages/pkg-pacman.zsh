@@ -14,7 +14,7 @@ export PACMAN_PACKAGES=(
     shfmt shellcheck tidy stylelint isync offlineimap xorg-xwininfo msmtp gnupg w3m
     haveged man man-pages man-db bc leiningen libvips gopls hunspell hunspell-en_us
     unzip pandoc python-black python-pyflakes python-isort python-pytest python-nose
-    pass
+    pass languagetool
 
     # GUI Applications
     virtualbox virtualbox-host-modules-arch virtualbox-guest-utils firefox thunderbird filezilla gimp
@@ -22,7 +22,7 @@ export PACMAN_PACKAGES=(
     qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libvirt edk2-ovmf
 
     # Development Tools
-    vim neovim emacs make gcc clang cmake direnv maven gradle nodejs npm yarn spring
+    vim neovim emacs emacs-apel emacs-haskell-mode emacs-lua-mode emacs-muse emacs-python-mode emacs-slime make gcc clang cmake direnv maven gradle nodejs npm yarn spring
     jdk17-openjdk go ruby rust luarocks cabal-install kotlin clojure lighttpd php composer
     python-pip
 )

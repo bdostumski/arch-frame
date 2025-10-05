@@ -11,7 +11,7 @@
   :init
   ;; Defer diary loading - don't load automatically
   (setq diary-display-function 'diary-fancy-display)
-  
+
   :config
   ;; Basic diary settings - only set when explicitly loaded
   (setq diary-file (expand-file-name "diary" doom-user-dir)
@@ -76,7 +76,7 @@
          (description (read-string "Event description: "))
          (time (read-string "Time (optional, e.g., 09:00): "))
          (entry (cond
-                 ((string= type "Daily") 
+                 ((string= type "Daily")
                   (format "%s %s%s"
                           (if (string-empty-p time) "" (concat time " "))
                           description
@@ -209,46 +209,11 @@
       (insert ";; %%(diary-block 12 20 2024 1 5 2025) Holiday period\n")
       (insert ";; Monday 09:00 Weekly team meeting\n\n")
       (insert ";; Examples (commented out to prevent auto-display):\n")
-      (insert (format ";; %s Example diary entry for today\n" 
+      (insert (format ";; %s Example diary entry for today\n"
                       (calendar-date-string (calendar-current-date))))
       (insert ";; Monday 09:00 Weekly team meeting\n")
       (insert ";; Friday 17:00 Weekend planning\n"))
     (message "Diary file initialized at %s" diary-file)))
-
-;; -------------------------------------------------------------------
-;; Keybindings
-;; -------------------------------------------------------------------
-(map! :leader
-      (:prefix-map ("n" . "notes")
-       (:prefix-map ("D" . "diary")
-        :desc "Show diary entries" "s" #'+diary/diary-show-entries
-        :desc "Create diary entry" "c" #'+diary/diary-create-entry
-        :desc "Quick add entry" "q" #'+diary/diary-quick-add
-        :desc "Recurring entry" "r" #'+diary/diary-create-recurring-entry
-        :desc "Go to date" "g" #'+diary/diary-goto-date
-        :desc "Insert template" "t" #'+diary/diary-insert-template
-        :desc "Initialize diary" "i" #'+diary/diary-initialize
-        :desc "Open diary file" "o" #'+diary/open-diary-file)))
-
-(map! :leader
-      (:prefix-map ("e" . "editor")
-      (:prefix-map ("a" . "applications")
-       (:prefix-map ("D" . "diary")
-        :desc "Show diary entries" "s" #'+diary/diary-show-entries
-        :desc "Create diary entry" "c" #'+diary/diary-create-entry
-        :desc "Quick add entry" "q" #'+diary/diary-quick-add
-        :desc "Recurring entry" "r" #'+diary/diary-create-recurring-entry
-        :desc "Go to date" "g" #'+diary/diary-goto-date
-        :desc "Insert template" "t" #'+diary/diary-insert-template
-        :desc "Initialize diary" "i" #'+diary/diary-initialize
-        :desc "Open diary file" "o" #'+diary/open-diary-file))))
-
-(map! :map calendar-mode-map
-      :n "d" #'diary-view-entries
-      :n "e" #'+diary/diary-create-entry
-      :n "i" #'+diary/diary-create-entry
-      :n "m" #'+diary/calendar-mark-diary-entries
-      :n "s" #'+diary/diary-show-entries)
 
 (provide 'app-diary-lib-config)
 

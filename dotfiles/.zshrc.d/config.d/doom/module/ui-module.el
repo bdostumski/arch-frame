@@ -1,61 +1,57 @@
 ;;; module/ui-module.el -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; This module aggregates all UI-related configurations for Doom Emacs.
-;; Each sub-config provides enhancements for the visual experience,
-;; dashboards, modelines, icons, popups, treemacs integration, and more.
+;; It includes themes, dashboards, modelines, popups, Treemacs, and
+;; other visual enhancements.
+;;
+;; Safety/load order rationale:
+;; 1. Lightweight, low-risk UI enhancements (emojis, word-wrap, unicode) first.
+;; 2. Foundational appearance settings (themes, modeline, dashboard) second.
+;; 3. Integrations that rely on other UI components (Treemacs, popup) loaded after.
+;; 4. Optional or heavier visual enhancements (minimap, zen mode) loaded last.
 
 ;;; Code:
 
-;; Deft - quick note management
-(load! "config/ui-config/ui-deft-config.el")
+;; ---------------------------------------------------------------------------
+;; 1. Basic UI enhancements
+;; ---------------------------------------------------------------------------
+(load! "config/ui-config/ui-emoji-config.el")              ;; Emoji rendering
+(load! "config/ui-config/ui-unicode-config.el")            ;; Unicode & symbol improvements
+(load! "config/ui-config/ui-word-wrap-config.el")          ;; Word wrap enhancements
+(load! "config/ui-config/ui-vi-tilde-fringe-config.el")    ;; Vim-style tilde at line ends
 
-;; Doom themes and UI tweaks
-(load! "config/ui-config/ui-doom-config.el")
+;; ---------------------------------------------------------------------------
+;; 2. Core appearance & dashboards
+;; ---------------------------------------------------------------------------
+(load! "config/ui-config/ui-doom-config.el")               ;; Doom theme & general tweaks
+(load! "config/ui-config/ui-doom-modeline-config.el")      ;; Enhanced status bar
+(load! "config/ui-config/ui-doom-dashboard-config.el")    ;; Startup dashboard
+(load! "config/ui-config/ui-doom-quit-config.el")         ;; Quit confirmation / exit tweaks
 
-;; Doom dashboard - startup screen with projects/recent files
-(load! "config/ui-config/ui-doom-dashboard-config.el")
+;; ---------------------------------------------------------------------------
+;; 3. File navigation & workspace helpers
+;; ---------------------------------------------------------------------------
+(load! "config/ui-config/ui-treemacs-config.el")          ;; File explorer
+(load! "config/ui-config/ui-window-select-config.el")     ;; Visual buffer selection
+(load! "config/ui-config/ui-workspaces-config.el")        ;; Multiple editing sessions
 
-;; Doom modeline - enhanced status bar
-(load! "config/ui-config/ui-doom-modeline-config.el")
+;; ---------------------------------------------------------------------------
+;; 4. Popups and notifications
+;; ---------------------------------------------------------------------------
+(load! "config/ui-config/ui-popup-config.el")             ;; Temporary windows/messages
 
-;; Quit confirmation & exit UI tweaks
-(load! "config/ui-config/ui-doom-quit-config.el")
+;; ---------------------------------------------------------------------------
+;; 5. Highlighting & productivity helpers
+;; ---------------------------------------------------------------------------
+(load! "config/ui-config/ui-hl-todo-config.el")           ;; TODO/FIXME highlighting
+(load! "config/ui-config/ui-deft-config.el")              ;; Quick note management
 
-;; Emoji support
-(load! "config/ui-config/ui-emoji-config.el")
-
-;; Highlight TODO/FIXME/NOTE keywords in code
-(load! "config/ui-config/ui-hl-todo-config.el")
-
-;; Minimap sidebar
-(load! "config/ui-config/ui-minimap-config.el")
-
-;; Popup management (temporary windows, messages, etc.)
-(load! "config/ui-config/ui-popup-config.el")
-
-;; Treemacs file explorer integration
-(load! "config/ui-config/ui-treemacs-config.el")
-
-;; Unicode & symbols rendering improvements
-(load! "config/ui-config/ui-unicode-config.el")
-
-;; Version control gutter indicators
-(load! "config/ui-config/ui-vc-gutter-config.el")
-
-;; Vim-style ~ at line ends (tilde fringe)
-(load! "config/ui-config/ui-vi-tilde-fringe-config.el")
-
-;; Window selection helpers (switching buffers visually)
-(load! "config/ui-config/ui-window-select-config.el")
-
-;; Word wrapping enhancements
-(load! "config/ui-config/ui-word-wrap-config.el")
-
-;; Workspaces (multiple editing sessions, like tabs)
-(load! "config/ui-config/ui-workspaces-config.el")
-
-;; Zen mode (distraction-free editing)
-(load! "config/ui-config/ui-zen-config.el")
+;; ---------------------------------------------------------------------------
+;; 6. Optional or heavier visual enhancements
+;; ---------------------------------------------------------------------------
+(load! "config/ui-config/ui-minimap-config.el")           ;; Minimap sidebar
+(load! "config/ui-config/ui-zen-config.el")               ;; Distraction-free Zen mode
+(load! "config/ui-config/ui-vc-gutter-config.el")         ;; Git/VC gutter indicators
 
 (provide 'ui-module)
 

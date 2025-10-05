@@ -29,10 +29,12 @@
 ;; ----------------------------------------
 ;; Performance Tweaks
 ;; ----------------------------------------
-(setq gc-cons-threshold (* 100 1024 1024)        ;; 100MB
-      read-process-output-max (* 4 1024 1024)   ;; 4MB
+(setq gc-cons-threshold (* 256 1024 1024)        ;; 256MB (increased)
+      read-process-output-max (* 8 1024 1024)    ;; 8MB (doubled)
       idle-update-delay 1.0
-      inhibit-compacting-font-caches t)
+      inhibit-compacting-font-caches t
+      fast-but-imprecise-scrolling t             ;; Added for smoother scrolling
+      redisplay-skip-fontification-on-input t)   ;; Prevent fontification freezes
 
 ;; Garbage Collector Magic Hack
 (use-package! gcmh
@@ -68,10 +70,24 @@
 (use-package! sudo-edit
   :commands sudo-edit)
 
+;; ----------------------------------------
+;; Path Setup - PERFORMANCE OPTIMIZED
+;; ----------------------------------------
 (use-package! exec-path-from-shell
-  :defer 2  ;; delay 2 seconds after startup
+  :defer t  ;; Don't load until needed
+  :init
+  ;; These settings significantly reduce startup time
+  (setq exec-path-from-shell-check-startup-files nil  ;; Don't check startup files
+        exec-path-from-shell-arguments '("-l")        ;; Use minimal shell arguments
+        exec-path-from-shell-variables '("PATH")      ;; Only sync PATH variable
+        exec-path-from-shell-warn-duration-millis 10000) ;; Only warn if >10 seconds
   :config
-  (exec-path-from-shell-initialize))
+  ;; Only initialize when actually needed
+  (defun my/setup-path-when-needed ()
+    (unless (or (daemonp) (not (display-graphic-p)))
+      (exec-path-from-shell-initialize)))
+  ;; Run path setup after everything else has loaded
+  (add-hook 'emacs-startup-hook #'my/setup-path-when-needed 90))
 
 ;; ----------------------------------------
 ;; Indentation Guides
@@ -84,6 +100,7 @@
         highlight-indent-guides-responsive 'stack
         highlight-indent-guides-auto-enabled t
         highlight-indent-guides-character ?•
+        highlight-indent-guides-delay 0.5  ;; Add slight delay for performance
         highlight-indent-guides-highlight-current-column t)
   (custom-set-faces
    '(highlight-indent-guides-odd-face               ((t (:foreground "#3a4454"))))
@@ -109,11 +126,13 @@
 ;; ----------------------------------------
 (use-package! saveplace :hook (after-init . save-place-mode))
 (use-package! savehist  :hook (after-init . savehist-mode))
-(use-package! time     :hook (after-init . display-time-mode)
-              :custom
-              (display-time-default-load-average nil)
-              (display-time-mail-check-directory nil))
-(use-package! battery   :hook (after-init . display-battery-mode))
+(use-package! time
+  :defer t
+  :hook (after-init . display-time-mode)
+  :custom
+  (display-time-default-load-average nil)
+  (display-time-mail-check-directory nil))
+(use-package! battery :defer t :hook (after-init . display-battery-mode))
 
 ;; ----------------------------------------
 ;; Smooth Scrolling

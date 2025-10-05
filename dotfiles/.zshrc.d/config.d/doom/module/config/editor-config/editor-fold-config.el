@@ -16,17 +16,7 @@
         (lambda (ov)
           (when (eq 'code (overlay-get ov 'hs))
             (overlay-put ov 'display
-                         (propertize " ↩ ..." 'face '(:inherit font-lock-comment-face)))))))
-
-;; ----------------------------
-;; Evil-style keybindings for hideshow
-;; ----------------------------
-(map! :map evil-normal-state-map
-      "za" #'hs-toggle-hiding
-      "zc" #'hs-hide-block
-      "zo" #'hs-show-block
-      "zM" #'hs-hide-all
-      "zR" #'hs-show-all)
+                         (propertize " Prettify the folding indicator ..." 'face '(:inherit font-lock-comment-face)))))))
 
 ;; ----------------------------
 ;; Persistent folds using vimish-fold

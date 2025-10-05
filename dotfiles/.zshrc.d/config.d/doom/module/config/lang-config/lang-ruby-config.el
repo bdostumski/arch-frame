@@ -16,14 +16,12 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("r" . "ruby")
-                                 :desc "Run current file" "r" #'ruby-run-file
-                                 :desc "Run Rails server" "s" #'rails-server
-                                 :desc "Go to definition" "d" #'robe-jump
-                                 :desc "Run tests" "t" #'rspec-run-single-file))))
+;;(map! :leader
+;;      (:prefix-map ("r" . "ruby")
+;;       :desc "Run current file" "r" #'ruby-run-file
+;;       :desc "Run Rails server" "s" #'rails-server
+;;       :desc "Go to definition" "d" #'robe-jump
+;;       :desc "Run tests" "t" #'rspec-run-single-file))
 
 (provide 'lang-ruby-config)
 

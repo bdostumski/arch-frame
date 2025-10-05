@@ -4,9 +4,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(elfeed-feeds '("https://programmingdigest.net/rss"))
+ '(ignored-local-variable-values '((eval progn (pp-buffer) (indent-buffer))))
  '(package-selected-packages
-   '(all-the-icons cl-libify dap-mode deflate flycheck-plantuml plantuml-mode
-     straight)))
+   '(all-the-icons cl-libify dap-mode deflate flycheck-plantuml org-roam
+     plantuml-mode straight)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

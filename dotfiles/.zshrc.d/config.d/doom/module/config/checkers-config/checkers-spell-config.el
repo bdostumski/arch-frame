@@ -28,10 +28,10 @@
         flyspell-consider-dash-as-word-delimiter-flag t  ;; Treat dash as word delimiter
         flyspell-abbrev-p t                     ;; Use abbrev mode
         flyspell-use-global-abbrev-table-p t)   ;; Use global abbrev table
-  
+
   ;; Better word boundaries for programming
   (add-to-list 'flyspell-prog-text-faces 'font-lock-doc-face)
-  
+
   ;; Custom correction function with better interface
   (defun checkers-spell-correct-dwim ()
     "Correct word at point or before point intelligently."
@@ -49,7 +49,7 @@
         (flyspell-correct-at-point)))
      ;; Otherwise, correct word before point
      (t (flyspell-correct-word-before-point))))
-  
+
   ;; Auto-correct common typos
   (defun checkers-spell-auto-correct-word ()
     "Auto-correct word if there's only one suggestion."
@@ -59,7 +59,7 @@
         (let ((suggestions (ispell-get-word nil "\\*")))
           (when (and suggestions (= (length (nth 2 suggestions)) 1))
             (ispell-command-loop suggestions nil (nth 2 suggestions) nil))))))
-  
+
   ;; Bind double-click to correct word
   (define-key flyspell-mouse-map [double-mouse-1] #'flyspell-correct-at-point))
 
@@ -70,25 +70,13 @@
 (defun checkers-spell-switch-language (lang)
   "Switch spell checking language."
   (interactive
-   (list (completing-read "Language: " 
+   (list (completing-read "Language: "
                           '("en_US" "en_GB" "es" "fr" "de" "it"))))
   (setq ispell-dictionary lang)
   (when flyspell-mode
     (flyspell-mode -1)
     (flyspell-mode 1))
   (message "Switched to %s dictionary" lang))
-
-;; Keybindings for spell checking (preserving your existing structure)
-(map! :leader
-      (:prefix-map ("e" . "editor")
-       (:prefix-map ("c" . "checkers")
-        (:prefix-map ("f" . "flyspell")
-         :desc "Spell correct word (smart)" "c" #'checkers-spell-correct-dwim
-         :desc "Spell check buffer" "b" #'flyspell-buffer
-         :desc "Toggle prog mode spell" "p" #'checkers-spell-toggle-prog-mode
-         :desc "Auto-correct word" "a" #'checkers-spell-auto-correct-word
-         :desc "Switch language" "l" #'checkers-spell-switch-language
-         :desc "Add word to dictionary" "w" #'ispell-word))))
 
 ;; Optional: Add visual feedback for corrections
 (use-package! flyspell-correct

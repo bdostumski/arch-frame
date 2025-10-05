@@ -11,13 +11,11 @@
   (setq graphql-indent-level 2))
 
 ;; Leader keybindings for GraphQL
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("q" . "graphql")
-                                 :desc "Execute query"       "e" #'graphql-run-query
-                                 :desc "Jump to definition"  "d" #'lsp-find-definition
-                                 :desc "Hover docs"          "h" #'lsp-hover))))
+;;(map! :leader
+;;      (:prefix-map ("q" . "graphql")
+;;       :desc "Execute query"       "e" #'graphql-run-query
+;;       :desc "Jump to definition"  "d" #'lsp-find-definition
+;;       :desc "Hover docs"          "h" #'lsp-hover))
 
 (provide 'lang-graphql-config)
 

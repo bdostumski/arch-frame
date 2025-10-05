@@ -380,29 +380,6 @@
           (message "No task file found for %s" runner))))))
 
 ;; ----------------------------
-;; Smart Keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix ("e" . "editor")
-               (:prefix ("t" . "tools")
-                        (:prefix ("r" . "task-runner")
-                         ;; Core task operations
-                         :desc "Run task" "r" #'+taskrunner/run-task
-                         :desc "Run last task" "l" #'+taskrunner/run-last-task
-                         :desc "Discover tasks" "d" #'+taskrunner/discover-tasks
-                         :desc "Edit task file" "e" #'+taskrunner/edit-task-file
-                         
-                         ;; Task management
-                         :desc "Create task file" "c" #'+taskrunner/create-taskfile
-                         :desc "Add to favorites" "f" #'+taskrunner/add-to-favorites
-                         :desc "Run favorite" "F" #'+taskrunner/run-favorite
-                         
-                         ;; Quick common tasks
-                         :desc "Build" "b" (lambda () (interactive) (+taskrunner/quick-task "build"))
-                         :desc "Test" "T" (lambda () (interactive) (+taskrunner/quick-task "test"))
-                         :desc "Clean" "C" (lambda () (interactive) (+taskrunner/quick-task "clean"))))))
-
-;; ----------------------------
 ;; Project Integration
 ;; ----------------------------
 (defun +taskrunner/setup-project-tasks ()

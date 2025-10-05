@@ -25,9 +25,9 @@
   ;; Use a safe date display function instead
   (setq calendar-date-echo-text
         (lambda (date)
-          (format "%04d-%02d-%02d" 
+          (format "%04d-%02d-%02d"
                   (nth 2 date)    ; year
-                  (nth 0 date)    ; month  
+                  (nth 0 date)    ; month
                   (nth 1 date)))) ; day
 
   ;; HOLIDAYS - Simplified and safe
@@ -59,7 +59,7 @@
                 holiday-local-holidays
                 holiday-christian-holidays))
 
-  ;; Week number display 
+  ;; Week number display
   (setq calendar-intermonth-text
         '(condition-case nil
              (let ((week-num (car (calendar-iso-from-absolute
@@ -117,7 +117,7 @@
   "Toggle diary integration with org-agenda."
   (interactive)
   (setq org-agenda-include-diary (not org-agenda-include-diary))
-  (message "Org-agenda diary integration: %s" 
+  (message "Org-agenda diary integration: %s"
            (if org-agenda-include-diary "enabled" "disabled")))
 
 ;; Safe helper functions
@@ -144,49 +144,11 @@
         (diary-view-entries))
     (error (message "Could not display diary entries"))))
 
-;; Basic keybindings
-(map! :leader
-      (:prefix ("o" . "open")
-       :desc "Calendar" "c" #'calendar))
-
-(map! :leader
-      (:prefix-map ("n" . "notes")
-       (:prefix-map ("c" . "calendar")
-        :desc "Open calendar" "c" #'calendar
-        :desc "Enable appointments" "a" #'+calendar/enable-appointments
-        :desc "Disable appointments" "d" #'+calendar/disable-appointments
-        :desc "Toggle org diary" "o" #'+calendar/toggle-org-diary-integration)))
-
-(map! :leader
-      (:prefix-map ("e" . "editor")
-      (:prefix-map ("a" . "applications")
-       (:prefix-map ("c" . "calendar")
-        :desc "Open calendar" "c" #'calendar
-        :desc "Enable appointments" "a" #'+calendar/enable-appointments
-        :desc "Disable appointments" "d" #'+calendar/disable-appointments
-        :desc "Toggle org diary" "o" #'+calendar/toggle-org-diary-integration))))
-
-(map! :map calendar-mode-map
-      :n "q" #'calendar-exit
-      :n "r" #'calendar-redraw
-      :n "g" #'+calendar/calendar-goto-today-safe
-      :n "." #'+calendar/calendar-goto-today-safe
-      :n "j" #'calendar-forward-day
-      :n "k" #'calendar-backward-day
-      :n "h" #'calendar-backward-day
-      :n "l" #'calendar-forward-day
-      :n "H" #'+calendar/calendar-view-holidays-safe
-      :n "d" #'+calendar/calendar-view-diary-safe
-      :n "TAB" #'calendar-forward-month
-      :n "S-TAB" #'calendar-backward-month
-      :n "<" #'calendar-scroll-left
-      :n ">" #'calendar-scroll-right)
-
 ;; Additional safe customizations
 (after! calendar
   ;; Ensure proper encoding
   (set-language-environment "UTF-8")
-  
+
   ;; Safe hook additions - but don't auto-mark diary
   (condition-case nil
       (progn
@@ -198,8 +160,8 @@
 (after! calendar
   (condition-case nil
       (custom-set-faces!
-       '(calendar-today :inherit highlight :weight bold)
-       '(holiday :inherit font-lock-string-face :weight bold))
+        '(calendar-today :inherit highlight :weight bold)
+        '(holiday :inherit font-lock-string-face :weight bold))
     (error nil)))
 
 (provide 'app-calendar-config)

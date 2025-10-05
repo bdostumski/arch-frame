@@ -13,12 +13,10 @@
         json-reformat:indent-width 2))
 
 ;; Leader keybindings for JSON
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("j" . "json")
-                                 :desc "Format buffer"   "f" #'json-reformat-region
-                                 :desc "Validate buffer" "v" #'lsp-format-buffer))))
+;;(map! :leader
+;;      (:prefix-map ("j" . "json")
+;;       :desc "Format buffer"   "f" #'json-reformat-region
+;;       :desc "Validate buffer" "v" #'lsp-format-buffer))
 
 (provide 'lang-json-config)
 

@@ -465,54 +465,6 @@
       (message "No corresponding source file found"))))
 
 ;; ----------------------------
-;; Smart Keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix ("e" . "editor")
-               (:prefix ("t" . "tools")
-                        (:prefix ("g" . "testing")
-                         ;; Core test operations
-                         :desc "Run test at point" "t" #'+testing/run-test-at-point
-                         :desc "Run test file" "f" #'+testing/run-test-file
-                         :desc "Run project tests" "p" #'+testing/run-project-tests
-                         :desc "Run last test" "l" #'+testing/run-last-test
-                         
-                         ;; Test management
-                         :desc "Discover tests" "d" #'+testing/discover-tests
-                         :desc "Create test file" "n" #'+testing/create-test-file
-                         :desc "Toggle test/source" "T" #'+testing/toggle-test-file
-                         
-                         ;; Coverage and reporting
-                         :desc "Run with coverage" "c" #'+testing/run-with-coverage
-                         :desc "View coverage report" "C" #'+testing/view-coverage-report
-                         
-                         ;; Favorites and history
-                         :desc "Add to favorites" "F" #'+testing/add-to-favorites
-                         :desc "Run favorite" "r" #'+testing/run-favorite))))
-
-;; Mode-specific keybindings
-(map! :map (js-mode-map typescript-mode-map)
-      :localleader
-      (:prefix ("T" . "Test")
-       :desc "Run Jest test" "t" #'+testing/run-jest-at-point
-       :desc "Run Jest file" "f" #'+testing/run-jest-file
-       :desc "Jest coverage" "c" (lambda () (interactive) (compile "npx jest --coverage"))))
-
-(map! :map python-mode-map
-      :localleader
-      (:prefix ("T" . "Test")
-       :desc "Run pytest" "t" #'+testing/run-pytest-at-point
-       :desc "Run pytest file" "f" #'+testing/run-pytest-file
-       :desc "Pytest coverage" "c" (lambda () (interactive) (compile "pytest --cov=."))))
-
-(map! :map rust-mode-map
-      :localleader
-      (:prefix ("T" . "Test")
-       :desc "Run Cargo test" "t" #'+testing/run-cargo-test-at-point
-       :desc "Run Cargo file tests" "f" #'+testing/run-cargo-test-file
-       :desc "Cargo coverage" "c" (lambda () (interactive) (compile "cargo tarpaulin"))))
-
-;; ----------------------------
 ;; Integration Hooks
 ;; ----------------------------
 (defun +testing/setup-project-testing ()

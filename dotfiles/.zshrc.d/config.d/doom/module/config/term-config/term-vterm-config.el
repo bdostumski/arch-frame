@@ -9,10 +9,6 @@
   ;; Keep a large scrollback buffer
   (setq vterm-max-scrollback 10000))
 
-;; Keybinding for quick Vterm access
-(map! :leader
-      :desc "Vterm" "o t" #'vterm)
-
 (provide 'term-vterm-config)
 
 ;;; term-vterm-config.el ends here

@@ -1,6 +1,4 @@
-
 ;;; init.el -*- lexical-binding: t; -*-
-
 
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
@@ -77,15 +75,15 @@
 
        :tools
        (projectile +native) ; Project management
-       ;;ansible
-       ;;biblio            ; Writes a PhD for you (citation needed)
+       ansible
+       biblio            ; Writes a PhD for you (citation needed)
        collab            ; buffers with friends
        (debugger +lsp)   ; FIXME stepping through code, to help you add bugs
        (testing +lsp)    ; For running tests (mainly in Python, JS, etc.)
        direnv
        (docker +lsp)
        editorconfig      ; let someone else argue about tabs vs spaces
-       ;;ein               ; tame Jupyter notebooks with emacs
+       ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        (lookup +elgot +dictionary)              ; navigate your code and its documentation
        (lsp +peek)             ; M-x vscode
@@ -93,8 +91,8 @@
        taskrunner        ; this module integrates taskrunner into Doom Emacs, which scraps runnable tasks from build systems like make, gradle, npm and the like.
        make              ; run make tasks from Emacs
        pass              ; password manager for nerds
-       pdf      ; pdf enhancements 
-       ;;terraform       ; infrastructure as code
+       pdf      ; pdf enhancements
+       terraform       ; infrastructure as code
        tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
        rgb               ; highlights color hex values and names with the color itself, and provides tools to easily modify color values or formats.
@@ -109,9 +107,9 @@
 
        :lang
        ;;agda              ; types of types of types of types...
-       ;;beancount         ; mind the GAAP
+       beancount         ; mind the GAAP
        (cc +lsp)         ; C > C++ == 1
-       ;;clojure           ; java with a lisp
+       clojure           ; java with a lisp
        common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
@@ -133,7 +131,7 @@
        ;;gdscript          ; the language you waited for
        (go +lsp)         ; the hipster dialect
        (graphql +lsp)    ; Give queries a REST
-       ;;(haskell +lsp)    ; a language that's lazier than I am
+       (haskell +lsp)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
        (json +lsp)              ; At least it ain't XML
@@ -141,8 +139,8 @@
        (java +lsp)       ; the poster child for carpal tunnel syndrome
        (javascript +lsp +tree-sitter)        ; all(hope(abandon(ye(who(enter(here))))))
        (typescript +lsp)   ; enable typescript
-       ;;julia             ; a better, faster MATLAB
-       ;;kotlin            ; a better, slicker Java(Script)
+       julia             ; a better, faster MATLAB
+       (kotlin +lsp)           ; a better, slicker Java(Script)
        (latex +latexmk +lsp)             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
@@ -153,25 +151,25 @@
        ;;ocaml             ; an objective camel
        (org +dragndrop +noter +present +roam2 +pandoc +gnuplot +journal +hugo)  ; organize your plain life in plain text
        (php +lsp)               ; perl's insecure younger brother
-       plantuml          ; diagrams for confusing people more
+       ;;plantuml          ; diagrams for confusing people more
        ;;graphviz          ; diagrams for confusing yourself even more
        ;;purescript        ; javascript, but functional
        (python +lsp +conda +poetry +pyenv +pyright)            ; beautiful is better than ugly
-       ;;qt                ; the 'cutest' gui framework ever
+       qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
        rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        (ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        (scala +lsp)             ; java, but good
-       ;;(scheme +guile)   ; a fully conniving family of lisps
+       (scheme +guile)   ; a fully conniving family of lisps
        (sh +lsp)                ; she sells {ba,z,fi}sh shells on the C xor
        (shell +zsh +bash +fish)
        ;;sml
-       ;;solidity          ; do you need a blockchain? No.
+       solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
-       ;;terra             ; Earth and Moon in alignment for performance.
+       terra             ; Earth and Moon in alignment for performance.
        (web +lsp)               ;  This module adds support for various web languages, including HTML5, CSS, SASS/SCSS, Pug/Jade/Slim, and HAML, as well as various web frameworks, like ReactJS, Wordpress, Jekyll, Phaser, AngularJS, Djano, and more.
        (yaml +lsp)              ; JSON, but readable
        ;;zig               ; C, but simpler

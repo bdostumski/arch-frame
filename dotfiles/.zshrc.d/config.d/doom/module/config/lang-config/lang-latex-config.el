@@ -50,13 +50,11 @@
 ;; ----------------------------
 ;; Leader keybindings
 ;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("l" . "latex")
-                                 :desc "Compile LaTeX"    "c" #'TeX-command-master
-                                 :desc "View PDF"         "v" #'TeX-view
-                                 :desc "Clean aux files"  "x" #'TeX-clean))))
+;;(map! :leader
+;;      (:prefix-map ("l" . "latex")
+;;       :desc "Compile LaTeX"    "c" #'TeX-command-master
+;;       :desc "View PDF"         "v" #'TeX-view
+;;       :desc "Clean aux files"  "x" #'TeX-clean))
 
 (provide 'lang-latex-config)
 

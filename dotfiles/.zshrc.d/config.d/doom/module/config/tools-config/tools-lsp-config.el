@@ -495,41 +495,6 @@ Returns t if:
          :desc "Workspace info"          "i" #'+lsp/lsp-show-workspace-info
          :desc "Clear cache"             "c" #'+lsp/lsp-clear-cache)))
 
-;; ----------------------------
-;; Global keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix ("s" . "lsp")
-                                 ;; Workspace management
-                                 :desc "Start LSP"                "s" #'lsp
-                                 :desc "Start deferred"           "S" #'lsp-deferred
-                                 :desc "Restart workspace"        "r" #'+lsp/lsp-workspace-restart
-                                 :desc "Shutdown workspace"       "q" #'+lsp/lsp-workspace-cleanup
-                                 :desc "Clear cache"              "c" #'+lsp/lsp-clear-cache
-                                 :desc "Workspace info"           "i" #'+lsp/lsp-show-workspace-info
-                                 :desc "Performance report"       "p" #'+lsp/lsp-performance-report
-                                 
-                                 ;; Treemacs integration
-                                 :desc "Treemacs symbols"         "t" #'lsp-treemacs-symbols
-                                 :desc "Treemacs errors"          "e" #'lsp-treemacs-errors-list
-                                 
-                                 ;; UI toggles
-                                 :desc "Toggle sideline"          "u" #'lsp-ui-sideline-mode
-                                 :desc "Toggle doc mode"          "d" #'lsp-ui-doc-mode
-                                 :desc "Toggle diagnostics"       "D" #'+lsp/lsp-toggle-diagnostics
-                                 :desc "Toggle highlighting"      "h" #'+lsp/lsp-toggle-symbol-highlighting
-                                 :desc "Toggle breadcrumb"        "b" #'+lsp/lsp-toggle-breadcrumb
-                                 :desc "Toggle lens"              "l" #'+lsp/lsp-toggle-lens))))
-
-;; Additional integration with existing Doom keybindings
-(map! :leader
-      (:prefix-map ("c" . "code")
-       :desc "Start LSP"                "L" #'lsp
-       :desc "LSP workspace info"       "I" #'+lsp/lsp-show-workspace-info
-       :desc "LSP restart"              "R" #'+lsp/lsp-workspace-restart))
-
 ;; Hook for Doom restarts and cleanup
 (add-hook 'doom-after-reload-hook #'+lsp/lsp-reset-state)
 (add-hook 'kill-emacs-hook #'+lsp/lsp-restore-performance-settings)

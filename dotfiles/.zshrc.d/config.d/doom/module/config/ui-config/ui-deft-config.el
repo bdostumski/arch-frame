@@ -11,12 +11,6 @@
   :defer t
   :commands (deft)
   :init
-  ;; Leader keybinding to open Deft
-    (map! :leader
-          (:prefix-map ("e" . "editor")
-           (:prefix-map ("u" . "ui")
-            (:prefix ("d" . "deft")
-             :desc "deft-notes" "d" #'deft))))
   :config
   ;; Core settings
   (setq deft-directory "~/Documents/notes"

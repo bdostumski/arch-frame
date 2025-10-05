@@ -33,6 +33,7 @@ export function create-package-directories() {
 	
 	if [[ ! -d "${HOME}/Documents/org/roam" ]]; then
 		mkdir -p "${HOME}/Documents/org/roam"
+		touch "${HOME}/Documents/org/feeds.org"
 	fi
 
 	if [[ ! -d "${HOME}/Documents/org/feeds.org" ]]; then
@@ -45,6 +46,11 @@ export function create-package-directories() {
 
 	if [[ ! -d "${HOME}/.config/doom/yanist" ]]; then
 		mkdir -p "${HOME}/.config/doom/yanist"
+	fi
+
+	if [[ ! -d "${HOME}/.config/doom/snippets" ]]; then
+		mkdir -p "${HOME}/.config/emacs/snippets"
+		chmod 777 "${HOME}/.config/emacs/snippets"
 	fi
 }
 

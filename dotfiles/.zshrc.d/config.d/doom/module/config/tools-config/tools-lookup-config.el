@@ -274,45 +274,6 @@
     (display-buffer (current-buffer))))
 
 ;; ----------------------------
-;; Smart Keybindings (avoiding conflicts)
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix-map ("l" . "lookup") 
-                                         (:prefix ("s" . "search")
-                                          ;; Core lookup functions (using 's' prefix since 'l' might conflict)
-                                          :desc "Definition at point" "d" #'+lookup/smart-lookup-at-point
-                                          :desc "References" "r" #'+lookup/references
-                                          :desc "Documentation" "h" #'+lookup/documentation
-                                          :desc "Dictionary" "D" #'define-word-at-point)
-                                         
-                                         ;; user-specific searches
-                                         (:prefix ("d" . "documentation")
-                                          :desc "Search my repos" "r" #'+lookup/search-in-user-repos
-                                          :desc "Current repo docs" "d" #'+lookup/browse-current-repo-docs)
-                                         
-                                         ;; Language-specific lookups
-                                         (:prefix ("l" . "language")
-                                          :desc "JavaScript MDN" "j" #'+lookup/javascript-mdn
-                                          :desc "NPM package" "n" #'+lookup/npm-package
-                                          :desc "Rust docs" "r" #'+lookup/rust-docs
-                                          :desc "GitHub search" "g" #'+lookup/github-search)
-                                         
-                                         ;; Learning tools
-                                         (:prefix ("L" . "learning")
-                                          :desc "Explain concept" "e" #'+lookup/explain-concept
-                                          :desc "Code examples" "c" #'+lookup/code-examples
-                                          :desc "Learning resources" "r" #'+lookup/learning-resources
-                                          :desc "Define term" "d" #'+lookup/define-programming-term)
-                                         
-                                         ;; Documentation browsers
-                                         (:prefix ("o" . "online")
-                                          :desc "Arch Wiki" "a" #'+lookup/search-arch-wiki
-                                          :desc "DevDocs" "d" #'devdocs-lookup
-                                          :desc "Dash docs" "D" #'dash-docs-search)))))
-
-;; ----------------------------
 ;; Mode-Specific Enhancements
 ;; ----------------------------
 (after! js2-mode

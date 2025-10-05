@@ -9,9 +9,6 @@
   :defer t
   :commands (minimap-mode minimap-create)
   :init
-  ;; Keybinding to toggle minimap
-  (map! :leader
-        :desc "Toggle minimap" "t m" #'minimap-mode)
   :config
   ;; Minimap settings
   (setq minimap-window-location 'right         ;; position: right or left

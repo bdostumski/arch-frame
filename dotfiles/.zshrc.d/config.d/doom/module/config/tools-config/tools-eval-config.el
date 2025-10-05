@@ -1,5 +1,5 @@
 ;;; module/config/tools-config/tools-eval-config.el -*- lexical-binding: t -*-
- 
+
 ;;; Commentary:
 ;; Configuration for inline evaluation of Emacs Lisp expressions.
 ;; Provides enhanced evaluation experience with overlays, keybindings, and visual feedback.
@@ -43,10 +43,10 @@
 (after! elisp-mode
   ;; Show function signatures in minibuffer
   (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
-  
+
   ;; Auto-highlight matching parentheses
   (add-hook 'emacs-lisp-mode-hook #'show-paren-mode)
-  
+
   ;; Enable aggressive indentation for cleaner code
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
 
@@ -59,7 +59,7 @@
 (after! ielm
   (setq ielm-prompt "λ> "
         ielm-use-dynamic-return t)
-  
+
   ;; Better history handling
   (add-hook 'ielm-mode-hook
             (lambda ()
@@ -84,26 +84,6 @@
 (when (modulep! :ui popup)
   (set-popup-rule! "^\\*eval"
     :size 0.3 :side 'bottom :select t :quit t))
-
-;; Enhanced leader keybindings for evaluation
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix ("v" . "eval")
-                                         (:when (modulep! :lang emacs-lisp)
-                                           :desc "Eval expression" "e" #'eval-last-sexp
-                                           :desc "Eval buffer" "b" #'eval-buffer
-                                           :desc "Eval region" "r" #'eval-region
-                                           :desc "Eval defun" "d" #'eval-defun
-                                           :desc "Eval and replace" "R" #'eval-and-replace
-                                           :desc "Eval expression (pretty)" "p" #'pp-eval-last-sexp
-                                           :desc "Eval expression in IELM" "i" #'ielm-eval-last-sexp)
-                                         
-                                         ;; General evaluation commands
-                                         :desc "Eval expression at point" "." #'+eval/region-and-replace
-                                         :desc "Send to REPL" "s" #'+eval/send-region-to-repl
-                                         :desc "Open REPL" "o" #'+eval/open-repl-other-window))))
-
 
 (provide 'tools-eval-config)
 

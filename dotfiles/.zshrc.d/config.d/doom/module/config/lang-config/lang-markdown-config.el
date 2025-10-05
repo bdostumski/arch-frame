@@ -12,13 +12,11 @@
   (setq markdown-command "pandoc"))
 
 ;; Leader keybindings
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("m" . "markdown")
-                                 :desc "Preview file" "p" #'markdown-live-preview-mode
-                                 :desc "Export to PDF" "f" #'markdown-export-to-pdf
-                                 :desc "Export to HTML" "h" #'markdown-export-to-html))))
+;;(map! :leader
+;;      (:prefix-map ("m" . "markdown")
+;;       :desc "Preview file" "p" #'markdown-live-preview-mode
+;;       :desc "Export to PDF" "f" #'markdown-export-to-pdf
+;;       :desc "Export to HTML" "h" #'markdown-export-to-html))
 
 (provide 'lang-markdown-config)
 

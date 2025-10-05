@@ -342,49 +342,6 @@
     (message "No favorite projects")))
 
 ;; ----------------------------
-;; Enhanced Leader Keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix-map ("p" . "project")
-                                 ;; Core projectile commands
-                                 :desc "Switch project" "p" #'projectile-switch-project
-                                 :desc "Find file in project" "f" #'projectile-find-file
-                                 :desc "Recent files" "r" #'projectile-recentf
-                                 :desc "Search in project" "s" #'+projectile/search-project
-                                 :desc "Replace in project" "R" #'projectile-replace
-                                 :desc "Toggle implementation/test" "t" #'projectile-toggle-between-implementation-and-test
-                                 :desc "Run project" "c" #'projectile-compile-project
-                                 :desc "Test project" "T" #'projectile-test-project
-                                 
-                                 ;; Enhanced project management
-                                 :desc "Project info" "i" #'+projectile/project-info
-                                 :desc "Recent projects" "P" #'+projectile/recent-projects
-                                 :desc "Create new project" "n" #'+projectile/create-project
-                                 
-                                 ;; Project discovery and cleanup
-                                 :desc "Discover projects" "D" #'+projectile/discover-projects
-                                 :desc "Cleanup stale projects" "C" #'+projectile/cleanup-stale-projects
-                                 
-                                 ;; Favorites
-                                 (:prefix-map ("F" . "favorites")
-                                  :desc "Add to favorites" "a" #'+projectile/add-to-favorites
-                                  :desc "Remove from favorites" "r" #'+projectile/remove-from-favorites
-                                  :desc "Switch to favorite" "f" #'+projectile/switch-to-favorite)
-                                 
-                                 ;; Git integration
-                                 :desc "Magit status" "g" #'projectile-vc
-                                 :desc "Git grep" "G" #'projectile-grep
-                                 
-                                 ;; Utilities
-                                 :desc "Find directory" "d" #'projectile-find-dir
-                                 :desc "Find other file" "o" #'projectile-find-other-file
-                                 :desc "Kill project buffers" "k" #'projectile-kill-buffers
-                                 :desc "Save project buffers" "S" #'projectile-save-project-buffers
-                                 :desc "Invalidate cache" "I" #'projectile-invalidate-cache))))
-
-;; ----------------------------
 ;; Project Hooks and Automation
 ;; ----------------------------
 (defun +projectile/setup-project-environment ()

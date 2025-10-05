@@ -47,17 +47,6 @@
 (use-package! treemacs-projectile :after (treemacs projectile))
 (use-package! treemacs-tab-bar :after treemacs)
 
-;; ----------------------------
-;; Keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("u" . "ui")
-                                (:prefix ("t" . "treemacs")
-                                 :desc "Toggle Treemacs" "t" #'treemacs
-                                 :desc "Treemacs Find File" "f" #'treemacs-find-file
-                                 :desc "Treemacs Follow Mode" "F" #'treemacs-follow-mode))))
-
 (provide 'ui-treemacs-projectile-config)
 
 ;;; ui-treemacs-projectile-config.el ends here

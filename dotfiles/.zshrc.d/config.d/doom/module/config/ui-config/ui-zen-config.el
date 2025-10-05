@@ -29,15 +29,6 @@
                   (fringe-mode nil))))))
 
 ;; ----------------------------------------
-;; Vim-style keybinding to toggle Zen mode
-;; ----------------------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("u" . "ui")
-                                (:prefix ("z" . "zen")
-                                 :desc "Toggle Zen Mode" "t" #'writeroom-mode))))
-
-;; ----------------------------------------
 ;; Visual-fill-column integration
 ;; ----------------------------------------
 (use-package! visual-fill-column

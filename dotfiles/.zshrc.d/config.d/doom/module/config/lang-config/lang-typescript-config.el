@@ -16,13 +16,11 @@
 ;; ----------------------------
 ;; Leader keybindings for TypeScript
 ;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("t" . "typescript")
-                                 :desc "Format buffer"      "f" #'lsp-format-buffer
-                                 :desc "Go to definition"   "d" #'lsp-find-definition
-                                 :desc "Run tests"          "t" #'npm-test-current-project))))
+;;(map! :leader
+;;      (:prefix-map ("t" . "typescript")
+;;       :desc "Format buffer"      "f" #'lsp-format-buffer
+;;       :desc "Go to definition"   "d" #'lsp-find-definition
+;;       :desc "Run tests"          "t" #'npm-test-current-project))
 
 (provide 'lang-typescript-config)
 

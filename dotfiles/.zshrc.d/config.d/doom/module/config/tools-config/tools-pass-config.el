@@ -244,23 +244,6 @@
           (error (message "❌ Error: %s" (error-message-string err)))))
     (message "❌ Password store not initialized. Run SPC e t p I first")))
 
-;; ----------------------------
-;; Keybindings
-;; ----------------------------
-
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix ("t" . "tools")
-                            (:prefix ("p" . "password")
-                             :desc "Status" "s" #'+pass/status
-                             :desc "Initialize" "I" #'+pass/initialize
-                             :desc "Setup GPG" "G" #'+pass/setup-gpg
-                             :desc "Reload config" "R" #'+pass/reload-config
-                             :desc "Copy" "c" #'+pass/copy-password
-                             :desc "Generate" "g" #'+pass/generate-password
-                             :desc "Insert" "i" #'+pass/insert-password
-                             :desc "List" "l" #'+pass/list-passwords))))
-
 (provide 'tools-pass-config)
 
 ;;; tools-pass-config.el ends here

@@ -1,8 +1,8 @@
 ;;; module/config/tools-config/tools-git-config.el -*- lexical-binding: t -*-
- 
+
 ;;; Commentary:
 ;; Git integration for Doom Emacs
- 
+
 ;;; Code:
 
 ;; ----------------------------
@@ -10,15 +10,15 @@
 ;; ----------------------------
 (after! magit
   (setq magit-diff-refine-hunk t
-        magit-repository-directories
-        '(("~/Workspace/arch-frame" . 2)
-          ("~/Workspace/bdostumski" . 2)
-          ("~/Workspace/bdostumski.github.io" . 1)
-          ("~/Workspace/learning-apache-kafka" . 0)
-          ("~/Workspace/learning-full-stack" . 0)
-          ("~/Workspace/learning-javascript" . 0)
-          ("~/Workspace/learning-microservices" . 0)
-          ("~/Workspace/learning-workspace" . 0))
+        ;;magit-repository-directories
+        ;;'(("~/Workspace/arch-frame" . 2)
+        ;;  ("~/Workspace/bdostumski" . 2)
+        ;;  ("~/Workspace/bdostumski.github.io" . 1)
+        ;;  ("~/Workspace/learning-apache-kafka" . 0)
+        ;;  ("~/Workspace/learning-full-stack" . 0)
+        ;;  ("~/Workspace/learning-javascript" . 0)
+        ;;  ("~/Workspace/learning-microservices" . 0)
+        ;;  ("~/Workspace/learning-workspace" . 0))
         magit-save-repository-buffers 'dontask
         magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1
         magit-bury-buffer-function #'magit-mode-quit-window
@@ -87,12 +87,12 @@ Refs:       %D
 
   (map! :leader
         (:prefix ("g" . "git")
-         (:prefix ("i" . "GitHub")
-          :desc "Create PR"      "R" #'+git/gh-create-pr
-          :desc "Browse Repo"    "H" #'+git/gh-browse-repo
-          :desc "View Issues"    "i" #'+git/gh-view-issues
-          :desc "View PRs"       "p" #'+git/gh-view-prs
-          :desc "Checkout PR"    "c" #'+git/gh-checkout-pr))))
+                 (:prefix ("i" . "GitHub")
+                  :desc "Create PR"      "R" #'+git/gh-create-pr
+                  :desc "Browse Repo"    "H" #'+git/gh-browse-repo
+                  :desc "View Issues"    "i" #'+git/gh-view-issues
+                  :desc "View PRs"       "p" #'+git/gh-view-prs
+                  :desc "Checkout PR"    "c" #'+git/gh-checkout-pr))))
 
 
 (provide 'tools-git-config)

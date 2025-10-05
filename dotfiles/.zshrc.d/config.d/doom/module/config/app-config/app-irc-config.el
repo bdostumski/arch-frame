@@ -53,17 +53,17 @@
       (let* ((filename (rcirc-generate-log-filename process target))
              (cell (assoc-string filename rcirc-log-alist))
              (buffer (if cell
-                        (cdr cell)
-                      (setq cell (cons filename (generate-new-buffer
-                                                " *rcirc-log*")))
-                      (push cell rcirc-log-alist)
-                      (cdr cell))))
+                         (cdr cell)
+                       (setq cell (cons filename (generate-new-buffer
+                                                  " *rcirc-log*")))
+                       (push cell rcirc-log-alist)
+                       (cdr cell))))
         (with-current-buffer buffer
           (goto-char (point-max))
           (insert (format-time-string "[%Y-%m-%d %H:%M:%S] "))
           (insert (format "<%s> %s\n"
-                         (or sender "")
-                         (rcirc-markup-text-functions text)))
+                          (or sender "")
+                          (rcirc-markup-text-functions text)))
           ;; Periodically save and clean up large buffers
           (when (> (buffer-size) 100000)
             (write-region (point-min) (point-max) filename t 'quiet)
@@ -125,19 +125,6 @@
 
   ;; Run cleanup weekly
   (run-at-time "1 week" (* 7 24 60 60) 'rcirc-cleanup-old-logs))
-
-;; ----------------------------
-;; Leader keybindings
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("a" . "applications")
-                                (:prefix-map ("i" . "irc")
-                                 :desc "Connect to IRC"      "c" #'rcirc
-                                 :desc "Switch IRC buffer"   "b" #'rcirc-switch-to-buffer
-                                 :desc "Disconnect"          "q" #'rcirc-cmd-quit
-                                 :desc "Reconnect"           "r" #'rcirc-reconnect-all
-                                 :desc "List channels"       "l" #'rcirc-cmd-list))))
 
 (provide 'app-irc-config)
 

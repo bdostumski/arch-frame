@@ -92,17 +92,5 @@
     
     (display-buffer (current-buffer))))
 
-;; ----------------------------
-;; Keybindings
-;; ----------------------------
-
-(map! :leader
-      (:prefix ("e" . "editor")
-               (:prefix ("t" . "tools")
-                        (:prefix ("u" . "upload")
-                         :desc "Upload project" "p" #'+upload/upload-project
-                         :desc "Deploy to GitHub Pages" "g" #'+upload/deploy-to-github-pages
-                         :desc "Deployment status" "s" #'+upload/show-deployment-status))))
-
 (provide 'tools-upload-config)
 ;;; tools-upload-config.el ends here

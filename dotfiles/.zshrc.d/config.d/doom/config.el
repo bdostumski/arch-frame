@@ -1,140 +1,94 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
-
-;; Doom exposes five (optional) variables for controlling fonts in Doom:
-;;
-;; - `doom-font' -- the primary font to use
-;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
-;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;; - `doom-symbol-font' -- for symbols
-;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-;;
-;; See 'C-h v doom-font' for documentation and more examples of what they
-;; accept. For example:
-;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-;;
-;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
-;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
-;; refresh your font settings. If Emacs still can't find your font, it likely
-;; wasn't installed correctly. Font issues are rarely Doom issues!
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-;;(setq doom-theme 'doom-one)
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-;;(setq display-line-numbers-type t)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Documents/org/")
-
-
-;; Whenever you reconfigure a package, make sure to wrap your config in an
-;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
-;;
-;;   (after! PACKAGE
-;;     (setq x y))
-;;
-;; The exceptions to this rule:
-;;
-;;   - Setting file/directory variables (like `org-directory')
-;;   - Setting variables which explicitly tell you to set them before their
-;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
-;;   - Setting doom variables (which start with 'doom-' or '+').
-;;
-;; Here are some additional functions/macros that will help you configure Doom.
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
-;; etc).
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
-
-
-;;; config.el --- Doom Emacs Configuration -*- lexical-binding: t; -*-
-
+;;; Doom Emacs main configuration
 ;;; Commentary:
-;; Loads modular configuration files from the `configurations/` directory.
+;; This file loads modular configuration files from the `module/` directory.
+;; Each module handles a specific area of functionality:
+;; UI, editing, LSP, tools, checkers, languages, apps, OS integration, etc.
+;;
+;; Load order is chosen for safety and dependency reasons:
 
 ;;; Code:
 
-;; ----------------------------------------
-;; Doom Emacs Modular Config Loader
-;; ----------------------------------------
-
-;; Completion Module
-;; Sets up completion frameworks: Company, Vertico, snippets, and related enhancements.
-(load! "module/completion-module.el")
-
-;; UI Module
-;; Configures visual appearance: themes, modeline, icons, treemacs, dashboard, zen, etc.
-(load! "module/ui-module.el")
-
-;; Editor Module
-;; Editing behavior: smartparens, multiple-cursors, folds, formatters, snippets, etc.
+;; ---------------------------------------------------------------------------
+;; 1. Editing Enhancements
+;; ---------------------------------------------------------------------------
+;; Provides modal editing (Evil), smartparens, folding, formatting, multiple cursors, snippets.
+;; Fundamental for daily editing, loaded first.
 (load! "module/editor-module.el")
 
-;; Emacs Module
-;; Core Emacs extensions: dired, ibuffer, undo, electric, file-templates, etc.
+;; ---------------------------------------------------------------------------
+;; 2. Completion & Snippets
+;; ---------------------------------------------------------------------------
+;; Handles Company, Ivy, Vertico, and YASnippet for in-buffer and minibuffer completion.
+;; Loaded after editor core to ensure proper keybindings and hooks.
+(load! "module/completion-module.el")
+
+;; ---------------------------------------------------------------------------
+;; 3. UI & Visuals
+;; ---------------------------------------------------------------------------
+;; Themes, modeline, dashboard, icons, Treemacs, minimap, Zen mode, and visual enhancements.
+;; Loaded early so visual defaults are applied to all subsequent modules.
+(load! "module/ui-module.el")
+
+;; ---------------------------------------------------------------------------
+;; 4. Emacs Core & Utilities
+;; ---------------------------------------------------------------------------
+;; Dired/Dirvish, ibuffer, undo system, electric pairs, file templates, yasnippet support.
+;; Ensures core utilities are available for other modules.
 (load! "module/emacs-module.el")
 
-;; Terminal Module
-;; Integrated terminals: eshell, vterm, tmux, shell configs (zsh, bash, fish).
+;; ---------------------------------------------------------------------------
+;; 5. Terminal Integration
+;; ---------------------------------------------------------------------------
+;; Eshell, vterm, shell configurations, and Tmux integration.
+;; Loaded after core utilities and UI for proper terminal rendering and keybindings.
 (load! "module/term-module.el")
 
-;; Checkers Module
-;; Spell checking, grammar, and syntax linting.
+;; ---------------------------------------------------------------------------
+;; 6. Checkers & Linters
+;; ---------------------------------------------------------------------------
+;; Spell checking, grammar tools, Flycheck, Flymake.
+;; Loaded after editing and completion modules to ensure hooks and keybindings are set.
 (load! "module/checkers-module.el")
 
-;; Tools Module
-;; DevOps & productivity: Magit, Docker, Gist, Lookup, Debugger, PDF, Terraform, etc.
+;; ---------------------------------------------------------------------------
+;; 7. Tools & Productivity
+;; ---------------------------------------------------------------------------
+;; Magit, Docker, Gist, debuggers, LSP, PDF tools, Make, task runners, AI/LLM integrations.
+;; Loaded after editors, UI, and checkers so all hooks and dependencies are available.
 (load! "module/tools-module.el")
 
-;; OS Module
-;; OS-specific integration: Unix tools, macOS support, TTY handling, direnv, etc.
+;; ---------------------------------------------------------------------------
+;; 8. OS Integration
+;; ---------------------------------------------------------------------------
+;; OS-specific tweaks, Unix tools, TTY configuration, direnv, which-key.
+;; Loaded after foundational modules to ensure compatibility.
 (load! "module/os-module.el")
 
-;; Language Module
-;; Programming language support: LSP, tree-sitter, SQL, web, Ruby, Java, C/C++, etc.
+;; ---------------------------------------------------------------------------
+;; 9. Language Support
+;; ---------------------------------------------------------------------------
+;; Programming and markup language modules.
+;; Includes LSP, Tree-sitter, SQL, web stack, Ruby, Java, C/C++, etc.
+;; Loaded after core tools and OS modules to ensure LSP servers, syntax parsers, and formatters work.
 (load! "module/lang-module.el")
 
-;; Email Module
-;; Email clients: mu4e setup with org integration and notifications.
+;; ---------------------------------------------------------------------------
+;; 10. Email Clients
+;; ---------------------------------------------------------------------------
+;; mu4e configuration and email integrations.
+;; Loaded after languages and tools so notifications and org integration are functional.
 (load! "module/email-module.el")
 
-;; App Module
-;; Applications: Calendar, RSS, IRC, EMMS, Everywhere, Org-roam, Chat tools.
+;; ---------------------------------------------------------------------------
+;; 11. Applications
+;; ---------------------------------------------------------------------------
+;; Calendar, RSS, IRC, EMMS, Org-roam, chat, and other user-facing apps.
+;; Loaded near the end to rely on all editor, UI, and tools infrastructure.
 (load! "module/app-module.el")
 
-;; Config Module
-;; User-specific config: personal keybindings, variables, environment, secrets.
-(load! "module/config-module.el")
-
-(provide 'config)
-
-;;; config.el ends here
+;; ---------------------------------------------------------------------------
+;; 12. User Config & Secrets
+;; ---------------------------------------------------------------------------
+;; Personal keybi
+(load! "module/keybindings.el")

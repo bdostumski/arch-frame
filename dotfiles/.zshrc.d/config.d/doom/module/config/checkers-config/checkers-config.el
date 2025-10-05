@@ -28,7 +28,7 @@
              nil                 ;; affix file (nil = default)
              utf-8)))            ;; encoding
     (message "Hunspell configured for spell checking"))
-   
+
    ;; Fallback to a spell
    ((executable-find "aspell")
     (setq ispell-program-name "aspell"
@@ -36,7 +36,7 @@
           ispell-local-dictionary "en_US"
           ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
     (message "Aspell configured for spell checking"))
-   
+
    ;; No spell checker found
    (t
     (message "Warning: No spell checker (hunspell/aspell) found. Please install one."))))

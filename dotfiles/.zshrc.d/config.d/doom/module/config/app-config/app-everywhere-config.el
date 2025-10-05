@@ -19,6 +19,9 @@
       (error
        (message "Failed to start Emacs server: %s" (error-message-string err))))))
 
+;; Optionally, you can enable server-mode everywhere
+;; (add-hook 'after-init-hook #'server-mode)
+
 ;; ----------------------------
 ;; Auto-save and auto-kill behavior for emacsclient
 ;; ----------------------------
@@ -27,6 +30,9 @@
 (setq server-window 'pop-to-buffer
       server-switch-hook nil
       server-kill-buffer-on-quit t)
+
+;; Optional: confirmation before killing buffers from emacsclient
+;; (setq server-kill-buffer-query nil)
 
 ;; Ask before killing Emacs if there are active clients
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -39,30 +45,17 @@
   "Show server start message once."
   (unless +everywhere/server-message-shown
     (setq +everywhere/server-message-shown t)
-    (run-with-timer 1.0 nil 
-      (lambda () 
-        (message "Emacs server is running. Use 'emacsclient' to edit files!")))))
+    (run-with-timer 1.0 nil
+                    (lambda ()
+                      (message "Emacs server is running. Use 'emacsclient' to edit files!")))))
 
 (add-hook 'server-after-make-frame-hook #'+everywhere/everywhere-server-start-message)
 
-;; Helper function for server status
-(defun +everywhere/server-status ()
-  "Display server running status."
-  (interactive)
-  (message "Server running: %s" 
-           (if (server-running-p) "Yes" "No")))
 
-;; ----------------------------
-;; Leader keybindings (KEEPING YOUR EXACT STRUCTURE)
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("a" . "applications")
-                                (:prefix-map ("e" . "everywhere")
-                                 :desc "Edit file with emacsclient (server-edit)" "f" #'server-edit
-                                 :desc "Start server"  "s" #'server-start
-                                 :desc "Stop server"   "k" #'server-force-delete
-                                 :desc "Show server running status" "r" #'+everywhere/server-status))))
+;; Optional: show a message when server starts
+;;(defun app/everywhere-server-start-message ()
+;;  (message "Emacs server is running. Use 'emacsclient' to edit files from the shell!"))
+;;(add-hook 'server-after-make-frame-hook #'app/everywhere-server-start-message)
 
 (provide 'app-everywhere-config)
 

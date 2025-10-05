@@ -429,69 +429,6 @@
                            (format "*Docker Top - %s*" container)))))
 
 ;; ----------------------------
-;; Comprehensive keybinding setup
-;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("t" . "tools")
-                                (:prefix ("o" . "devops")
-                                         (:prefix ("d" . "docker")
-                                                  ;; Container management
-                                                  (:prefix ("c" . "containers")
-                                                   :desc "List containers"         "c" #'+docker/docker-containers
-                                                   :desc "Quick exec"              "e" #'+docker/docker-quick-exec
-                                                   :desc "Quick logs"              "l" #'+docker/docker-quick-logs
-                                                   :desc "Container stats"         "s" #'+docker/docker-stats
-                                                   :desc "Container top"           "t" #'+docker/docker-top)
-                                                  ;; Image management
-                                                  (:prefix ("i" . "images")
-                                                   :desc "List images"             "i" #'+docker/docker-images
-                                                   :desc "Build image"             "b" #'+docker/docker-build
-                                                   :desc "Run image"               "r" #'+docker/docker-run
-                                                   :desc "Pull image"              "p" #'docker-image-pull)
-                                                  ;; Network management
-                                                  (:prefix ("n" . "networks")
-                                                   :desc "List networks"           "n" #'docker-networks
-                                                   :desc "Create network"          "c" #'docker-network-create)
-                                                  ;; Volume management
-                                                  (:prefix ("v" . "volumes")
-                                                   :desc "List volumes"            "v" #'docker-volumes
-                                                   :desc "Create volume"           "c" #'docker-volume-create)
-                                                  ;; Docker Compose operations
-                                                  (:prefix ("C" . "compose")
-                                                   :desc "Up"                      "u" #'+docker/docker-compose-up
-                                                   :desc "Down"                    "d" #'+docker/docker-compose-down
-                                                   :desc "Logs"                    "l" #'+docker/docker-compose-logs
-                                                   :desc "Build"                   "b" #'+docker/docker-compose-build
-                                                   :desc "Pull"                    "p" #'+docker/docker-compose-pull
-                                                   :desc "Restart"                 "r" #'+docker/docker-compose-restart)
-                                                  ;; Build operations
-                                                  (:prefix ("b" . "build")
-                                                   :desc "Build image"             "b" #'+docker/docker-build
-                                                   :desc "Compose build"           "c" #'+docker/docker-compose-build)
-                                                  ;; Logs and monitoring
-                                                  (:prefix ("l" . "logs")
-                                                   :desc "Container logs"          "c" #'+docker/docker-quick-logs
-                                                   :desc "Compose logs"            "C" #'+docker/docker-compose-logs
-                                                   :desc "Container stats"         "s" #'+docker/docker-stats)
-                                                  ;; System operations
-                                                  (:prefix ("s" . "system")
-                                                   :desc "System info"             "i" #'+docker/docker-show-system-info
-                                                   :desc "System prune"            "p" #'+docker/docker-system-prune
-                                                   :desc "System stats"            "s" #'+docker/docker-stats)
-                                                  ;; Templates and scaffolding
-                                                  (:prefix ("t" . "templates")
-                                                   :desc "Create Dockerfile"       "d" #'+docker/docker-create-dockerfile
-                                                   :desc "Create Compose file"     "c" #'+docker/docker-create-compose-file)
-                                                  ;; Help and documentation
-                                                  (:prefix ("h" . "help")
-                                                   :desc "Docker help"             "d"
-                                                   (lambda () (interactive) (async-shell-command "docker --help" "*Docker Help*"))
-                                                   :desc "Compose help"            "c"
-                                                   (lambda () (interactive) (async-shell-command (concat (+docker/compose-cmd) " --help") "*Docker Compose Help*"))
-                                                   :desc "System info"             "i" #'+docker/docker-show-system-info))))))
-
-;; ----------------------------
 ;; Integration with other packages
 ;; ----------------------------
 (after! projectile

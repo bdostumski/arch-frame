@@ -1,6 +1,6 @@
 ;; -*- mode: diary -*-
 ;; Personal Diary File
-;; 
+
 ;; Date formats supported:
 ;; 12/25 Christmas (American format)
 ;; 25/12 Christmas (European format)
@@ -8,16 +8,13 @@
 ;; December 25 Christmas (Month name)
 ;; 25 December Christmas (Day Month)
 ;; Monday 09:00 Weekly team meeting (Day of week)
-;; 
+
 ;; Recurring entries:
 ;; %%(diary-anniversary 5 24 1970) Wedding anniversary (%d years)
 ;; %%(diary-block 12 20 2024 1 5 2025) Holiday period
 ;; Monday 09:00 Weekly team meeting
-;; 
-;; Examples:
-;;Saturday, September 13, 2025 Example diary entry for today
-Monday, October 20, 2025 Example diary entry for today
-;;Monday 09:00 Weekly team meeting
-;;Friday 17:00 Weekend planning
-;;Saturday, September 13, 2025
-;;Saturday, September 13, 2025 Test my code
+
+;; Examples (commented out to prevent auto-display):
+;; Monday, September 29, 2025 Example diary entry for today
+;; Monday 09:00 Weekly team meeting
+;; Friday 17:00 Weekend planning

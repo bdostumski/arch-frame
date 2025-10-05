@@ -13,13 +13,11 @@
         lisp-repl-buffer-name "*lisp-repl*"))
 
 ;; Leader keybindings for Lisp
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("l" . "Lisp")
-                                 :desc "Start REPL"       "r" #'run-lisp
-                                 :desc "Eval last sexp"   "e" #'eval-last-sexp
-                                 :desc "Eval buffer"      "b" #'eval-buffer))))
+;;(map! :leader
+;;      (:prefix-map ("l" . "Lisp")
+;;       :desc "Start REPL"       "r" #'run-lisp
+;;       :desc "Eval last sexp"   "e" #'eval-last-sexp
+;;       :desc "Eval buffer"      "b" #'eval-buffer))
 
 (provide 'lang-common-lisp-config)
 

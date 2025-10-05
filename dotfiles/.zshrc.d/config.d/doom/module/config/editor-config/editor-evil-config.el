@@ -1,5 +1,4 @@
 ;;; module/config/editor-config/ui-evil-config.el -*- lexical-binding: t; -*-
-
 ;;; Commentary:
 ;; Optimized Evil mode setup for Doom Emacs.
 ;; Provides Vim-like behavior everywhere, with quality-of-life tweaks,
@@ -11,24 +10,30 @@
   ;; ----------------------------
   ;; Core Evil settings
   ;; ----------------------------
-  (setq evil-want-C-u-scroll t           ;; <C-u> scroll up
-        evil-want-C-d-scroll t           ;; <C-d> scroll down
-        evil-want-C-i-jump t             ;; <C-i> works like Vim
-        evil-respect-visual-line-mode t  ;; respect visual line mode
-        evil-move-cursor-back nil        ;; cursor stays at end of yank
-        evil-kill-on-visual-paste nil)   ;; don't override kill ring on paste
+  (setq evil-want-C-u-scroll t
+        evil-want-C-d-scroll t
+        evil-want-C-i-jump t
+        evil-want-C-w-in-emacs-state t
+        evil-respect-visual-line-mode t
+        evil-move-cursor-back nil
+        evil-kill-on-visual-paste nil
+        evil-want-fine-undo t
+        evil-split-window-below t
+        evil-vsplit-window-right t
+        evil-search-module 'evil-search
+        evil-ex-complete-emacs-commands nil
+        evil-ex-interactive-search-highlight 'selected-window
+        evil-insert-skip-empty-lines t
+        evil-mode-line-format nil
+        evil-normal-state-cursor '(box "orange")
+        evil-insert-state-cursor '(bar "white")
+        evil-visual-state-cursor '(hollow "orange")
+        evil-replace-state-cursor '(hbar "red")
+        evil-operator-state-cursor '(evil-half-cursor "red"))
 
-  ;; ----------------------------
-  ;; Keybindings
-  ;; ----------------------------
-  (map! :n "Y" (cmd! (evil-yank (point) (line-end-position))) ;; Y yanks to EOL
-        :n "Q" #'evil-record-macro                             ;; Q for macro
-        :v "v" #'er/expand-region)                             ;; better visual selection
-
-  ;; Optional: more ergonomic navigation
-  (map! :n "H" #'evil-first-non-blank
-        :n "L" #'evil-end-of-line)
-  )
+  ;; Important: Ensure undo-tree integration is properly set
+  (when (featurep 'undo-tree)
+    (setq evil-undo-system 'undo-tree)))
 
 ;; ----------------------------
 ;; Evil-surround (like tpope's plugin)

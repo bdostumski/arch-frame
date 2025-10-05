@@ -16,13 +16,11 @@
 ;; ----------------------------
 ;; Leader keybindings for YAML
 ;; ----------------------------
-(map! :leader
-      (:prefix-map ("e" . "editor")
-                   (:prefix-map ("l" . "lang")
-                                (:prefix-map ("y" . "yaml")
-                                 :desc "Format buffer"      "f" #'lsp-format-buffer
-                                 :desc "Go to definition"   "d" #'lsp-find-definition
-                                 :desc "Validate buffer"    "v" #'lsp-diagnostics))))
+;;(map! :leader
+;;      (:prefix-map ("y" . "yaml")
+;;       :desc "Format buffer"      "f" #'lsp-format-buffer
+;;       :desc "Go to definition"   "d" #'lsp-find-definition
+;;       :desc "Validate buffer"    "v" #'lsp-diagnostics))
 
 (provide 'lang-yaml-config)
 

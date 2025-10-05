@@ -21,10 +21,6 @@
   ;; Enable syntax highlighting
   (add-hook 'eshell-mode-hook #'eshell-syntax-highlighting-mode))
 
-;; Keybinding for quick Eshell access
-(map! :leader
-      :desc "Eshell" "o e" #'eshell)
-
 (provide 'term-eshell-config)
 
 ;;; term-eshell-config.el ends here
