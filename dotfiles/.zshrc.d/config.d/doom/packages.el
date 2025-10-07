@@ -49,6 +49,9 @@
 (package! maven-test-mode)         ; Maven integration for Java testing
 (package! rainbow-delimiters)      ; color-coded parentheses for nested expressions
 (package! plantuml-mode)           ; PlantUML support for diagrams
+(package! json-mode)
+(package! json-reformat)
+(package! php-cs-fixer)
 
 ;; ============================
 ;; 🔤 Completion & Snippets

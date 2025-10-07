@@ -1137,6 +1137,408 @@
 (map! :leader
       :desc "Toggle Zen Mode" "t z" #'writeroom-mode)
 
+;; ----------------------------------------
+;; Scala Keybindings
+;; ----------------------------------------
+(map! :after scala-mode
+      :map scala-mode-map
+      :localleader
+      :desc "Start sbt" "s" #'sbt-start
+      :desc "Run current test" "t c" #'sbt-do-test-only
+      :desc "Run all tests" "t a" #'sbt-do-test
+      :desc "Run REPL" "r" #'sbt-run-repl
+      :desc "Compile" "c" #'sbt-do-compile
+      :desc "Go to definition" "d" #'lsp-find-definition
+      :desc "Format buffer" "f" #'lsp-format-buffer)
+
+;; ----------------------------
+;; Web Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("w" . "web")
+                                 :desc "Format buffer"      "f" #'lsp-format-buffer
+                                 :desc "Go to definition"   "d" #'lsp-find-definition
+                                 :desc "Find references"    "r" #'lsp-find-references
+                                 :desc "Rename symbol"      "n" #'lsp-rename
+                                 :desc "Show errors"        "e" #'flycheck-list-errors
+                                 :desc "Run npm script"     "s" #'npm-run-current-project
+                                 :desc "Run dev server"     "d" (cmd! (npm-run-current-project "dev"))
+                                 :desc "Build project"      "b" (cmd! (npm-run-current-project "build"))
+                                 :desc "Test project"       "t" (cmd! (npm-run-current-project "test"))))))
+
+;; ----------------------------
+;; SQL Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("s" . "sql")
+                                 :desc "Connect to DB"           "c" #'sql-connect
+                                 :desc "Execute buffer"          "e" #'sql-send-buffer
+                                 :desc "Execute region"          "r" #'sql-send-region
+                                 :desc "List products"           "l" #'sql-list-all-products
+                                 :desc "Set product"             "s" #'sql-set-product))))
+
+;; ----------------------------
+;; Go Keybindings
+;; ----------------------------
+(map! :map go-mode-map
+      :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix ("g" . "go")
+                                 :desc "Run go build"          "b" #'go-build
+                                 :desc "Run go test"           "t" #'go-test-current-project
+                                 :desc "Run current test"      "T" #'go-test-current-test
+                                 :desc "Run go test with coverage" "c" #'go-test-current-coverage
+                                 :desc "Go to definition"      "d" #'lsp-find-definition
+                                 :desc "Go to references"      "r" #'lsp-find-references
+                                 :desc "Add import"            "i" #'go-import-add
+                                 :desc "Remove unused imports" "I" #'go-remove-unused-imports
+                                 :desc "Toggle test file"      "f" #'go-test-toggle
+                                 :desc "Run go mod tidy"       "m" (cmd! (compile "go mod tidy"))))))
+
+;; ----------------------------
+;; YAML Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("y" . "yaml")
+                                 :desc "Format buffer"      "f" #'lsp-format-buffer
+                                 :desc "Go to definition"   "d" #'lsp-find-definition
+                                 :desc "Show diagnostics"   "v" #'lsp-ui-flycheck-list
+                                 :desc "Organize imports"   "o" #'lsp-organize-imports
+                                 :desc "Rename"             "r" #'lsp-rename))))
+
+;; ----------------------------
+;; Typescript Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("t" . "typescript")
+                                 :desc "Format buffer"      "f" #'lsp-format-buffer
+                                 :desc "Go to definition"   "d" #'lsp-find-definition
+                                 :desc "Find references"    "r" #'lsp-find-references
+                                 :desc "Rename symbol"      "n" #'lsp-rename
+                                 :desc "Show errors"        "e" #'flycheck-list-errors
+                                 :desc "Run npm script"     "s" #'npm-run-current-project
+                                 :desc "Run dev server"     "d" (cmd! (npm-run-current-project "dev"))
+                                 :desc "Build project"      "b" (cmd! (npm-run-current-project "build"))
+                                 :desc "Test project"       "t" (cmd! (npm-run-current-project "test"))))))
+
+;; ----------------------------
+;; SH Keybindings
+;; ----------------------------
+(map! :map sh-mode-map
+      :localleader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix ("e" . "execute")
+                                 :desc "Run buffer" "r" #'+sh/run-current-buffer)
+                                
+                                (:prefix ("g" . "goto")
+                                 :desc "Go to definition" "d" #'lsp-find-definition)
+                                
+                                (:prefix ("h" . "help")
+                                 :desc "Documentation" "h" #'lsp-ui-doc-show)
+                                
+                                (:prefix ("l" . "lsp")
+                                 :desc "Format buffer" "f" #'lsp-format-buffer
+                                 :desc "Lint buffer" "l" #'lsp-execute-code-action
+                                 :desc "Rename" "r" #'lsp-rename))))
+
+;; ----------------------------
+;; Shell Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("t" . "terminal")
+
+                                 :desc "Open Zsh"  "z" (lambda () (interactive) 
+                                                         (let ((shell-file-name "/bin/zsh"))
+                                                           (open-shell-in shell-file-name)))
+                                 :desc "Open Bash" "b" (lambda () (interactive) 
+                                                         (let ((shell-file-name "/bin/bash"))
+                                                           (open-shell-in shell-file-name)))
+                                 :desc "Open Fish" "f" (lambda () (interactive) 
+                                                         (let ((shell-file-name "/bin/fish"))
+                                                           (open-shell-in shell-file-name)))))))
+
+;; ----------------------------
+;; Ruby Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("r" . "ruby")
+                                 :desc "Run current file" "r" #'ruby-run-file
+                                 :desc "Run Rails server" "s" #'rails-server
+                                 :desc "Go to definition" "d" #'robe-jump
+                                 :desc "Run tests" "t" #'rspec-run-single-file))))
+
+;; ----------------------------
+;; REST Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("r" . "rest")
+                                 :desc "Send request at point" "s" #'restclient-http-send-current
+                                 :desc "View last response" "v" #'restclient-show-response))))
+
+;; ----------------------------
+;; Plantuml Keybindings
+;; ----------------------------
+(map! :after plantuml-mode
+      :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("u" . "uml")
+                                 :desc "Preview diagram" "p" #'plantuml-preview
+                                 :desc "Export diagram" "e" #'plantuml-export-buffer))))
+
+;; ----------------------------
+;; PHP Keybindings
+;; ----------------------------
+(map! :after php-mode
+      :map php-mode-map
+      :localleader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix ("p" . "php")
+                                 :desc "Run PHP script" "r" #'php-execute-file
+                                 :desc "Format buffer" "f" #'lsp-format-buffer
+                                 :desc "Format with PHP-CS-Fixer" "F" #'php-cs-fixer-fix
+                                 :desc "Go to definition" "d" #'lsp-find-definition
+                                 :desc "Find references" "r" #'lsp-find-references
+                                 :desc "Show documentation" "h" #'lsp-ui-doc-show)
+                                
+                                (:prefix ("t" . "tests")
+                                 :desc "Run test at point" "t" #'phpunit-current-test
+                                 :desc "Run current class tests" "c" #'phpunit-current-class
+                                 :desc "Run current project tests" "p" #'phpunit-current-project))))
+
+;; ----------------------------
+;; Leader keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("o" . "org")
+                                 :desc "Open agenda" "a" #'org-agenda
+                                 :desc "Capture note" "c" #'org-capture
+                                 :desc "Roam buffer" "r" #'org-roam-buffer-toggle
+                                 :desc "Export to Hugo" "h" #'org-hugo-export-wim-to-md))))
+
+;; ----------------------------
+;; C/C++ Keybindings
+;; ----------------------------
+(map! :map (c-mode-map c++-mode-map)
+      :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("c" . "C/C++")
+                                 :desc "Compile project" "c" #'compile
+                                 :desc "Run debugger" "d" #'gdb
+                                 :desc "Switch header/source" "s" #'ff-find-other-file
+                                 :desc "Format buffer" "f" #'lsp-format-buffer
+                                 :desc "Format region" "r" #'lsp-format-region))))
+
+;; ----------------------------
+;; Lisp Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("l" . "Lisp")
+                                 :desc "Start REPL"         "r" #'run-lisp
+                                 :desc "Start SLIME"        "s" #'slime
+                                 :desc "Eval last sexp"     "e" #'eval-last-sexp
+                                 :desc "Eval buffer"        "b" #'eval-buffer
+                                 :desc "Eval region"        "v" #'eval-region
+                                 :desc "Expand macro"       "m" #'slime-macroexpand-1
+                                 :desc "Find definition"    "g" #'slime-edit-definition
+                                 :desc "SLIME selector"     "." #'slime-selector
+                                 :desc "SLIME documentation" "d" #'slime-describe-symbol))))
+
+;; ----------------------------
+;; CSV Keybindings
+;; ----------------------------
+(map! :map csv-mode-map
+      :localleader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("c" . "csv")
+                                             "a" #'csv-align-fields
+                                             "s" #'csv-sort-fields
+                                             "t" #'csv-transpose
+                                             "k" #'csv-kill-fields))))
+
+;; ----------------------------
+;; XML Keybindings
+;; ----------------------------
+(map! :map nxml-mode-map
+      :localleader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("x" . "xml")
+                                             "f" #'nxml-forward-element
+                                             "b" #'nxml-backward-element
+                                             "p" #'nxml-backward-up-element
+                                             "n" #'nxml-down-element))))
+
+;; ----------------------------
+;; JSON Keybindings
+;; ----------------------------
+(map! :map json-mode-map
+      :localleader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("j" . "json")
+                                             "f" #'jq-format-json))))
+
+
+;; ----------------------------
+;; EJC Keybindings
+;; ----------------------------
+(map! :map ejc-sql-mode-map
+      :localleader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("e" . "ejc")
+                                             "c" #'ejc-connect
+                                             "r" #'ejc-reconnect
+                                             "x" #'ejc-execute-query
+                                             "h" #'ejc-describe-table
+                                             "d" #'ejc-describe-entity
+                                             "t" #'ejc-show-tables-list))))
+
+;; ----------------------------
+;; Lisp Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("i" . "elisp")
+                                 :desc "Evaluate buffer"       "b" #'eval-buffer
+                                 :desc "Evaluate expression"   "e" #'eval-last-sexp
+                                 :desc "Evaluate region"       "r" #'eval-region
+                                 :desc "Describe function"     "f" #'describe-function
+                                 :desc "Describe variable"     "v" #'describe-variable
+                                 :desc "Find definition"       "g" #'xref-find-definitions
+                                 :desc "Format region/buffer"  "=" #'indent-region))))
+
+;; ----------------------------
+;; GraphQL Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("q" . "graphql")
+                                 :desc "Execute query"       "e" (if (fboundp 'graphql-run-query)
+                                                                     #'graphql-run-query
+                                                                   #'graphql-send-query)
+                                 :desc "Jump to definition"  "d" #'lsp-find-definition
+                                 :desc "Hover docs"          "h" #'lsp-hover
+                                 :desc "Format buffer"       "f" #'lsp-format-buffer))))
+
+;; ----------------------------
+;; Javascript Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("j" . "javascript")
+                                 :desc "Run node REPL" "r" #'nodejs-repl
+                                 :desc "Send buffer to REPL" "b" #'nodejs-repl-send-buffer
+                                 :desc "Send region to REPL" "s" #'nodejs-repl-send-region
+                                 :desc "Format buffer" "f" #'prettier-js
+                                 :desc "Go to definition" "d" #'lsp-find-definition
+                                 :desc "Find references" "R" #'lsp-find-references
+                                 :desc "Organize imports" "o" #'lsp-organize-imports))))
+
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("p" . "project")
+                                 :desc "npm test" "jt" (cmd! (compile "npm test"))
+                                 :desc "npm start" "js" (cmd! (compile "npm start"))
+                                 :desc "npm install" "ji" (cmd! (compile "npm install"))
+                                 :desc "npm build" "jb" (cmd! (compile "npm run build"))))))
+
+;; ----------------------------
+;; Java Keybindings
+;; ----------------------------
+(map! :after java-mode
+      :map java-mode-map
+      :localleader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix ("j" . "java")
+                                 :desc "Compile project" "c" #'lsp-java-build-project
+                                 :desc "Run main class" "r" #'lsp-java-run-main
+                                 :desc "Run debugger"   "d" #'dap-debug
+                                 :desc "Run tests"      "t" #'lsp-java-run-test
+                                 :desc "Organize imports" "o" #'lsp-java-organize-imports
+                                 :desc "Extract to method" "m" #'lsp-java-extract-method
+                                 :desc "Generate getters/setters" "g" #'lsp-java-generate-getters-and-setters)
+                                (:prefix ("r" . "refactor")
+                                 :desc "Code actions" "a" #'lsp-execute-code-action
+                                 :desc "Rename" "r" #'lsp-rename))))
+
+;; ----------------------------
+;; Json Keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("o" . "json")
+                                 :desc "Format buffer"   "f" (lambda () (interactive)
+                                                               (if (region-active-p)
+                                                                   (json-reformat-region (region-beginning) (region-end))
+                                                                 (json-reformat-region (point-min) (point-max))))
+                                 :desc "Validate buffer" "v" #'lsp-format-buffer))))
+
+
+;; ----------------------------
+;; Latex keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("l" . "latex")
+                                 :desc "Compile LaTeX"    "c" #'TeX-command-master
+                                 :desc "View PDF"         "v" #'TeX-view
+                                 :desc "Clean aux files"  "x" #'TeX-clean))))
+
+;; ----------------------------
+;; Lua keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("u" . "lua")
+                                 :desc "Evaluate buffer" "b" #'lua-send-buffer
+                                 :desc "Evaluate region" "r" #'lua-send-region
+                                 :desc "Run REPL" "s" #'lua-start-process))))
+
+;; ----------------------------
+;; Markdown keybindings
+;; ----------------------------
+(map! :leader
+      (:prefix-map ("e" . "editor")
+                   (:prefix-map ("l" . "language")
+                                (:prefix-map ("r" . "markdown")
+                                 :desc "Preview file" "p" #'markdown-live-preview-mode
+                                 :desc "Export to PDF" "f" #'markdown-export-to-html-and-pdf
+                                 :desc "Export to HTML" "h" #'markdown-export-to-html))))
+
+
 (provide 'keybindings)
 
 ;;; keybindings.el ends here

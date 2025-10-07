@@ -1,4 +1,4 @@
-;;; module/config/lang-config/lang-latex-config.el -*- lexical-binding: t; -*-
+;;; lang-latex-config.el --- LaTeX configuration for Doom Emacs -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; LaTeX setup for Doom Emacs.
 ;; Features:
@@ -14,7 +14,6 @@
 ;; AUCTeX + latexmk
 ;; ----------------------------
 (use-package! auctex-latexmk
-  :defer t
   :after latex
   :hook (LaTeX-mode . auctex-latexmk-setup)
   :config
@@ -25,14 +24,12 @@
 ;; Math preview
 ;; ----------------------------
 (use-package! math-preview
-  :defer t
   :hook (LaTeX-mode . math-preview-mode))
 
 ;; ----------------------------
 ;; CDLaTeX: fast math and environment insertion
 ;; ----------------------------
 (use-package! cdlatex
-  :defer t
   :hook (LaTeX-mode . turn-on-cdlatex))
 
 ;; ----------------------------
@@ -40,22 +37,12 @@
 ;; ----------------------------
 (after! latex
   ;; Enable LSP in LaTeX buffers
-  (add-hook 'latex-mode-hook #'lsp)
+  (add-hook 'LaTeX-mode-hook #'lsp) ;; Fixed: LaTeX-mode-hook instead of latex-mode-hook
 
   ;; Compilation and viewing settings
   (setq TeX-command-default "LatexMk"
         TeX-save-query nil
         TeX-PDF-mode t))
 
-;; ----------------------------
-;; Leader keybindings
-;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("l" . "latex")
-;;       :desc "Compile LaTeX"    "c" #'TeX-command-master
-;;       :desc "View PDF"         "v" #'TeX-view
-;;       :desc "Clean aux files"  "x" #'TeX-clean))
-
 (provide 'lang-latex-config)
-
 ;;; lang-latex-config.el ends here

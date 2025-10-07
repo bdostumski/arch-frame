@@ -1,4 +1,4 @@
-;;; module/config/lang-config/lang-plantuml-config.el -*- lexical-binding: t; -*-
+;;; lang-plantuml-config.el -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; PlantUML configuration for Doom Emacs.
 ;; Sets the PlantUML jar path, execution mode, and leader keybindings
@@ -6,18 +6,14 @@
 
 ;;; Code:
 
-(after! plantuml-mode
-  ;; Set PlantUML jar location
-  (setq plantuml-jar-path "~/.config/emacs/.local/etc/plantuml.jar"
-        plantuml-default-exec-mode 'jar))
+;; Define variables first so they exist before plantuml-mode is loaded
+(setq-default plantuml-jar-path "~/.config/emacs/.local/etc/plantuml.jar"
+              plantuml-default-exec-mode 'jar)
 
-;; ----------------------------
-;; Leader keybindings
-;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("u" . "uml")
-;;       :desc "Preview diagram" "p" #'plantuml-preview
-;;       :desc "Export diagram" "e" #'plantuml-export-buffer))
+;; Additional configuration after plantuml-mode is loaded
+(after! plantuml-mode
+  ;; Any additional plantuml-mode specific configurations can go here
+  )
 
 (provide 'lang-plantuml-config)
 

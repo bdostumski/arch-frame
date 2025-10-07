@@ -82,15 +82,5 @@
 ;;         org-gcal-client-secret "your-client-secret"
 ;;         org-gcal-file-alist '(("your-email@gmail.com" .  "~/Documents/org/gcal.org"))))
 
-;; ----------------------------
-;; Leader keybindings
-;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("o" . "org")
-;;       :desc "Open agenda" "a" #'org-agenda
-;;       :desc "Capture note" "c" #'org-capture
-;;       :desc "Roam buffer" "r" #'org-roam-buffer-toggle
-;;       :desc "Export to Hugo" "h" #'org-hugo-export-wim-to-md))
-
 (provide 'lang-org-config)
 ;;; lang-org-config.el ends here

@@ -8,19 +8,19 @@
 
 (after! yaml-mode
   ;; Enable LSP in YAML buffers
-  (add-hook 'yaml-mode-hook #'lsp)
+  (add-hook 'yaml-mode-hook #'lsp!)
 
   ;; Indentation settings
-  (setq yaml-indent-offset 2))
+  (setq yaml-indent-offset 2)
+  
+  ;; Enable format on save (optional)
+  (add-hook 'yaml-mode-hook #'(lambda ()
+                                (add-hook 'before-save-hook #'lsp-format-buffer nil 'local))))
 
-;; ----------------------------
-;; Leader keybindings for YAML
-;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("y" . "yaml")
-;;       :desc "Format buffer"      "f" #'lsp-format-buffer
-;;       :desc "Go to definition"   "d" #'lsp-find-definition
-;;       :desc "Validate buffer"    "v" #'lsp-diagnostics))
+;; Configure YAML language server
+(after! lsp-mode
+  (setq lsp-yaml-schema-store-enable t)  ;; Enable JSON schema store
+  (setq lsp-yaml-format-enable t))       ;; Enable formatting
 
 (provide 'lang-yaml-config)
 

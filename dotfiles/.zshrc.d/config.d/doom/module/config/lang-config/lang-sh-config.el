@@ -7,20 +7,22 @@
 ;;; Code:
 
 (after! sh-mode
-  ;; Enable LSP for shell buffers
-  (add-hook 'sh-mode-hook #'lsp)
+  ;; Enable LSP for shell buffers if available
+  (when (modulep! :tools lsp)
+    (add-hook 'sh-mode-hook #'lsp!))
 
   ;; Set basic indentation
-  (setq sh-basic-offset 2))
+  (setq sh-basic-offset 2
+        sh-indentation 2))
 
-;; ----------------------------
-;; Leader keybindings for sh-mode
-;; ----------------------------
-;;(map! :leader
-;;      (:prefix-map ("s" . "shell")
-;;       :desc "Run buffer"       "r" #'sh-run-current-buffer
-;;       :desc "Lint buffer"      "l" #'lsp-diagnostics
-;;       :desc "Go to definition" "d" #'lsp-find-definition))
+;; Function to run current shell script buffer
+(defun +sh/run-current-buffer ()
+  "Run the current buffer as a shell script."
+  (interactive)
+  (let ((file-name buffer-file-name))
+    (if file-name
+        (async-shell-command (concat "chmod +x " file-name " && " file-name))
+      (message "Buffer is not visiting a file!"))))
 
 (provide 'lang-sh-config)
 
