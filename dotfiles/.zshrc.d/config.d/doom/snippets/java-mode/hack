@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: HACK comment
+# key: hack
+# --
+// HACK: $0

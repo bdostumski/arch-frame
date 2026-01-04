@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Spring Repository
+# key: repo
+# --
+@Repository
+public interface ${1:`(file-name-sans-extension (buffer-name))`} extends JpaRepository<${2: Entity}, ${3:Long}> {
+
+    $0
+}

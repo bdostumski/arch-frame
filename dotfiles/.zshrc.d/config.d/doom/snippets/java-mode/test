@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name:  JUnit test method
+# key: test
+# --
+@Test
+void ${1:should_DoSomething_When_Condition}() {
+    // Given
+    $2
+    
+    // When
+    $3
+    
+    // Then
+    $0
+}}

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: record
+# key: record
+# --
+public record ${1:`(file-name-sans-extension (buffer-name))`}(${2:String name}) {
+    $0
+}

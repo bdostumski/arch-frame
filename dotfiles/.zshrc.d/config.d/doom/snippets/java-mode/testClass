@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: JUnit test class
+# key:  testclass
+# --
+import org.junit.jupiter.api.*;
+import static org.junit. jupiter.api. Assertions.*;
+
+class ${1:`(file-name-sans-extension (buffer-name))`} {
+
+    @BeforeEach
+    void setUp() {
+        $2
+    }
+
+    @Test
+    void ${3:should_DoSomething}() {
+        $0
+    }
+}}

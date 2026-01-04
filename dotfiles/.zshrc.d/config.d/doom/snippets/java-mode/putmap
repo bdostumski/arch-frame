@@ -1,0 +1,8 @@
+# -*- mode:  snippet -*-
+# name: @PutMapping
+# key: putmap
+# --
+@PutMapping("/${1:path}/{id}")
+public ${2:ResponseEntity<$3>} ${4:update}(@PathVariable Long id, @RequestBody ${5:Dto} ${6:dto}) {
+    $0
+}

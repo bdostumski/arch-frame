@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: DEPRICATED comment
+# key: depricated
+# --
+// DEPRICATED: $0

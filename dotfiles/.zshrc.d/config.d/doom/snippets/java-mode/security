@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: SECURITY comment
+# key: security
+# --
+// SECURITY: $0

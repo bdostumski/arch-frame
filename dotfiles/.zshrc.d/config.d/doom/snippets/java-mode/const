@@ -1,0 +1,5 @@
+# -*- mode:  snippet -*-
+# name: constant
+# key: const
+# --
+private static final ${1:String} ${2:NAME} = $0;

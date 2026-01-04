@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: @DeleteMapping
+# key: delmap
+# --
+@DeleteMapping("/${1:path}/{id}")
+public ResponseEntity<Void> ${2:delete}(@PathVariable Long id) {
+    $0
+    return ResponseEntity.noContent().build();
+}

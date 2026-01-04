@@ -1,0 +1,11 @@
+# -*- mode:  snippet -*-
+# name: if-else-if statement
+# key: ifei
+# --
+if ($1) {
+    $2
+} else if ($3) {
+    $4
+} else {
+    $0
+}

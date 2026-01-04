@@ -1,0 +1,9 @@
+# -*- mode:  snippet -*-
+# name: try-with-resources
+# key:  tryr
+# --
+try (${1:Resource} ${2:res} = new $1($3)) {
+    $0
+} catch (${4:Exception} ${5:e}) {
+    $6
+}

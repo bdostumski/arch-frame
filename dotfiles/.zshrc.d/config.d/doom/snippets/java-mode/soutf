@@ -1,0 +1,5 @@
+# -*- mode:  snippet -*-
+# name: System.out. printf
+# key:  soutf
+# --
+System.out.printf("$1%n"$2);$0

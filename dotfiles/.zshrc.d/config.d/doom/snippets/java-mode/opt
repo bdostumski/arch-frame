@@ -1,0 +1,5 @@
+# -*- mode:  snippet -*-
+# name: Optional. ofNullable
+# key: opt
+# --
+Optional.ofNullable($1).orElse($0)

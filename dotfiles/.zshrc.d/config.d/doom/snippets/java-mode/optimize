@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: OPTIMIZE comment
+# key: optimize 
+# --
+// OPTIMIZE: $0

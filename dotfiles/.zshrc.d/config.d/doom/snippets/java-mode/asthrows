@@ -1,0 +1,7 @@
+# -*- mode:  snippet -*-
+# name: assertThrows
+# key: asthrows
+# --
+assertThrows(${1:Exception}. class, () -> {
+    $0
+});

@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name:  JPA Entity
+# key: entity
+# --
+@Entity
+@Table(name = "${1:table_name}")
+public class ${2:`(file-name-sans-extension (buffer-name))`} {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    $0
+}

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name:  stream collect to list
+# key: collect
+# --
+.collect(Collectors.toList())

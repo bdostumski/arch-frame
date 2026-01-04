@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name:  BUG comment
+# key: bug
+# --
+// BUG: $0

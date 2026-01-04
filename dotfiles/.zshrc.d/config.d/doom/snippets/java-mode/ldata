@@ -1,0 +1,8 @@
+# -*- mode:  snippet -*-
+# name: Lombok @Data class
+# key: ldata
+# --
+@Data
+public class ${1:`(file-name-sans-extension (buffer-name))`} {
+    $0
+}

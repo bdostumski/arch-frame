@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: REVIEW comment
+# key: review
+# --
+// REVIEW: $0

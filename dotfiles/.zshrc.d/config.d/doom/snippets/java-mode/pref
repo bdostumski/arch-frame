@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: PREF comment
+# key: pref 
+# --
+// PREF: $0

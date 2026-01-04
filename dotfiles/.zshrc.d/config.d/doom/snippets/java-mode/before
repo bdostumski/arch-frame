@@ -1,0 +1,8 @@
+# -*- mode:  snippet -*-
+# name: @BeforeEach
+# key: before
+# --
+@BeforeEach
+void setUp() {
+    $0
+}

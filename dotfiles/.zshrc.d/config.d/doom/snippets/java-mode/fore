@@ -1,0 +1,7 @@
+# -*- mode:  snippet -*-
+# name: for-each loop
+# key: fore
+# --
+for (${1:Type} ${2:item} : ${3:collection}) {
+    $0
+}

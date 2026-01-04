@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: private field
+# key: pf
+# --
+private ${1:String} ${2:name};

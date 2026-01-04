@@ -1,0 +1,9 @@
+# -*- mode:  snippet -*-
+# name: Autowired constructor
+# key: autowired
+# --
+private final ${1:Service} ${2:service};
+
+public ${3:`(file-name-sans-extension (buffer-name))`}($1 $2) {
+    this.$2 = $2;
+}

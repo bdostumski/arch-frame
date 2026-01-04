@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Javadoc method
+# key: jdocm
+# --
+/**
+ * ${1:Description}
+ *
+ * @param ${2:param} ${3:description}
+ * @return ${4:description}
+ */

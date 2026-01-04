@@ -1,0 +1,5 @@
+# -*- mode:  snippet -*-
+# name: Mockito when
+# key: when
+# --
+when(${1:mock}. ${2:method}($3)).thenReturn($0);

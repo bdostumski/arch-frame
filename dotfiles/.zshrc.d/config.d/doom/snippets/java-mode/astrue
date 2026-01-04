@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: assertTrue
+# key: astrue
+# --
+assertTrue($1);$0

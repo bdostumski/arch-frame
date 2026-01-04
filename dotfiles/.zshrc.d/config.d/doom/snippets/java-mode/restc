@@ -1,0 +1,10 @@
+# -*- mode:  snippet -*-
+# name: Spring RestController
+# key: restc
+# --
+@RestController
+@RequestMapping("/${1:api}")
+public class ${2:`(file-name-sans-extension (buffer-name))`} {
+
+    $0
+}

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name:  Mockito mock
+# key: mock
+# --
+@Mock
+private ${1:Type} ${2:mockName};

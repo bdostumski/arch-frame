@@ -1,0 +1,5 @@
+# -*- mode:  snippet -*-
+# name: Lombok @Slf4j
+# key: log
+# --
+@Slf4j

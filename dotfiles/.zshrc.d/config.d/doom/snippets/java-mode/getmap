@@ -1,0 +1,8 @@
+# -*- mode:  snippet -*-
+# name: @GetMapping
+# key: getmap
+# --
+@GetMapping("/${1:path}")
+public ${2:ResponseEntity<$3>} ${4:methodName}($5) {
+    $0
+}

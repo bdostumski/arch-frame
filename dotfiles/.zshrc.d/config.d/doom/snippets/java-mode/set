@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name:  setter
+# key:  set
+# --
+public void set${1:Property}(${2:String} ${3:value}) {
+    this. ${1:$(downcase yas-text)} = $3;
+}

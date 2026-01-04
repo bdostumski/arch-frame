@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: @PostMapping
+# key: postmap
+# --
+@PostMapping("/${1:path}")
+public ${2:ResponseEntity<$3>} ${4:create}(@RequestBody ${5:Dto} ${6:dto}) {
+    $0
+}
