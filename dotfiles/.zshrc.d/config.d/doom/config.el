@@ -9,8 +9,6 @@
 ;; ============================================================================
 ;; APPEARANCE
 ;; ============================================================================
-(setq doom-theme 'doom-one)
-
 (use-package doom-themes
   :ensure t
   :custom
@@ -85,7 +83,7 @@
 ;; ============================================================================
 ;; DIRED + DIRVISH
 ;; ============================================================================
-(after!  dired
+(after! dired
   :config
   (setq dired-use-ls-dired t
         dired-listing-switches "-alh --group-directories-first --time-style=long-iso"
@@ -109,7 +107,6 @@
   (add-to-list 'yas-snippet-dirs
                (expand-file-name "snippets" doom-user-dir)))
 
-
 ;; ============================================================================
 ;; WORD-WRAP
 ;; ============================================================================
@@ -130,7 +127,6 @@
         ("SECURITY"   . "#FF6C6B")
         ("DEPRECATED" . "#5B6268")))
 
-
 ;; ============================================================================
 ;; HL-TODO
 ;; ============================================================================
@@ -141,7 +137,6 @@
           (lambda ()
             (setq-local undo-tree-auto-save-history t)))
 
-
 ;; ============================================================================
 ;; FORMAT
 ;; ============================================================================
@@ -149,36 +144,8 @@
       '(not 
         xml-mode
         nxml-mode
-	tex-mode         
-	latex-mode))
-;; ============================================================================
-;; ORG-ROAM (Add after your ORG-MODE section)
-;; ============================================================================
-(let ((org-roam-dir (expand-file-name "org/roam/" doom-user-dir)))
-  (unless (file-directory-p org-roam-dir)
-    (make-directory org-roam-dir t)))
-
-(setq org-roam-directory (file-truename (expand-file-name "org/roam/" doom-user-dir)))
-
-(after! org-roam
-  (setq org-roam-db-gc-threshold most-positive-fixnum  
-        org-roam-completion-everywhere t))             
-
-;; ============================================================================
-;; DEFT
-;; ============================================================================
-(let ((org-notes-dir (expand-file-name "org/notes/" doom-user-dir))) ;; Create /org/notes/ in doom emacs home directory
-  (unless (file-directory-p org-notes-dir)
-    (make-directory org-notes-dir t)))
-
-(setq deft-recursive t                          ;; Search also in subdirectories
-      deft-use-filename-as-title t              ;; Use note filenames to generate the displayed titles in deft file browser
-      deft-use-filter-string-for-filename t     ;; Slashes are removed and replaced by hyphens,
-      deft-file-naming-rules '((noslash . "-")  ;; Naming rules to replace unwanted chars with hyphens
-                               (nospace . "-")
-                               (case-fn . downcase))
-      deft-default-extension '("org" "txt" "text" "tex" "md" "markdown")                ;; Default extensions
-      deft-directory (file-truename (expand-file-name "org/notes/" doom-user-dir)))     ;; deft notes home directory
+        tex-mode
+        latex-mode))
 
 ;; ============================================================================
 ;; ORG-MODE
@@ -213,10 +180,40 @@
         org-appear-autosubmarkers t))
 
 ;; ============================================================================
+;; ORG-ROAM 
+;; ============================================================================
+(let ((org-roam-dir (expand-file-name "org/roam/" doom-user-dir)))
+  (unless (file-directory-p org-roam-dir)
+    (make-directory org-roam-dir t)))
+
+(setq org-roam-directory (file-truename (expand-file-name "org/roam/" doom-user-dir)))
+
+(after! org-roam
+  (setq org-roam-db-gc-threshold most-positive-fixnum  
+        org-roam-completion-everywhere t))             
+
+;; ============================================================================
+;; DEFT
+;; ============================================================================
+(let ((org-notes-dir (expand-file-name "org/notes/" doom-user-dir))) ;; Create /org/notes/ in doom emacs home directory
+  (unless (file-directory-p org-notes-dir)
+    (make-directory org-notes-dir t)))
+
+(setq deft-recursive t                          ;; Search also in subdirectories
+      deft-use-filename-as-title t              ;; Use note filenames to generate the displayed titles in deft file browser
+      deft-use-filter-string-for-filename t     ;; Slashes are removed and replaced by hyphens,
+      deft-file-naming-rules '((noslash . "-")  ;; Naming rules to replace unwanted chars with hyphens
+                               (nospace . "-")
+                               (case-fn . downcase))
+      deft-default-extension '("org" "txt" "text" "tex" "md" "markdown")                ;; Default extensions
+      deft-directory (file-truename (expand-file-name "org/notes/" doom-user-dir)))     ;; deft notes home directory
+
+;; ============================================================================
 ;; CALENDAR
 ;; ============================================================================
 (after! calendar
-  :config calendar-date-style 'iso
+  :config
+  calendar-date-style 'iso
   calendar-mark-holidays-flag t
   calendar-week-start-day 1)
 
@@ -238,20 +235,39 @@
 ;; ============================================================================
 ;; LSP-UI (Single merged block)
 ;; ============================================================================
-;;(after! lsp-ui
-;;  (setq lsp-ui-doc-enable nil
-;;        lsp-ui-doc-position 'at-point
-;;        lsp-ui-doc-show-with-cursor nil     
-;;        lsp-ui-doc-show-with-mouse nil
-;;        lsp-ui-doc-delay 0.5
-;;        lsp-ui-doc-max-height 15
-;;        lsp-ui-doc-max-width 80
-;;        lsp-ui-sideline-enable t
-;;        lsp-ui-sideline-show-diagnostics t
-;;        lsp-ui-sideline-show-hover nil      
-;;        lsp-ui-sideline-show-code-actions nil
-;;        lsp-ui-peek-enable t
-;;        lsp-ui-peek-show-directory t))
+(after! lsp-ui
+  (setq lsp-lens-enable t
+        ;;   lsp-ui-doc-enable nil
+        ;;        lsp-ui-doc-position 'at-point
+        ;;        lsp-ui-doc-show-with-cursor nil     
+        ;;        lsp-ui-doc-show-with-mouse nil
+        ;;        lsp-ui-doc-delay 0.5
+        ;;        lsp-ui-doc-max-height 15
+        ;;        lsp-ui-doc-max-width 80
+        ;;        lsp-ui-sideline-enable t
+        ;;        lsp-ui-sideline-show-diagnostics t
+        ;;        lsp-ui-sideline-show-hover nil      
+        ;;        lsp-ui-sideline-show-code-actions nil
+        ;;        lsp-ui-peek-enable t
+        ;;        lsp-ui-peek-show-directory t)
+        )
+  )
+
+;; ============================================================================
+;; DAP (Debug Adapter Protocol) - IntelliJ-like Debugging
+;; ============================================================================
+(after! dap-mode
+  (setq dap-java-java-command "/usr/lib/jvm/default/bin/java"
+        dap-auto-configure-features '(sessions locals breakpoints expressions controls tooltip))
+
+  (setq dap-auto-show-output t
+        dap-output-window-min-height 10
+        dap-output-window-max-height 20))
+
+(add-hook! (java-mode java-ts-mode) 
+  (dap-mode 1)
+  (dap-ui-mode 1)
+  (dap-tooltip-mode 1))
 
 ;; ============================================================================
 ;; COMPANY
@@ -281,7 +297,6 @@
   company-dabbrev-downcase nil               ;; preserve case
   company-dabbrev-ignore-case nil            ;; case sensitive
   company-dabbrev-other-buffers t)           ;; search other buffers
-
 
 ;; Enable company in modes
 (add-hook 'after-init-hook 'global-company-mode) ;; enable company mode instant
@@ -324,14 +339,17 @@
         lsp-java-autobuild-enabled nil
         lsp-java-save-actions-organize-imports t 
         lsp-java-completion-import-order ["java" "javax" "org" "com"])
-
-  (setq lsp-java-completion-favorite-static-members
-        ["org.junit.Assert.*"
-         "org.junit.jupiter.api.Assertions.*"
-         "org.mockito.Mockito.*"
-         "java.util.Objects.requireNonNull"])
   
-  (setq lsp-java-references-code-lens-enabled t
+  (setq lsp-java-completion-favorite-static-members
+        ["org.junit.Assert.*" "org.junit.Assume.*" "org.junit.jupiter.api.Assertions.*"
+         "org.junit.jupiter.api.Assumptions.*"
+         "org.junit.jupiter.api.DynamicContainer.*"
+         "org.junit.jupiter.api.DynamicTest.*" "org.mockito.Mockito.*"
+         "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects.requireNonNull"])
+
+  ;; IDE like lens
+  (setq lsp-lens-enable t
+        lsp-java-references-code-lens-enabled t
         lsp-java-implementations-code-lens-enabled t)
   
   ;; Formatter settings
@@ -361,19 +379,15 @@
       (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
 
 ;; ============================================================================
-;; DAP (Debug Adapter Protocol) - IntelliJ-like Debugging
+;; DAP (Java Debugging)
 ;; ============================================================================
-(after! dap-mode
+(after! dap-java
   (setq dap-java-java-command "/usr/lib/jvm/default/bin/java")
-  (setq dap-auto-configure-features '(sessions locals breakpoints expressions controls tooltip))
-  
-  (setq dap-auto-show-output t
-        dap-output-window-min-height 10
-        dap-output-window-max-height 20))
+  (setq dap-java-vm-args
+        '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")))
 
-(add-hook! (java-mode java-ts-mode) 
-  (dap-mode 1)
-  (dap-ui-mode 1)
-  (dap-tooltip-mode 1))
+(add-hook 'java-mode-local-vars-hook #'dap-mode)
+(add-hook 'java-mode-local-vars-hook #'dap-ui-mode)
+(add-hook 'java-mode-local-vars-hook #'dap-tooltip-mode)
 
 ;;; config.el ends here

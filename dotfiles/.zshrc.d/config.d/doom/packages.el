@@ -5,6 +5,7 @@
 ;; ============================
 (package! sudo-edit)
 (package! tldr)          
+(package! pdf-tools)
 
 ;; ============================
 ;; Org & Notes

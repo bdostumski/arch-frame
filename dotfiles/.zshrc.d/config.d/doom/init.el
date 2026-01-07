@@ -1,10 +1,10 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
 (doom! :input
-       ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
+       ;;bidi            ; (tfel ot) thgir etirw uoy gnipleh
        ;;chinese
        ;;japanese
-       ;;layout            ; auie,ctsrnm is the superior home row
+       ;;layout          ; auie,ctsrnm is the superior home row
 
        :completion
        (company +childframe)           ; the ultimate code completion backend
@@ -57,9 +57,9 @@
        (dired +dirvish +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        ;;eww             ; the internet is gross
-       (ibuffer +icons)           ; interactive buffer management
+       (ibuffer +icons)  ; interactive buffer management
        ;;tramp           ; remote files at your arthritic fingertips
-       (undo +tree)              ; persistent, smarter undo for your inevitable mistakes
+       (undo +tree)      ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
@@ -76,24 +76,24 @@
        :tools
        ;;ansible
        ;;biblio          ; Writes a PhD for you (citation needed)
-       collab            ; buffers with friends
-       debugger          ; FIXME stepping through code, to help you add bugs
+       ;;collab            ; buffers with friends
+       (debugger +lsp)          ; FIXME stepping through code, to help you add bugs
        direnv
-       docker
+       (docker +lsp)
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein             ; tame Jupyter notebooks with emacs
        (eval +overlay)   ; run code, run (also, repls)
-       lookup            ; navigate your code and its documentation
+       (lookup +dictionary +docsets +offline)            ; navigate your code and its documentation
        llm               ; when I said you needed friends, I didn't mean...
        (lsp +peek)              ;  use +lsp-mode
-       magit             ; a git porcelain for Emacs
+       (magit +forge)             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
-       pass              ; password manager for nerds
+       (pass +auth)              ; password manager for nerds
        pdf               ; pdf enhancements
        ;;terraform         ; infrastructure as code
        tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
-       ;;upload            ; map local to remote projects via ssh/ftp
+       ;;upload          ; map local to remote projects via ssh/ftp
 
        :os
        (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
@@ -103,24 +103,24 @@
        ;;ada               ; In strong typing we (blindly) trust
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
-       (cc +lsp)         ; C > C++ == 1
-       ;;clojure           ; java with a lisp
+       (cc +lsp +tree-sitter)           ; C > C++ == 1
+       ;;(clojure +lsp)           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
-       ;;csharp            ; unity, .NET, and mono shenanigans
-       data              ; config/data formats
+       ;;(csharp +lsp)            ; unity, .NET, and mono shenanigans
+       data                ; config/data formats
        ;;(dart +flutter)   ; paint ui and not much else
        ;;dhall
-       ;;elixir            ; erlang done right
+       ;;(elixir +lsp)            ; erlang done right
        ;;elm               ; care for a cup of TEA?
-       emacs-lisp        ; drown in parentheses
+       emacs-lisp          ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
        ;;ess               ; emacs speaks statistics
        ;;factor
        ;;faust             ; dsp, but you get to keep your soul
        ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
-       ;;fsharp            ; ML stands for Microsoft's Language
+       ;;(fsharp +lsp)            ; ML stands for Microsoft's Language
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
        ;;gdscript          ; the language you waited for
        ;;(go +lsp)         ; the hipster dialect
@@ -128,43 +128,43 @@
        ;;(haskell +lsp)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
-       json              ; At least it ain't XML
+       json                ; At least it ain't XML
        ;;janet             ; Fun fact: Janet is me!
-       (java +lsp  +tree-sitter)       ; the poster child for carpal tunnel syndrome
+       (java +lsp +tree-sitter)       ; the poster child for carpal tunnel syndrome
        (javascript +lsp +tree-sitter)  ; instead of just (javascript)
-       ;;julia             ; a better, faster MATLAB
+       ;;(julia +lsp)             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        ;;latex             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
        ;;lua               ; one-based indices? one-based indices
-       markdown          ; writing docs for people to ignore
+       markdown            ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
-       ;;ocaml             ; an objective camel
-       (org +roam +pretty)               ; organize your plain life in plain text
-       ;;php               ; perl's insecure younger brother
+       ;;(ocaml +lsp)             ; an objective camel
+       (org +roam +pretty) ; organize your plain life in plain text
+       ;;(php +lsp)               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;graphviz          ; diagrams for confusing yourself even more
-       ;;purescript        ; javascript, but functional
-       ;;python            ; beautiful is better than ugly
+       ;;(purescript +lsp)        ; javascript, but functional
+       ;;(python +lsp)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
-       rest              ; Emacs as a REST client
+       rest                ; Emacs as a REST client
        ;;rst               ; ReST in peace
-       ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       ;;(ruby +lsp +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-       ;;scala             ; java, but good
+       ;;(scala +lsp)             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       (sh +lsp +tree-sitter)                  ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
-       ;;swift             ; who asked for emoji variables?
+       ;;(swift +lsp)             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        (web +lsp +tree-sitter)               ; the tubes
-       yaml              ; JSON, but readable
-       ;;zig               ; C, but simpler
+       yaml                ; JSON, but readable
+       ;;(zig +lsp)               ; C, but simpler
 
        :email
        (mu4e +org +gmail)
@@ -175,7 +175,7 @@
        calendar
        ;;emms
        everywhere        ; *leave* Emacs!? You must be joking
-       irc               ; how neckbeards socialize
+       ;;irc               ; how neckbeards socialize
        (rss +org)        ; emacs as an RSS reader
 
        :config
