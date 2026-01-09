@@ -236,22 +236,20 @@
 ;; LSP-UI (Single merged block)
 ;; ============================================================================
 (after! lsp-ui
-  (setq lsp-lens-enable t
-        ;;   lsp-ui-doc-enable nil
-        ;;        lsp-ui-doc-position 'at-point
-        ;;        lsp-ui-doc-show-with-cursor nil     
-        ;;        lsp-ui-doc-show-with-mouse nil
-        ;;        lsp-ui-doc-delay 0.5
-        ;;        lsp-ui-doc-max-height 15
-        ;;        lsp-ui-doc-max-width 80
-        ;;        lsp-ui-sideline-enable t
-        ;;        lsp-ui-sideline-show-diagnostics t
-        ;;        lsp-ui-sideline-show-hover nil      
-        ;;        lsp-ui-sideline-show-code-actions nil
-        ;;        lsp-ui-peek-enable t
-        ;;        lsp-ui-peek-show-directory t)
-        )
-  )
+  (setq
+   ;; Inline information like references / implementations (IDEA-like)
+   lsp-lens-enable t
+
+   ;; Clean breadcrumb in headerline
+   lsp-headerline-breadcrumb-enable t
+   lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols)
+
+   ;; No noisy popups
+   lsp-ui-doc-enable nil
+   lsp-ui-sideline-enable nil
+
+   ;; Keep peek (very useful)
+   lsp-ui-peek-enable t))
 
 ;; ============================================================================
 ;; DAP (Debug Adapter Protocol) - IntelliJ-like Debugging
@@ -348,7 +346,7 @@
          "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects.requireNonNull"])
 
   ;; IDE like lens
-  (setq lsp-lens-enable t
+  (setq lsp-java-lens-mode t
         lsp-java-references-code-lens-enabled t
         lsp-java-implementations-code-lens-enabled t)
   
@@ -366,15 +364,23 @@
   ;; Profile name MUST match the name="..." in your XML file
   (setq lsp-java-format-settings-profile "Default")
 
-  (setq lsp-java-vmargs
-        '("-XX:+UseParallelGC"
-          "-XX:GCTimeRatio=4"
-          "-XX:AdaptiveSizePolicyWeight=90"
-          "-Xmx4G"          
-          "-Xms1G"
-          "-Dsun.zip.disableMemoryMapping=true"))
+  ;; JVM args (PERFORMANCE + LOMBOK)
+  (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
+         (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
 
-  (let ((lombok-jar (expand-file-name "~/.local/share/lombok/lombok.jar")))
+    ;; Ensure directory exists
+    (unless (file-directory-p java-lib-dir)
+      (make-directory java-lib-dir t))
+
+    ;; Base JVM args
+    (setq lsp-java-vmargs
+          '("-XX:+UseG1GC"
+            "-XX:+UseStringDeduplication"
+            "-Xmx4G"
+            "-Xms1G"
+            "-Dsun.zip.disableMemoryMapping=true"))
+
+    ;; Add Lombok javaagent if present
     (when (file-exists-p lombok-jar)
       (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
 
