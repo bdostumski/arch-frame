@@ -18,7 +18,6 @@
    doom-themes-enable-italic t
    doom-themes-padded-modeline 4
    display-line-numbers-type 'relative
-   hl-line-mode t
 
    ;; FILE HANDLING
    auto-save-default t
@@ -47,6 +46,11 @@
   (unless (file-directory-p dir)
     (make-directory dir t)))
 
+(defun ensure-file-exists (file)
+  (unless (file-exists-p file)
+    (with-temp-buffer
+      (write-file file))))
+
 ;; Ensure snippet directory
 (ensure-dir-exists (expand-file-name "snippets" doom-user-dir))
 
@@ -64,6 +68,22 @@
 
 ;; Ensure org/notes directory
 (ensure-dir-exists (expand-file-name "org/notes/" doom-user-dir))
+
+;; Ensure org/notes/tasks.org file
+(ensure-file-exists (expand-file-name "org/notes/tasks.org" doom-user-dir))
+
+;; Ensure org/notes/notes.org file 
+(ensure-file-exists (expand-file-name "org/notes/notes.org" doom-user-dir))
+
+;; Ensure backups directory
+(ensure-dir-exists (expand-file-name "backups/" doom-user-dir))
+
+;; ============================================================================
+;; COMMON 
+;; ============================================================================
+(add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode)) ;; Assign .log files to text-mode
+(add-to-list 'auto-mode-alist '("\\.env\\'" . conf-mode)) ;; .env files -> conf-mode
+(global-hl-line-mode t) ;; Enable line highlighting globally
 
 ;; ============================================================================
 ;; MODELINE
@@ -96,7 +116,19 @@
 (after! dirvish
   :init (dirvish-override-dired-mode)
   :config
-  (setq dirvish-attributes '(vc-state subtree-state nerd-icons collapse git-msg file-size)))
+  (setq dirvish-attributes '(vc-state subtree-state nerd-icons collapse git-msg file-size)
+        dirvish-mode-line-format '(:left (sort file-time " " file-size))
+        dirvish-use-mode-line t))
+
+;; ============================================================================
+;; CREATE DIRECTORY IF NOT EXISTS
+;; ============================================================================
+(setq backup-directory-alist `(("." . ,(expand-file-name "backups/" doom-cache-dir)))
+      backup-by-copying t       ;; Copy files instead of linking them
+      delete-old-versions t     ;; Don't ask before deleting old backups
+      kept-new-versions 6       ;; Keep 6 newest versions
+      kept-old-versions 2       ;; Keep 2 oldest versions
+      version-control t)        ;; Use version numbers for backups
 
 ;; ============================================================================
 ;; SUDO-EDIT
@@ -121,8 +153,10 @@
 ;; ============================================================================
 ;; PERFORMANCE TWEAKS
 ;; ============================================================================
-(setq gc-cons-threshold (* 50 1000 1000) ;; Set a high threshold of 100MB during startup
-      gc-cons-percentage 0.6)           ;; Temporarily increase GC frequency during startup
+(setq gc-cons-threshold (* 50 1000 1000) ;; Set a high threshold of 50MB during startup
+      gc-cons-percentage 0.6           ;; Temporarily increase GC frequency during startup
+      gcmh-idle-delay 1  ; Trigger GC after being idle for 1 second
+      gcmh-high-cons-threshold (* 64 1024 1024)) ; Slightly lower the threshold to 64MB
 
 (add-hook 'emacs-startup-hook
           (lambda ()
@@ -133,7 +167,7 @@
 ;; Use gcmh-mode to handle garbage collection dynamically
 (use-package! gcmh
   :config
-  (setq gcmh-idle-delay 5                      ;; Trigger GC after being idle for 5 seconds
+  (setq gcmh-idle-delay 2                      ;; Trigger GC after being idle for 5 seconds
         gcmh-high-cons-threshold (* 128 1024 1024) ;; GC reaches threshold of 128MB when idle
         gcmh-low-cons-threshold (* 8 1024 1024))   ;; Reduce to 8MB during normal operations
   (gcmh-mode 1))                               ;; Enable gcmh-mode
@@ -176,12 +210,14 @@
 ;; ============================================================================
 ;; FORMAT
 ;; ============================================================================
-(setq +format-on-save-enabled-modes ;; Exclude modes to format on save
+(setq +format-on-save-enabled-modes
       '(not 
         xml-mode
         nxml-mode
         tex-mode
-        latex-mode))
+        latex-mode
+        org-mode
+        markdown-mode))
 
 ;; ============================================================================
 ;; ORG-MODE
@@ -212,6 +248,11 @@
         org-appear-autolinks t
         org-appear-autosubmarkers t))
 
+(setq org-capture-templates
+      '(("t" "Task" entry (file+headline (expand-file-name "org/notes/tasks.org" doom-user-dir) "Tasks")
+         "* TODO %?\n  %u\n  %a")
+        ("n" "Note" entry (file+headline (expand-file-name "org/notes/notes.org" doom-user-dir) "Notes")
+         "* %? :NOTE:\n%U\n%a")))
 
 (use-package! org-download
   :after org
@@ -219,14 +260,16 @@
   (setq org-download-image-dir (expand-file-name "org/images" org-directory)
         org-download-screenshot-method "xfce4-screenshooter -r -o"))
 
-;; ============================================================================
-;; ORG-ROAM 
-;; ============================================================================
-(setq org-roam-directory (file-truename (expand-file-name "org/roam/" doom-user-dir)))
+(use-package! org-superstar
+  :hook (org-mode . org-superstar-mode)
+  :config
+  (setq org-superstar-headline-bullets-list '("◉" "○" "●" "◆" "▶")
+        org-superstar-item-bullet-alist '((?* . ?•)
+                                          (?+ . ?➤)
+                                          (?- . ?✦))))
 
-(after! org-roam
-  (setq org-roam-db-gc-threshold most-positive-fixnum  
-        org-roam-completion-everywhere t))             
+(add-hook 'org-mode-hook #'visual-line-mode)
+(add-hook 'org-mode-hook #'org-indent-mode)
 
 ;; ============================================================================
 ;; DEFT
@@ -239,6 +282,27 @@
                                (case-fn . downcase))
       deft-default-extension '("org" "txt" "text" "tex" "md" "markdown")                ;; Default extensions
       deft-directory (file-truename (expand-file-name "org/notes/" doom-user-dir)))     ;; deft notes home directory
+
+;; ============================================================================
+;; ORG-ROAM 
+;; ============================================================================
+(setq org-roam-directory (file-truename (expand-file-name "org/roam/" doom-user-dir)))
+
+(after! org-roam
+  (setq org-roam-db-gc-threshold most-positive-fixnum  
+        org-roam-completion-everywhere t))             
+
+(use-package! websocket
+  :ensure t ;; Ensure the package is installed
+  :after org-roam) ;; Dependency for org-roam-ui
+
+(use-package! org-roam-ui
+  :after org-roam
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 ;; ============================================================================
 ;; CALENDAR
@@ -255,7 +319,11 @@
 ;; ============================================================================
 (after! lsp-mode
   (setq lsp-response-timeout 30
+        lsp-use-plists nil ;; Improves performance in some cases with large projects
+        lsp-diagnostic-package :none ;; Disables double diagnostics if Flycheck is explicitly managed
+        lsp-file-watch-threshold 2000 ;; Higher threshold for handling larger codebases
         lsp-log-io nil
+        lsp-lens-enable nil
         lsp-enable-file-watchers nil
         lsp-enable-folding nil
         lsp-enable-text-document-color nil
@@ -268,9 +336,6 @@
 ;; ============================================================================
 (after! lsp-ui
   (setq
-   ;; Inline information like references / implementations (IDEA-like)
-   lsp-lens-enable t
-
    ;; Clean breadcrumb in headerline
    lsp-headerline-breadcrumb-enable t
    lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols)
@@ -322,24 +387,53 @@
 
 ;; Enable company in modes
 (add-hook 'after-init-hook 'global-company-mode) ;; enable company mode instant
-;;(add-hook 'prog-mode-hook #'company-mode)      ;; enable company mode after programming mode
-;;(add-hook 'text-mode-hook #'company-mode))     ;; enable company mode after text mode
 
 ;; ============================================================================
 ;; VERTICO
 ;; ============================================================================
 (after! vertico
-  ;; UI
   (setq vertico-count 15                        ;; Maximum numbers of candidates to show
         vertico-resize t                        ;; How to resize the Vertico minibuffer window, see resize-mini-windows.
         vertico-cycle t                         ;; Enable cycling for vertico-next and vertico-previous.
         enable-recursive-minibuffers t))        ;; Non-nil means to allow minibuffer commands while in the minibuffer.
 
 ;; ============================================================================
+;; VERTICO ADDITIONAL PACKAGES
+;; ============================================================================
+(use-package! marginalia
+  :after vertico
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle)) ;; Cycle annotations
+  :init
+  (marginalia-mode))
+
+(use-package! embark
+  :bind
+  (("C-." . embark-act) ;; Invoke actions from the minibuffer
+   ("C-;" . embark-dwim))) ;; Act on completion at point
+
+;; Optional: Integrate Consult with Embark actions
+(use-package! embark-consult
+  :after (consult embark)
+  :demand t
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+;; ============================================================================
 ;; WHICH-KEY
 ;; ============================================================================
 (setq which-key-idle-delay 0.3
       which-key-idle-secondary-delay 0.05)
+
+;; ============================================================================
+;; COPILOT
+;; ============================================================================
+;;(use-package! copilot
+;;  :hook (prog-mode . copilot-mode)
+;;  :bind (:map copilot-completion-map
+;;              ("C-<tab>" . copilot-accept-completion)
+;;              ("M-]" . copilot-next-completion)
+;;              ("M-[" . copilot-previous-completion)))
 
 ;; ============================================================================
 ;; JAVA (LSP + JDTLS) - FIXED VERSION
@@ -353,6 +447,7 @@
         dap-java-java-command (or (executable-find "java") "/usr/bin/java")
         
         ;; Your other settings...
+        sp-java-test-additional-args '("--scan-class-path")
         dap-java-vm-args '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")
         lsp-java-import-gradle-enabled t
         lsp-java-import-maven-enabled t
@@ -361,7 +456,9 @@
         lsp-java-import-gradle-annotation-processing-enabled t
         lsp-java-save-actions-organize-imports t 
         dap-java-test-runner "junit"
-        lsp-java-completion-import-order ["java" "javax" "org" "com"])
+        lsp-java-completion-import-order ["java" "javax" "org" "com"]
+        lsp-java-workspace-folders-ignore-directories
+        '("^\\.idea$" "^\\.metadata$" "^node_modules$" "^\\.git$" "^build$"))
 
   ;; Rest of your configuration...
   (setq lsp-java-completion-favorite-static-members

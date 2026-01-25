@@ -6,6 +6,10 @@
 (package! sudo-edit)
 (package! tldr)          
 (package! pdf-tools)
+;;(package! copilot
+;;  :recipe (:host github
+;;           :repo "copilot-emacs/copilot.el"
+;;           :files ("*.el")))
 
 ;; ============================
 ;; Org & Notes
@@ -13,6 +17,8 @@
 (package! org-appear)
 (package! org-modern)
 (package! org-download)
+(package! org-superstar)
+(package! org-roam-ui)
 
 ;; ============================
 ;; Optional Enhancements

@@ -18,8 +18,8 @@
      "720838034f1dd3b3da66f6bd4d053ee67c93a747b219d1c546c41c4e425daf93"
      "0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1" default))
  '(package-selected-packages
-   '(@ docker-compose-mode eglot-java javadoc-lookup javap-mode lsp-java
-     lsp-javacomp modus-themes pdf-tools))
+   '(@ dimmer docker-compose-mode eglot-java javadoc-lookup javap-mode lsp-java
+     lsp-javacomp modus-themes org-superstar pdf-tools))
  '(safe-local-variable-directories
    '("/home/dostumski/.config/emacs/.local/straight/repos/projectile/"
      "/home/dostumski/.config/doom/" "~/.config/emacs/")))
