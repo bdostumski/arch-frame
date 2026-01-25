@@ -19,7 +19,7 @@
      "0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1" default))
  '(package-selected-packages
    '(@ docker-compose-mode eglot-java javadoc-lookup javap-mode lsp-java
-     lsp-javacomp pdf-tools))
+     lsp-javacomp modus-themes pdf-tools))
  '(safe-local-variable-directories
    '("/home/dostumski/.config/emacs/.local/straight/repos/projectile/"
      "/home/dostumski/.config/doom/" "~/.config/emacs/")))

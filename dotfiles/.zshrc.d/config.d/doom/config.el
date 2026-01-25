@@ -9,41 +9,26 @@
 ;; ============================================================================
 ;; APPEARANCE
 ;; ============================================================================
-(use-package doom-themes
-  :ensure t
-  :custom
-
-  ;; Global settings
-  (doom-themes-enable-bold t)           ;; if nil, bold is universally disabled
-  (doom-themes-enable-italic t)         ;; if nil, italics is universally disabled
-  (doom-themes-padded-modeline t)       ;; Pad the mode-line in 4px on each side
-  ;; Must be used *after* the theme is loaded
-  (custom-set-faces
-   `(mode-line ((t (:background ,(doom-color 'dark-violet)))))
-   `(font-lock-comment-face ((t (:foreground ,(doom-color 'base6))))))
-
-  (doom-themes-visual-bell-config)      ;; Enable flashing mode-line on errors
-  (doom-themes-neotree-config)          ;; Enable custom neotree theme (nerd-icons must be installed!)
-  (doom-themes-treemacs-config)         ;; or for treemacs users
-  (doom-themes-org-config)              ;; Corrects (and improves) org-mode's native fontification.
-  (display-line-numbers-type 'relative) ;; Enable relative numbers 
-
-  ;; Fonts settings
-  (doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'medium))
-  (doom-variable-pitch-font (font-spec :family "Noto Sans" :size 16))
-  (doom-serif-font (font-spec :family "Noto Serif" :size 16))
-  (doom-symbol-font (font-spec :family "Symbols Nerd Font"))
-  (doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 22))
-
-  ;; for treemacs users
-  (doom-themes-treemacs-theme "doom-one") ; use "doom-colors" for less minimal icon theme
+(use-package! doom-themes
+  :init
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t
+        doom-themes-padded-modeline 4
+        doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'medium)
+        doom-variable-pitch-font (font-spec :family "Noto Sans" :size 16)
+        doom-serif-font (font-spec :family "Noto Serif" :size 16)
+        doom-symbol-font (font-spec :family "Symbols Nerd Font")
+        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
+        display-line-numbers-type 'relative
+        hl-line-mode t)
   :config
+  (doom-themes-org-config)
   (load-theme 'doom-one t))
 
 ;; ============================================================================
 ;; MODELINE
 ;; ============================================================================
-(after! doom-modeline-mode
+(after! doom-modeline
   (setq doom-modeline-height 28
         doom-modeline-bar-width 4
         doom-modeline-icon t
@@ -59,14 +44,6 @@
 (display-battery-mode -1)
 
 ;; ============================================================================
-;; PERFORMANCE TWEAKS
-;; ============================================================================
-;;(setq idle-update-delay 1.0
-;;      read-process-output-max (* 4 1024 1024)
-;;      bidi-paragraph-direction 'left-to-right
-;;      bidi-inhibit-bpa t)
-
-;; ============================================================================
 ;; FILE HANDLING
 ;; ============================================================================
 (setq auto-save-default t
@@ -78,13 +55,12 @@
 ;; ============================================================================
 (setq projectile-enable-caching t
       projectile-indexing-method 'hybrid
-      projectile-project-search-path '("~/Workspace" "~/Documents"))
+      projectile-project-search-path '("~/" "~/Workspace" "~/Documents"))
 
 ;; ============================================================================
 ;; DIRED + DIRVISH
 ;; ============================================================================
 (after! dired
-  :config
   (setq dired-use-ls-dired t
         dired-listing-switches "-alh --group-directories-first --time-style=long-iso"
         dired-recursive-copies 'always
@@ -95,6 +71,14 @@
   :init (dirvish-override-dired-mode)
   :config
   (setq dirvish-attributes '(vc-state subtree-state nerd-icons collapse git-msg file-size)))
+
+;; ============================================================================
+;; SUDO-EDIT
+;; ============================================================================
+(use-package!  sudo-edit
+  :commands (sudo-edit sudo-edit-find-file)
+  :config
+  (sudo-edit-indicator-mode +1))  ; Show indicator when editing as sudo
 
 ;; ============================================================================
 ;; YAS-SNIPPET
@@ -113,6 +97,27 @@
 (+global-word-wrap-mode) ;; Enable word-wrap almost everywhere
 
 ;; ============================================================================
+;; PERFORMANCE TWEAKS
+;; ============================================================================
+(setq gc-cons-threshold (* 500 1000 1000) ;; Set a high threshold of 500MB
+      gc-cons-percentage 0.6)           ;; Adjust gc percentage threshold
+(add-hook 'emacs-startup-hoomk
+          (lambda ()
+            (setq gc-cons-threshold (* 2 1000 1000) ;; Lower after startup
+                  gc-cons-percentage 0.1)))
+
+;; ============================================================================
+;; AUTOREVERT
+;; ============================================================================
+(after! autorevert
+  (setq global-auto-revert-non-file-buffers t ; Revert Dired and other buffers
+        auto-revert-verbose nil         ; No message spam
+        auto-revert-use-notify t        ; Use inotify if available
+        auto-revert-avoid-polling t))   ; Fallback to polling only if needed
+
+(global-auto-revert-mode 1)             ; Revert buffers when the underlying file has changed)
+
+;; ============================================================================
 ;; HL-TODO
 ;; ============================================================================
 (setq hl-todo-keyword-faces
@@ -128,14 +133,16 @@
         ("DEPRECATED" . "#5B6268")))
 
 ;; ============================================================================
-;; HL-TODO
+;; UNDO-TREE
 ;; ============================================================================
-(after! undo-tree
-  (setq undo-tree-auto-save-history nil))
+(let ((undo-tree-history-dir (expand-file-name "undo-tree-history/" doom-user-dir)))
+  (unless (file-directory-p undo-tree-history-dir)
+    (make-directory undo-tree-history-dir t)))
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            (setq-local undo-tree-auto-save-history t)))
+(after! undo-tree
+  (setq undo-tree-enable-undo-in-region t        ;; Allow region-based undo
+        undo-tree-history-directory-alist `(("." . ,(expand-file-name "undo-tree-history/" doom-user-dir))) ;; Dedicated folder for undo history
+        undo-tree-auto-save-history t))          ;; Enable history auto-saving globally
 
 ;; ============================================================================
 ;; FORMAT
@@ -159,6 +166,7 @@
 (after! org
   (setq org-hide-emphasis-markers t
         org-pretty-entities t
+        org-image-actual-width nil
         org-ellipsis " ▾"
         org-startup-folded 'content
         org-startup-indented t
@@ -212,25 +220,24 @@
 ;; CALENDAR
 ;; ============================================================================
 (after! calendar
-  :config
-  calendar-date-style 'iso
-  calendar-mark-holidays-flag t
-  calendar-week-start-day 1)
+  (setq calendar-date-style 'iso
+        calendar-mark-holidays-flag t
+        calendar-week-start-day 1
+        holiday-bulgarian-holidays '((holiday-fixed 3 3 "Bulgaria Liberation Day")
+                                     )))
 
 ;; ============================================================================
-;; LSP PERFORMANCE (Add after your PERFORMANCE TWEAKS section)
+;; LSP PERFORMANCE 
 ;; ============================================================================
-;;(after! lsp-mode
-;;  (setq lsp-response-timeout 30
-;;        lsp-idle-delay 1.0                    
-;;        lsp-log-io nil
-;;        lsp-enable-file-watchers nil
-;;        lsp-enable-folding nil
-;;        lsp-enable-text-document-color nil
-;;        lsp-enable-symbol-highlighting nil    
-;;        lsp-headerline-breadcrumb-enable nil  
-;;        lsp-completion-provider :capf
-;;        lsp-disabled-clients '(semgrep-ls)))
+(after! lsp-mode
+  (setq lsp-response-timeout 30
+        lsp-log-io nil
+        lsp-enable-file-watchers nil
+        lsp-enable-folding nil
+        lsp-enable-text-document-color nil
+        lsp-enable-symbol-highlighting nil    
+        lsp-completion-provider :capf
+        lsp-disabled-clients '(semgrep-ls)))
 
 ;; ============================================================================
 ;; LSP-UI (Single merged block)
@@ -254,47 +261,40 @@
 ;; ============================================================================
 ;; DAP (Debug Adapter Protocol) - IntelliJ-like Debugging
 ;; ============================================================================
-(after! dap-mode
-  (setq dap-java-java-command "/usr/lib/jvm/default/bin/java"
-        dap-auto-configure-features '(sessions locals breakpoints expressions controls tooltip))
+(after! dap-java
+  (setq 
+   lsp-java-autobuild-enabled t))
 
-  (setq dap-auto-show-output t
+(after! dap-mode
+  ;; Enable IntelliJ-like auto UI
+  (dap-auto-configure-mode 1)
+
+  (setq dap-auto-configure-features
+        '(sessions locals breakpoints expressions controls tooltip)
+
+        dap-auto-show-output t
         dap-output-window-min-height 10
         dap-output-window-max-height 20))
-
-(add-hook! (java-mode java-ts-mode) 
-  (dap-mode 1)
-  (dap-ui-mode 1)
-  (dap-tooltip-mode 1))
 
 ;; ============================================================================
 ;; COMPANY
 ;; ============================================================================
 (after! company
   (setq
-   ;;Performance optimization
-   company-minimum-prefix-length 1           ;; start completion after 1 char
-   company-idle-delay 0.1                    ;; fast pop-up (0.0 for instant)
-   company-show-quick-access t               ;; show numbers for quick selection
-   company-require-match nil                 ;; allow free text input
-
+   ;; Performance optimization
+   company-minimum-prefix-length 1
+   company-show-quick-access t
+   company-require-match nil
    ;; UI improvements
-   company-tooltip-align-annotations t       ;; align annotations to the right
-   company-tooltip-limit 12                  ;; limit tooltip items
-   company-tooltip-minimum 6                 ;; minimum tooltip items
-   company-selection-wrap-around t           ;; circular navigation
-   company-tooltip-flip-when-above t         ;; flip tooltip when above cursor
-
-   ;; Company Backends
-   company-backends
-   '((company-capf company-yasnippet)        ;; LSP + snippets
-     (company-dabbrev-code company-keywords company-files)
-     company-dabbrev))
-
-  ;; dabbrev-like company-mode completion backend.
-  company-dabbrev-downcase nil               ;; preserve case
-  company-dabbrev-ignore-case nil            ;; case sensitive
-  company-dabbrev-other-buffers t)           ;; search other buffers
+   company-tooltip-align-annotations t
+   company-tooltip-limit 12
+   company-tooltip-minimum 6
+   company-selection-wrap-around t
+   company-tooltip-flip-when-above t
+   ;; dabbrev settings
+   company-dabbrev-downcase nil
+   company-dabbrev-ignore-case nil
+   company-dabbrev-other-buffers t))
 
 ;; Enable company in modes
 (add-hook 'after-init-hook 'global-company-mode) ;; enable company mode instant
@@ -312,88 +312,67 @@
         enable-recursive-minibuffers t))        ;; Non-nil means to allow minibuffer commands while in the minibuffer.
 
 ;; ============================================================================
-;; TREE-SITTER
-;; ============================================================================
-(setq +tree-sitter-hl-enabled-modes t)
-
-;; ============================================================================
 ;; WHICH-KEY
 ;; ============================================================================
 (setq which-key-idle-delay 0.3
       which-key-idle-secondary-delay 0.05)
 
 ;; ============================================================================
-;; JAVA (LSP + JDTLS)
+;; JAVA (LSP + JDTLS) - FIXED VERSION
 ;; ============================================================================
-(add-hook 'java-ts-mode-hook #'lsp!)
-(add-hook 'java-mode-hook #'lsp!)
-
 (after! lsp-java
-  (setq lsp-java-java-path "/usr/lib/jvm/default/bin/java")
-  
-  (setq lsp-java-import-gradle-enabled t
+  ;; Remove the system path - let Doom handle it
+  (setq lsp-java-server-install-dir (expand-file-name "lsp/jdtls/" doom-cache-dir)
+        ;; Remove this line to allow auto-download: 
+        ;; lsp-java-jdt-download-url nil
+        lsp-java-java-path (or (executable-find "java") "/usr/bin/java")
+        dap-java-java-command (or (executable-find "java") "/usr/bin/java")
+        
+        ;; Your other settings...
+        dap-java-vm-args '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")
+        lsp-java-import-gradle-enabled t
         lsp-java-import-maven-enabled t
         lsp-java-maven-download-sources t
-        lsp-java-autobuild-enabled nil
+        lsp-java-autobuild-enabled t 
+        lsp-java-import-gradle-annotation-processing-enabled t
         lsp-java-save-actions-organize-imports t 
+        dap-java-test-runner "junit"
         lsp-java-completion-import-order ["java" "javax" "org" "com"])
-  
-  (setq lsp-java-completion-favorite-static-members
-        ["org.junit.Assert.*" "org.junit.Assume.*" "org.junit.jupiter.api.Assertions.*"
-         "org.junit.jupiter.api.Assumptions.*"
-         "org.junit.jupiter.api.DynamicContainer.*"
-         "org.junit.jupiter.api.DynamicTest.*" "org.mockito.Mockito.*"
-         "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects.requireNonNull"])
 
-  ;; IDE like lens
+  ;; Rest of your configuration...
+  (setq lsp-java-completion-favorite-static-members
+        ["org.junit.Assert.*" "org.junit. Assume.*" "org.junit.jupiter.api.Assertions.*"
+         "org.junit.jupiter. api. Assumptions.*"
+         "org.junit.jupiter.api.DynamicContainer.*"
+         "org.junit.jupiter.api. DynamicTest.*" "org.mockito.Mockito.*"
+         "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects. requireNonNull"])
+
+  ;; IDE features
   (setq lsp-java-lens-mode t
         lsp-java-references-code-lens-enabled t
         lsp-java-implementations-code-lens-enabled t)
-  
-  ;; Formatter settings
+
+  ;; Formatter
   (setq lsp-java-format-enabled t
         lsp-java-format-comments-enabled t
         lsp-java-format-on-type-enabled nil)
 
-  ;; Use expand-file-name first, then prepend file://
-  (let ((formatter-file (expand-file-name "formatter/formatter-java.xml" doom-user-dir)))
-    (when (file-exists-p formatter-file)
-      (setq lsp-java-format-settings-url (concat "file:///" formatter-file)
-            lsp-java-format-settings-profile "Default")))
-  
-  ;; Profile name MUST match the name="..." in your XML file
-  (setq lsp-java-format-settings-profile "Default")
-
-  ;; JVM args (PERFORMANCE + LOMBOK)
+  ;; JVM args with Lombok
   (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
          (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
 
-    ;; Ensure directory exists
     (unless (file-directory-p java-lib-dir)
       (make-directory java-lib-dir t))
 
-    ;; Base JVM args
     (setq lsp-java-vmargs
           '("-XX:+UseG1GC"
             "-XX:+UseStringDeduplication"
             "-Xmx4G"
             "-Xms1G"
+            "-XX:+AlwaysPreTouch"
             "-Dsun.zip.disableMemoryMapping=true"))
 
-    ;; Add Lombok javaagent if present
     (when (file-exists-p lombok-jar)
       (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
-
-;; ============================================================================
-;; DAP (Java Debugging)
-;; ============================================================================
-(after! dap-java
-  (setq dap-java-java-command "/usr/lib/jvm/default/bin/java")
-  (setq dap-java-vm-args
-        '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")))
-
-(add-hook 'java-mode-local-vars-hook #'dap-mode)
-(add-hook 'java-mode-local-vars-hook #'dap-ui-mode)
-(add-hook 'java-mode-local-vars-hook #'dap-tooltip-mode)
 
 ;;; config.el ends here
