@@ -19,6 +19,8 @@
 (package! org-download)
 (package! org-superstar)
 (package! org-roam-ui)
+(package! websocket
+  :recipe (:host github :repo "ahyatt/emacs-websocket"))
 
 ;; ============================
 ;; Optional Enhancements

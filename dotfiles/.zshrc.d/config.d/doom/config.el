@@ -76,7 +76,14 @@
 (ensure-file-exists (expand-file-name "org/notes/notes.org" doom-user-dir))
 
 ;; Ensure backups directory
-(ensure-dir-exists (expand-file-name "backups/" doom-user-dir))
+(let ((backup-dir (expand-file-name "backups/" doom-cache-dir)))
+  (ensure-dir-exists backup-dir)
+  (setq backup-directory-alist `(("." . ,backup-dir))
+        backup-by-copying t       ;; Copy files instead of linking them
+        delete-old-versions t     ;; Don't ask before deleting old backups
+        kept-new-versions 6       ;; Keep 6 newest versions
+        kept-old-versions 2       ;; Keep 2 oldest versions
+        version-control t))       ;; Use version numbers for backups
 
 ;; ============================================================================
 ;; COMMON 
@@ -119,16 +126,6 @@
   (setq dirvish-attributes '(vc-state subtree-state nerd-icons collapse git-msg file-size)
         dirvish-mode-line-format '(:left (sort file-time " " file-size))
         dirvish-use-mode-line t))
-
-;; ============================================================================
-;; CREATE DIRECTORY IF NOT EXISTS
-;; ============================================================================
-(setq backup-directory-alist `(("." . ,(expand-file-name "backups/" doom-cache-dir)))
-      backup-by-copying t       ;; Copy files instead of linking them
-      delete-old-versions t     ;; Don't ask before deleting old backups
-      kept-new-versions 6       ;; Keep 6 newest versions
-      kept-old-versions 2       ;; Keep 2 oldest versions
-      version-control t)        ;; Use version numbers for backups
 
 ;; ============================================================================
 ;; SUDO-EDIT
