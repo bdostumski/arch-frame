@@ -12,6 +12,7 @@
 ;; ============================
 (package! org-appear)
 (package! org-modern)
+(package! org-download)
 
 ;; ============================
 ;; Optional Enhancements

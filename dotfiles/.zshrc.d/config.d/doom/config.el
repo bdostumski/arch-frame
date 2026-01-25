@@ -11,19 +11,59 @@
 ;; ============================================================================
 (use-package! doom-themes
   :init
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t
-        doom-themes-padded-modeline 4
-        doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'medium)
-        doom-variable-pitch-font (font-spec :family "Noto Sans" :size 16)
-        doom-serif-font (font-spec :family "Noto Serif" :size 16)
-        doom-symbol-font (font-spec :family "Symbols Nerd Font")
-        doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
-        display-line-numbers-type 'relative
-        hl-line-mode t)
+  (setq
+
+   ;; COMMON
+   doom-themes-enable-bold t
+   doom-themes-enable-italic t
+   doom-themes-padded-modeline 4
+   display-line-numbers-type 'relative
+   hl-line-mode t
+
+   ;; FILE HANDLING
+   auto-save-default t
+   make-backup-files t
+   create-lockfiles nil
+
+   ;; PROJECTILE
+   projectile-enable-caching t
+   projectile-indexing-method 'hybrid
+   projectile-project-search-path '("~/Workspace" "~/Documents") 
+
+   ;; FONTS
+   doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'medium)
+   doom-variable-pitch-font (font-spec :family "Noto Sans" :size 16)
+   doom-serif-font (font-spec :family "Noto Serif" :size 16)
+   doom-symbol-font (font-spec :family "Symbols Nerd Font")
+   doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 22))
   :config
   (doom-themes-org-config)
   (load-theme 'doom-one t))
+
+;; ============================================================================
+;; CREATE DIRECTORY IF NOT EXISTS
+;; ============================================================================
+(defun ensure-dir-exists (dir)
+  (unless (file-directory-p dir)
+    (make-directory dir t)))
+
+;; Ensure snippet directory
+(ensure-dir-exists (expand-file-name "snippets" doom-user-dir))
+
+;; Ensure undo-tree-history directory
+(ensure-dir-exists (expand-file-name "undo-tree-history/" doom-user-dir))
+
+;; Ensure org directory
+(ensure-dir-exists (expand-file-name "org/" doom-user-dir))
+
+;; Ensure org/images directory
+(ensure-dir-exists (expand-file-name "org/images" doom-user-dir))
+
+;; Ensure org/roam directory
+(ensure-dir-exists (expand-file-name "org/roam/" doom-user-dir))
+
+;; Ensure org/notes directory
+(ensure-dir-exists (expand-file-name "org/notes/" doom-user-dir))
 
 ;; ============================================================================
 ;; MODELINE
@@ -44,20 +84,6 @@
 (display-battery-mode -1)
 
 ;; ============================================================================
-;; FILE HANDLING
-;; ============================================================================
-(setq auto-save-default t
-      make-backup-files t
-      create-lockfiles nil)
-
-;; ============================================================================
-;; PROJECTILE
-;; ============================================================================
-(setq projectile-enable-caching t
-      projectile-indexing-method 'hybrid
-      projectile-project-search-path '("~/" "~/Workspace" "~/Documents"))
-
-;; ============================================================================
 ;; DIRED + DIRVISH
 ;; ============================================================================
 (after! dired
@@ -75,7 +101,7 @@
 ;; ============================================================================
 ;; SUDO-EDIT
 ;; ============================================================================
-(use-package!  sudo-edit
+(use-package! sudo-edit
   :commands (sudo-edit sudo-edit-find-file)
   :config
   (sudo-edit-indicator-mode +1))  ; Show indicator when editing as sudo
@@ -83,10 +109,6 @@
 ;; ============================================================================
 ;; YAS-SNIPPET
 ;; ============================================================================
-(let ((snippets-dir (expand-file-name "snippets" doom-user-dir)))
-  (unless (file-directory-p snippets-dir)
-    (make-directory snippets-dir t)))
-
 (after! yasnippet
   (add-to-list 'yas-snippet-dirs
                (expand-file-name "snippets" doom-user-dir)))
@@ -99,21 +121,32 @@
 ;; ============================================================================
 ;; PERFORMANCE TWEAKS
 ;; ============================================================================
-(setq gc-cons-threshold (* 500 1000 1000) ;; Set a high threshold of 500MB
-      gc-cons-percentage 0.6)           ;; Adjust gc percentage threshold
-(add-hook 'emacs-startup-hoomk
+(setq gc-cons-threshold (* 50 1000 1000) ;; Set a high threshold of 100MB during startup
+      gc-cons-percentage 0.6)           ;; Temporarily increase GC frequency during startup
+
+(add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 2 1000 1000) ;; Lower after startup
+            ;; After startup, lower GC threshold
+            (setq gc-cons-threshold (* 2 1000 1000) ;; Lower threshold to 2MB after startup
                   gc-cons-percentage 0.1)))
+
+;; Use gcmh-mode to handle garbage collection dynamically
+(use-package! gcmh
+  :config
+  (setq gcmh-idle-delay 5                      ;; Trigger GC after being idle for 5 seconds
+        gcmh-high-cons-threshold (* 128 1024 1024) ;; GC reaches threshold of 128MB when idle
+        gcmh-low-cons-threshold (* 8 1024 1024))   ;; Reduce to 8MB during normal operations
+  (gcmh-mode 1))                               ;; Enable gcmh-mode
 
 ;; ============================================================================
 ;; AUTOREVERT
 ;; ============================================================================
 (after! autorevert
   (setq global-auto-revert-non-file-buffers t ; Revert Dired and other buffers
-        auto-revert-verbose nil         ; No message spam
-        auto-revert-use-notify t        ; Use inotify if available
-        auto-revert-avoid-polling t))   ; Fallback to polling only if needed
+        auto-revert-verbose nil              ; Silently revert changes
+        auto-revert-use-notify t             ; Use inotify if available
+        auto-revert-interval 1               ; Check for updates more frequently if needed
+        auto-revert-avoid-polling t))        ; Fallback to polling only if absolutely needed
 
 (global-auto-revert-mode 1)             ; Revert buffers when the underlying file has changed)
 
@@ -135,10 +168,6 @@
 ;; ============================================================================
 ;; UNDO-TREE
 ;; ============================================================================
-(let ((undo-tree-history-dir (expand-file-name "undo-tree-history/" doom-user-dir)))
-  (unless (file-directory-p undo-tree-history-dir)
-    (make-directory undo-tree-history-dir t)))
-
 (after! undo-tree
   (setq undo-tree-enable-undo-in-region t        ;; Allow region-based undo
         undo-tree-history-directory-alist `(("." . ,(expand-file-name "undo-tree-history/" doom-user-dir))) ;; Dedicated folder for undo history
@@ -157,10 +186,6 @@
 ;; ============================================================================
 ;; ORG-MODE
 ;; ============================================================================
-(let ((org-notes-dir (expand-file-name "org/" doom-user-dir)))
-  (unless (file-directory-p org-notes-dir)
-    (make-directory org-notes-dir t)))
-
 (setq org-directory (expand-file-name "org/" doom-user-dir))
 
 (after! org
@@ -187,13 +212,16 @@
         org-appear-autolinks t
         org-appear-autosubmarkers t))
 
+
+(use-package! org-download
+  :after org
+  :config
+  (setq org-download-image-dir (expand-file-name "org/images" org-directory)
+        org-download-screenshot-method "xfce4-screenshooter -r -o"))
+
 ;; ============================================================================
 ;; ORG-ROAM 
 ;; ============================================================================
-(let ((org-roam-dir (expand-file-name "org/roam/" doom-user-dir)))
-  (unless (file-directory-p org-roam-dir)
-    (make-directory org-roam-dir t)))
-
 (setq org-roam-directory (file-truename (expand-file-name "org/roam/" doom-user-dir)))
 
 (after! org-roam
@@ -203,10 +231,6 @@
 ;; ============================================================================
 ;; DEFT
 ;; ============================================================================
-(let ((org-notes-dir (expand-file-name "org/notes/" doom-user-dir))) ;; Create /org/notes/ in doom emacs home directory
-  (unless (file-directory-p org-notes-dir)
-    (make-directory org-notes-dir t)))
-
 (setq deft-recursive t                          ;; Search also in subdirectories
       deft-use-filename-as-title t              ;; Use note filenames to generate the displayed titles in deft file browser
       deft-use-filter-string-for-filename t     ;; Slashes are removed and replaced by hyphens,
