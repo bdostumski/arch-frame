@@ -17,17 +17,6 @@
    doom-themes-enable-bold t
    doom-themes-enable-italic t
    doom-themes-padded-modeline 4
-   display-line-numbers-type 'relative
-
-   ;; FILE HANDLING
-   auto-save-default t
-   make-backup-files t
-   create-lockfiles nil
-
-   ;; PROJECTILE
-   projectile-enable-caching t
-   projectile-indexing-method 'hybrid
-   projectile-project-search-path '("~/Workspace" "~/Documents") 
 
    ;; FONTS
    doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'medium)
@@ -38,6 +27,9 @@
   :config
   (doom-themes-org-config)
   (load-theme 'doom-one t))
+
+;; Turn on pixel scrolling
+(pixel-scroll-precision-mode t)
 
 ;; ============================================================================
 ;; CREATE DIRECTORY IF NOT EXISTS
@@ -86,11 +78,31 @@
         version-control t))       ;; Use version numbers for backups
 
 ;; ============================================================================
-;; COMMON 
+;; PROJECTILE 
 ;; ============================================================================
-(add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode)) ;; Assign .log files to text-mode
-(add-to-list 'auto-mode-alist '("\\.env\\'" . conf-mode)) ;; .env files -> conf-mode
-(global-hl-line-mode t) ;; Enable line highlighting globally
+(setq 
+ projectile-enable-caching t
+ projectile-indexing-method 'hybrid
+ projectile-project-search-path '("~/Workspace" "~/Documents"))
+
+;; ============================================================================
+;; FILE HANDLING
+;; ============================================================================
+(setq 
+ auto-save-default t
+ make-backup-files t
+ create-lockfiles nil)
+
+;; Assign .log files to text-mode
+(add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode)) 
+;;  .env files -> conf-mode
+(add-to-list 'auto-mode-alist '("\\.env\\'" . conf-mode)) 
+
+;; ============================================================================
+;; LINE NUMBERS
+;; ============================================================================
+(setq display-line-numbers-type 'relative)
+(remove-hook! '(text-mode-hook) #'display-line-numbers-mode)
 
 ;; ============================================================================
 ;; MODELINE
@@ -180,6 +192,14 @@
         auto-revert-avoid-polling t))        ; Fallback to polling only if absolutely needed
 
 (global-auto-revert-mode 1)             ; Revert buffers when the underlying file has changed)
+
+;; ============================================================================
+;; HL LINE
+;; ============================================================================
+(add-hook 'prog-mode-hook #'hl-line-mode)
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (setq-local global-hl-line-sticky-flag nil)))
 
 ;; ============================================================================
 ;; HL-TODO
@@ -312,80 +332,6 @@
                                      )))
 
 ;; ============================================================================
-;; LSP PERFORMANCE 
-;; ============================================================================
-(after! lsp-mode
-  (setq lsp-response-timeout 30
-        lsp-use-plists nil ;; Improves performance in some cases with large projects
-        lsp-diagnostic-package :none ;; Disables double diagnostics if Flycheck is explicitly managed
-        lsp-file-watch-threshold 2000 ;; Higher threshold for handling larger codebases
-        lsp-log-io nil
-        lsp-lens-enable nil
-        lsp-enable-file-watchers nil
-        lsp-enable-folding nil
-        lsp-enable-text-document-color nil
-        lsp-enable-symbol-highlighting nil    
-        lsp-completion-provider :capf
-        lsp-disabled-clients '(semgrep-ls)))
-
-;; ============================================================================
-;; LSP-UI (Single merged block)
-;; ============================================================================
-(after! lsp-ui
-  (setq
-   ;; Clean breadcrumb in headerline
-   lsp-headerline-breadcrumb-enable t
-   lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols)
-
-   ;; No noisy popups
-   lsp-ui-doc-enable nil
-   lsp-ui-sideline-enable nil
-
-   ;; Keep peek (very useful)
-   lsp-ui-peek-enable t))
-
-;; ============================================================================
-;; DAP (Debug Adapter Protocol) - IntelliJ-like Debugging
-;; ============================================================================
-(after! dap-java
-  (setq 
-   lsp-java-autobuild-enabled t))
-
-(after! dap-mode
-  ;; Enable IntelliJ-like auto UI
-  (dap-auto-configure-mode 1)
-
-  (setq dap-auto-configure-features
-        '(sessions locals breakpoints expressions controls tooltip)
-
-        dap-auto-show-output t
-        dap-output-window-min-height 10
-        dap-output-window-max-height 20))
-
-;; ============================================================================
-;; COMPANY
-;; ============================================================================
-(after! company
-  (setq
-   ;; Performance optimization
-   company-minimum-prefix-length 1
-   company-show-quick-access t
-   company-require-match nil
-   ;; UI improvements
-   company-tooltip-align-annotations t
-   company-tooltip-limit 12
-   company-tooltip-minimum 6
-   company-selection-wrap-around t
-   company-tooltip-flip-when-above t
-   ;; dabbrev settings
-   company-dabbrev-downcase nil
-   company-dabbrev-ignore-case nil
-   company-dabbrev-other-buffers t))
-
-;; Enable company in modes
-(add-hook 'after-init-hook 'global-company-mode) ;; enable company mode instant
-
-;; ============================================================================
 ;; VERTICO
 ;; ============================================================================
 (after! vertico
@@ -431,66 +377,215 @@
 ;;              ("C-<tab>" . copilot-accept-completion)
 ;;              ("M-]" . copilot-next-completion)
 ;;              ("M-[" . copilot-previous-completion)))
+;;
+;; ============================================================================
+;; MU4E
+;; ============================================================================
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+(require 'smtpmail)
+
+;; Mail user agent
+(setq mail-user-agent 'mu4e-user-agent)
+
+;; Maildir configuration (Gmail)
+(setq mu4e-maildir "~/Maildir")  ;; Adjust to your Maildir location
+(setq mu4e-drafts-folder   "/[Gmail].Drafts"
+      mu4e-sent-folder     "/[Gmail].Sent Mail"
+      mu4e-trash-folder    "/[Gmail].Trash")
+
+;; Gmail IMAP handles sent messages, so do not save copies locally
+(setq mu4e-sent-messages-behavior 'delete)
+
+;; Maildir shortcuts & bookmarks
+(setq mu4e-maildir-shortcuts
+      '( (:maildir "/INBOX"             :key ?i)
+         (:maildir "/[Gmail].Sent Mail" :key ?s)
+         (:maildir "/[Gmail].Trash"     :key ?t)
+         (:maildir "/[Gmail].All Mail"  :key ?a)))
+
+;; Add a bookmark for Inbox and mark it as favorite (shown in modeline)
+(add-to-list 'mu4e-bookmarks
+             '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
+
+;; Mail fetching
+(setq mu4e-get-mail-command "offlineimap")
+
+;; User identity & signature
+(setq user-mail-address "b.dostumski@gmail.com"
+      user-full-name  "Borislav Dostumski"
+      message-signature
+      (concat
+       "Borislav Dostumski\n"
+       "http://www.github.com/bdostumski\n"))
+
+;; Sending mail via msmtp or smtpmail
+(setq sendmail-program "/usr/bin/msmtp"
+      message-sendmail-f-is-evil t
+      message-sendmail-extra-arguments '("--read-envelope-from")
+      mail-specify-envelope-from t
+      mail-envelope-from 'header
+      message-send-mail-function 'message-send-mail-with-sendmail)
+
+;; Optional SMTP via smtpmail
+;; (setq message-send-mail-function 'smtpmail-send-it
+;;       starttls-use-gnutls t
+;;       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+;;       smtpmail-auth-credentials
+;;         '(("smtp.gmail.com" 587 "USERNAME@gmail.com" nil))
+;;       smtpmail-default-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-service 587)
+
+;; Additional options
+(setq message-kill-buffer-on-exit t) ;; Automatically kill message buffer after sending
+
+;; Optional authentication sources
+;; (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo"))
+
+;; ============================================================================
+;; LSP Configuration for Doom Emacs
+;; ============================================================================
+(use-package! lsp-mode
+  :init
+  ;; Keyboard shortcut prefix for LSP commands
+  (setq lsp-keymap-prefix "C-c l")
+  ;; Enable LSP in programming modes
+  :hook ((prog-mode . lsp-deferred))
+  :config
+  (setq lsp-idle-delay 0.5                 ;; Delay for sending data to LSP server
+        lsp-log-io nil                     ;; Disable LSP server communication logs
+        lsp-response-timeout 30            ;; Timeout for LSP server responses
+        lsp-completion-provider :capf))    ;; Use Completion-at-Point framework for suggestions
+
+(use-package! lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-doc-enable t                ;; Show documentation when hovering over symbols
+        lsp-ui-doc-delay 0.3               ;; Delay for showing documentation popup
+        lsp-ui-sideline-enable t           ;; Enable sideline hints
+        lsp-ui-sideline-show-diagnostics t ;; Show diagnostics (e.g., errors/warnings) in sideline
+        lsp-ui-sideline-show-hover t       ;; Show hover documentation in sideline
+        lsp-ui-sideline-update-mode 'line))
+
+(use-package! company
+  :hook (prog-mode . company-mode)
+  :config
+  (setq company-idle-delay 0.2             ;; Delay before showing suggestions after typing
+        company-minimum-prefix-length 1    ;; Show suggestions after typing 1 character
+        company-tooltip-align-annotations t
+        company-selection-wrap-around t))
+
+;; Optional: Add icons to completions (requires `all-the-icons`)
+(use-package! company-box
+  :hook (company-mode . company-box-mode))
+
+;; Purely optional, disable LSP progress spinner (if you find it distracting)
+(setq lsp-progress-spinner nil)
+
+;; ============================================================================
+;; DAP (Debug Adapter Protocol) - IntelliJ-like Debugging
+;; ============================================================================
+(after! dap-java
+  (setq 
+   lsp-java-autobuild-enabled t))
+;;
+(after! dap-mode
+  ;; Enable IntelliJ-like auto UI
+  (dap-auto-configure-mode 1)
+
+  (setq dap-auto-configure-features
+        '(sessions locals breakpoints expressions controls tooltip)
+
+        dap-auto-show-output t
+        dap-output-window-min-height 10
+        dap-output-window-max-height 20))
+
+;; ============================================================================
+;; COMPANY
+;; ============================================================================
+(after! company
+  (setq
+   ;; Performance optimization
+   company-minimum-prefix-length 1
+   company-show-quick-access t
+   company-require-match nil
+   ;; UI improvements
+   company-tooltip-align-annotations t
+   company-tooltip-limit 12
+   company-tooltip-minimum 6
+   company-selection-wrap-around t
+   company-tooltip-flip-when-above t
+   ;; dabbrev settings
+   company-dabbrev-downcase nil
+   company-dabbrev-ignore-case nil
+   company-dabbrev-other-buffers t))
+
+;; Enable company in modes
+(add-hook 'after-init-hook 'global-company-mode) ;; enable company mode instant
+
 
 ;; ============================================================================
 ;; JAVA (LSP + JDTLS) - FIXED VERSION
 ;; ============================================================================
-(after! lsp-java
-  ;; Remove the system path - let Doom handle it
-  (setq lsp-java-server-install-dir (expand-file-name "lsp/jdtls/" doom-cache-dir)
-        ;; Remove this line to allow auto-download: 
-        ;; lsp-java-jdt-download-url nil
-        lsp-java-java-path (or (executable-find "java") "/usr/bin/java")
-        dap-java-java-command (or (executable-find "java") "/usr/bin/java")
-        
-        ;; Your other settings...
-        sp-java-test-additional-args '("--scan-class-path")
-        dap-java-vm-args '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")
-        lsp-java-import-gradle-enabled t
-        lsp-java-import-maven-enabled t
-        lsp-java-maven-download-sources t
-        lsp-java-autobuild-enabled t 
-        lsp-java-import-gradle-annotation-processing-enabled t
-        lsp-java-save-actions-organize-imports t 
-        dap-java-test-runner "junit"
-        lsp-java-completion-import-order ["java" "javax" "org" "com"]
-        lsp-java-workspace-folders-ignore-directories
-        '("^\\.idea$" "^\\.metadata$" "^node_modules$" "^\\.git$" "^build$"))
+;;(after! lsp-java
+;;  ;; Remove the system path - let Doom handle it
+;;  (setq lsp-java-server-install-dir (expand-file-name "lsp/jdtls/" doom-cache-dir)
+;;        ;; Remove this line to allow auto-download: 
+;;        ;; lsp-java-jdt-download-url nil
+;;        lsp-java-java-path (or (executable-find "java") "/usr/bin/java")
+;;        dap-java-java-command (or (executable-find "java") "/usr/bin/java")
+;;        
+;;        ;; Your other settings...
+;;        sp-java-test-additional-args '("--scan-class-path")
+;;        dap-java-vm-args '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")
+;;        lsp-java-import-gradle-enabled t
+;;        lsp-java-import-maven-enabled t
+;;        lsp-java-maven-download-sources t
+;;        lsp-java-autobuild-enabled t 
+;;        lsp-java-import-gradle-annotation-processing-enabled t
+;;        lsp-java-save-actions-organize-imports t 
+;;        dap-java-test-runner "junit"
+;;        lsp-java-completion-import-order ["java" "javax" "org" "com"]
+;;        lsp-java-workspace-folders-ignore-directories
+;;        '("^\\.idea$" "^\\.metadata$" "^node_modules$" "^\\.git$" "^build$"))
+;;
+;;  ;; Rest of your configuration...
+;;  (setq lsp-java-completion-favorite-static-members
+;;        ["org.junit.Assert.*" "org.junit. Assume.*" "org.junit.jupiter.api.Assertions.*"
+;;         "org.junit.jupiter. api. Assumptions.*"
+;;         "org.junit.jupiter.api.DynamicContainer.*"
+;;         "org.junit.jupiter.api. DynamicTest.*" "org.mockito.Mockito.*"
+;;         "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects. requireNonNull"])
+;;
+;;  ;; IDE features
+;;  (setq lsp-java-lens-mode t
+;;        lsp-java-references-code-lens-enabled t
+;;        lsp-java-implementations-code-lens-enabled t)
+;;
+;;  ;; Formatter
+;;  (setq lsp-java-format-enabled t
+;;        lsp-java-format-comments-enabled t
+;;        lsp-java-format-on-type-enabled nil)
+;;
+;;  ;; JVM args with Lombok
+;;  (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
+;;         (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
+;;
+;;    (unless (file-directory-p java-lib-dir)
+;;      (make-directory java-lib-dir t))
+;;
+;;    (setq lsp-java-vmargs
+;;          '("-XX:+UseG1GC"
+;;            "-XX:+UseStringDeduplication"
+;;            "-Xmx4G"
+;;            "-Xms1G"
+;;            "-XX:+AlwaysPreTouch"
+;;            "-Dsun.zip.disableMemoryMapping=true"))
+;;
+;;    (when (file-exists-p lombok-jar)
+;;      (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
 
-  ;; Rest of your configuration...
-  (setq lsp-java-completion-favorite-static-members
-        ["org.junit.Assert.*" "org.junit. Assume.*" "org.junit.jupiter.api.Assertions.*"
-         "org.junit.jupiter. api. Assumptions.*"
-         "org.junit.jupiter.api.DynamicContainer.*"
-         "org.junit.jupiter.api. DynamicTest.*" "org.mockito.Mockito.*"
-         "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects. requireNonNull"])
-
-  ;; IDE features
-  (setq lsp-java-lens-mode t
-        lsp-java-references-code-lens-enabled t
-        lsp-java-implementations-code-lens-enabled t)
-
-  ;; Formatter
-  (setq lsp-java-format-enabled t
-        lsp-java-format-comments-enabled t
-        lsp-java-format-on-type-enabled nil)
-
-  ;; JVM args with Lombok
-  (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
-         (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
-
-    (unless (file-directory-p java-lib-dir)
-      (make-directory java-lib-dir t))
-
-    (setq lsp-java-vmargs
-          '("-XX:+UseG1GC"
-            "-XX:+UseStringDeduplication"
-            "-Xmx4G"
-            "-Xms1G"
-            "-XX:+AlwaysPreTouch"
-            "-Dsun.zip.disableMemoryMapping=true"))
-
-    (when (file-exists-p lombok-jar)
-      (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
+;;; config.el ends here
 
 ;;; config.el ends here
