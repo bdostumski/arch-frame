@@ -564,17 +564,18 @@
   ;; JVM args with Lombok
   (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
          (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
-
+    ;; Ensure directory exists
     (unless (file-directory-p java-lib-dir)
       (make-directory java-lib-dir t))
 
+    ;; Base JVM args
     (setq lsp-java-vmargs
           '("-XX:+UseG1GC"
             "-XX:+UseStringDeduplication"
             "-Xmx4G"
             "-Xms1G"
-            "-XX:+AlwaysPreTouch"
             "-Dsun.zip.disableMemoryMapping=true"))
+    ;; Add Lombok javaagent if present
 
     (when (file-exists-p lombok-jar)
       (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
