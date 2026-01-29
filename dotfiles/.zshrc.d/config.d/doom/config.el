@@ -528,64 +528,55 @@
 ;; ============================================================================
 ;; JAVA (LSP + JDTLS) - FIXED VERSION
 ;; ============================================================================
-;;(after! lsp-java
-;;  ;; Remove the system path - let Doom handle it
-;;  (setq lsp-java-server-install-dir (expand-file-name "lsp/jdtls/" doom-cache-dir)
-;;        ;; Remove this line to allow auto-download: 
-;;        ;; lsp-java-jdt-download-url nil
-;;        lsp-java-java-path (or (executable-find "java") "/usr/bin/java")
-;;        dap-java-java-command (or (executable-find "java") "/usr/bin/java")
-;;        
-;;        ;; Your other settings...
-;;        sp-java-test-additional-args '("--scan-class-path")
-;;        dap-java-vm-args '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")
-;;        lsp-java-import-gradle-enabled t
-;;        lsp-java-import-maven-enabled t
-;;        lsp-java-maven-download-sources t
-;;        lsp-java-autobuild-enabled t 
-;;        lsp-java-import-gradle-annotation-processing-enabled t
-;;        lsp-java-save-actions-organize-imports t 
-;;        dap-java-test-runner "junit"
-;;        lsp-java-completion-import-order ["java" "javax" "org" "com"]
-;;        lsp-java-workspace-folders-ignore-directories
-;;        '("^\\.idea$" "^\\.metadata$" "^node_modules$" "^\\.git$" "^build$"))
-;;
-;;  ;; Rest of your configuration...
-;;  (setq lsp-java-completion-favorite-static-members
-;;        ["org.junit.Assert.*" "org.junit. Assume.*" "org.junit.jupiter.api.Assertions.*"
-;;         "org.junit.jupiter. api. Assumptions.*"
-;;         "org.junit.jupiter.api.DynamicContainer.*"
-;;         "org.junit.jupiter.api. DynamicTest.*" "org.mockito.Mockito.*"
-;;         "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects. requireNonNull"])
-;;
-;;  ;; IDE features
-;;  (setq lsp-java-lens-mode t
-;;        lsp-java-references-code-lens-enabled t
-;;        lsp-java-implementations-code-lens-enabled t)
-;;
-;;  ;; Formatter
-;;  (setq lsp-java-format-enabled t
-;;        lsp-java-format-comments-enabled t
-;;        lsp-java-format-on-type-enabled nil)
-;;
-;;  ;; JVM args with Lombok
-;;  (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
-;;         (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
-;;
-;;    (unless (file-directory-p java-lib-dir)
-;;      (make-directory java-lib-dir t))
-;;
-;;    (setq lsp-java-vmargs
-;;          '("-XX:+UseG1GC"
-;;            "-XX:+UseStringDeduplication"
-;;            "-Xmx4G"
-;;            "-Xms1G"
-;;            "-XX:+AlwaysPreTouch"
-;;            "-Dsun.zip.disableMemoryMapping=true"))
-;;
-;;    (when (file-exists-p lombok-jar)
-;;      (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
+(after! lsp-java
+  ;; Remove the system path - let Doom handle it
+  (setq sp-java-test-additional-args '("--scan-class-path")
+        dap-java-vm-args '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")
+        lsp-java-import-gradle-enabled t
+        lsp-java-import-maven-enabled t
+        lsp-java-maven-download-sources t
+        lsp-java-autobuild-enabled t 
+        lsp-java-import-gradle-annotation-processing-enabled t
+        lsp-java-save-actions-organize-imports t 
+        dap-java-test-runner "junit"
+        lsp-java-completion-import-order ["java" "javax" "org" "com"]
+        lsp-java-workspace-folders-ignore-directories
+        '("^\\.idea$" "^\\.metadata$" "^node_modules$" "^\\.git$" "^build$"))
 
-;;; config.el ends here
+  ;; Rest of your configuration...
+  (setq lsp-java-completion-favorite-static-members
+        ["org.junit.Assert.*" "org.junit.Assume.*" "org.junit.jupiter.api.Assertions.*"
+         "org.junit.jupiter.api.Assumptions.*"
+         "org.junit.jupiter.api.DynamicContainer.*"
+         "org.junit.jupiter.api.DynamicTest.*" "org.mockito.Mockito.*"
+         "org.mockito.ArgumentMatchers.*" "org.mockito.Answers.*" "java.util.Objects.requireNonNull"])
+
+  ;; IDE features
+  (setq lsp-java-lens-mode t
+        lsp-java-references-code-lens-enabled t
+        lsp-java-implementations-code-lens-enabled t)
+
+  ;; Formatter
+  (setq lsp-java-format-enabled t
+        lsp-java-format-comments-enabled t
+        lsp-java-format-on-type-enabled nil)
+
+  ;; JVM args with Lombok
+  (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
+         (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
+
+    (unless (file-directory-p java-lib-dir)
+      (make-directory java-lib-dir t))
+
+    (setq lsp-java-vmargs
+          '("-XX:+UseG1GC"
+            "-XX:+UseStringDeduplication"
+            "-Xmx4G"
+            "-Xms1G"
+            "-XX:+AlwaysPreTouch"
+            "-Dsun.zip.disableMemoryMapping=true"))
+
+    (when (file-exists-p lombok-jar)
+      (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
 
 ;;; config.el ends here
