@@ -6,10 +6,17 @@
 (package! sudo-edit)
 (package! tldr)          
 (package! pdf-tools)
-;;(package! copilot
-;;  :recipe (:host github
-;;           :repo "copilot-emacs/copilot.el"
-;;           :files ("*.el")))
+(package! copilot
+  :recipe (:host github
+           :repo "copilot-emacs/copilot.el"
+           :files ("*.el")))
+
+;; ============================
+;; Database
+;; ============================
+(package! ejc-sql)
+(package! emacsql) ;; Required dependency for ejc-sql
+(package! dash-functional) ;; Sometimes also required depending on your Emacs version
 
 ;; ============================
 ;; Org & Notes
@@ -21,6 +28,8 @@
 (package! org-roam-ui)
 (package! websocket
   :recipe (:host github :repo "ahyatt/emacs-websocket"))
+(package! ob-restclient)     
+(package! restclient)        
 
 ;; ============================
 ;; Optional Enhancements
