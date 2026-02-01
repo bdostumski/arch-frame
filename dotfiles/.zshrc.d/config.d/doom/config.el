@@ -28,6 +28,9 @@
   (doom-themes-org-config)
   (load-theme 'doom-one t))
 
+;; Transparent Emacs 
+(add-to-list 'default-frame-alist '(alpha-background . 100))
+
 ;; Turn on pixel scrolling
 (pixel-scroll-precision-mode t)
 (add-hook 'doom-first-file-hook #'global-git-commit-mode)
@@ -114,6 +117,7 @@
   (setq doom-modeline-height 28
         doom-modeline-bar-width 4
         doom-modeline-icon t
+        doom-modeline-persp-name t
         doom-modeline-major-mode-icon t
         doom-modeline-buffer-file-name-style 'truncate-upto-project
         doom-modeline-buffer-encoding nil
@@ -657,7 +661,7 @@
 (after! dap-java
   (setq 
    lsp-java-autobuild-enabled t))
-;;
+
 (after! dap-mode
   ;; Enable IntelliJ-like auto UI
   (dap-auto-configure-mode 1)
@@ -895,62 +899,162 @@
             (prettify-symbols-mode)))
 
 ;; ============================================================================
-;; JAVA (LSP + JDTLS) - FIXED VERSION
+;; JAVA (LSP + DAP + Maven + Gradle)
 ;; ============================================================================
+
+;; Only run on GUI frames, and only import what you need
+(when (memq window-system '(mac ns x))
+  (use-package! exec-path-from-shell
+    :defer 2
+    :init
+    (setq exec-path-from-shell-arguments '("-l"))
+    (setq exec-path-from-shell-check-startup-files nil)
+    :config
+    (exec-path-from-shell-copy-envs '("PATH" "JAVA_HOME"))))
+
+;; Ensure PATH/JAVA_HOME from shell (important on Arch)
+(use-package! exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-envs '("PATH" "JAVA_HOME")))
+
 (after! lsp-java
-  ;; Remove the system path - let Doom handle it
-  (setq sp-java-test-additional-args '("--scan-class-path")
-        dap-java-vm-args '("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n")
-        lsp-java-import-gradle-enabled t
-        lsp-java-import-maven-enabled t
+  ;; Use Java from PATH (dynamic via archlinux-java)
+  (setq lsp-java-java-path "java"
         lsp-java-maven-download-sources t
-        lsp-java-autobuild-enabled t 
-        lsp-java-import-gradle-annotation-processing-enabled t
-        lsp-java-save-actions-organize-imports t 
-        dap-java-test-runner "junit"
-        lsp-java-completion-import-order ["java" "javax" "org" "com"]
-        lsp-java-workspace-folders-ignore-directories
-        '("^\\.idea$" "^\\.metadata$" "^node_modules$" "^\\.git$" "^build$"))
-
-  ;; Rest of your configuration...
-  (setq lsp-java-completion-favorite-static-members
-        ["org.junit.Assert.*"
-         "org.junit.Assume.*"
-         "org.junit.jupiter.api.Assertions.*"
-         "org.junit.jupiter.api.Assumptions.*"
-         "org.junit.jupiter.api.DynamicContainer.*"
-         "org.junit.jupiter.api.DynamicTest.*"
-         "org.mockito.Mockito.*"
-         "org.mockito.ArgumentMatchers.*"
-         "org.mockito.Answers.*"
-         "java.util.Objects.requireNonNull"])
-
-  ;; IDE features
-  (setq lsp-java-lens-mode t
-        lsp-java-references-code-lens-enabled t
-        lsp-java-implementations-code-lens-enabled t)
-
-  ;; Formatter
-  (setq lsp-java-format-enabled t
+        lsp-java-import-maven-enabled t
+        lsp-java-import-gradle-enabled t
+        lsp-java-autobuild-enabled t
+        lsp-java-save-actions-organize-imports t
+        lsp-java-format-enabled t
         lsp-java-format-comments-enabled t
         lsp-java-format-on-type-enabled nil)
 
-  ;; JVM args with Lombok
-  (let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
-         (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
-    ;; Ensure directory exists
-    (unless (file-directory-p java-lib-dir)
-      (make-directory java-lib-dir t))
+  ;; JVM args for jdtls
+  (setq lsp-java-vmargs
+        '("-XX:+UseG1GC"
+          "-XX:+UseStringDeduplication"
+          "-Xmx4G"
+          "-Xms1G"
+          "-Dsun.zip.disableMemoryMapping=true")))
 
-    ;; Base JVM args
-    (setq lsp-java-vmargs
-          '("-XX:+UseG1GC"
-            "-XX:+UseStringDeduplication"
-            "-Xmx4G"
-            "-Xms1G"
-            "-Dsun.zip.disableMemoryMapping=true"))
+(after! dap-mode
+  (dap-auto-configure-mode 1)
+  (setq dap-auto-configure-features
+        '(sessions locals breakpoints expressions controls tooltip)))
 
-    (when (file-exists-p lombok-jar)
-      (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs))))
+(after! lsp-java
+  ;; Force the exact Java binary JDTLS should use
+  (setq lsp-java-java-path "/usr/lib/jvm/java-21-openjdk/bin/java"
+        ;; Keep JDTLS workspace in Doom cache to avoid permission issues
+        lsp-java-workspace-dir (expand-file-name "lsp-java/" doom-cache-dir)))
+
+;; ----------------------------------------------------------------------------
+;; Helpers
+;; ----------------------------------------------------------------------------
+(defun +java/java-project-root ()
+  "Get project root from LSP or Projectile."
+  (or (lsp-workspace-root)
+      (projectile-project-root)
+      default-directory))
+
+(defun +java/java-main-class ()
+  "Prompt for fully-qualified main class."
+  (read-string "Main class (e.g. com.example.Main): "))
+
+(defun +java/java-project-name ()
+  "Prompt for project name (used by DAP)."
+  (read-string "Project name: " (projectile-project-name)))
+
+;; ----------------------------------------------------------------------------
+;; Run / Debug: Single File
+;; ----------------------------------------------------------------------------
+(defun +java/java-run-current-file ()
+  "Compile and run current Java file."
+  (interactive)
+  (let ((file buffer-file-name))
+    (if (and file (file-exists-p file))
+        (progn
+          (setq-local compile-command
+                      (format "javac %s && java %s"
+                              (shell-quote-argument file)
+                              (file-name-sans-extension
+                               (file-name-nondirectory file))))
+          (call-interactively #'compile))
+      (message "No Java file in this buffer."))))
+
+(defun +java/java-debug-current-file ()
+  "Debug current Java file using DAP."
+  (interactive)
+  (let ((file buffer-file-name))
+    (if (and file (file-exists-p file))
+        (dap-debug
+         (list :type "java"
+               :request "launch"
+               :name "Debug single Java file"
+               :mainClass (file-name-sans-extension
+                           (file-name-nondirectory file))
+               :cwd (file-name-directory file)))
+      (message "No Java file in this buffer."))))
+
+;; ----------------------------------------------------------------------------
+;; Run: Maven / Gradle
+;; ----------------------------------------------------------------------------
+(defun +java/java-run-maven ()
+  "Run Maven project from root."
+  (interactive)
+  (let ((default-directory (+java/java-project-root)))
+    (if (file-exists-p (expand-file-name "pom.xml" default-directory))
+        (compile "mvn -q -DskipTests clean package exec:java")
+      (message "No pom.xml found in project root."))))
+
+(defun +java/java-run-gradle ()
+  "Run Gradle project from root."
+  (interactive)
+  (let ((default-directory (+java/java-project-root)))
+    (if (or (file-exists-p (expand-file-name "build.gradle" default-directory))
+            (file-exists-p (expand-file-name "build.gradle.kts" default-directory)))
+        (compile "./gradlew -q run")
+      (message "No build.gradle(.kts) found in project root."))))
+
+;; ----------------------------------------------------------------------------
+;; Debug: Project Main Class
+;; ----------------------------------------------------------------------------
+(defun +java/java-debug-main ()
+  "Debug a project main class using DAP."
+  (interactive)
+  (dap-debug
+   (list :type "java"
+         :request "launch"
+         :name "Debug Java Main"
+         :mainClass (+java/java-main-class)
+         :projectName (+java/java-project-name)
+         :cwd (+java/java-project-root))))
+
+;; ----------------------------------------------------------------------------
+;; Keybindings
+;; ----------------------------------------------------------------------------
+(after! lsp-java
+  (map! :leader
+        (:prefix ("l" . "LSP")
+                 (:prefix ("l d" . "LSP Debug")
+                  :desc "Debug main class" "d" #'+java/java-debug-main
+                  :desc "Debug single Java file" "f" #'+java/java-debug-current-file
+                  :desc "Toggle Breakpoint" "b" #'dap-breakpoint-toggle
+                  :desc "Continue" "c" #'dap-continue
+                  :desc "Step Into" "i" #'dap-step-in
+                  :desc "Step Out" "o" #'dap-step-out
+                  :desc "Locals" "l" #'dap-ui-locals
+                  :desc "Hydra" "h" #'dap-hydra)
+
+                 (:prefix ("l r" . "LSP Run")
+                  :desc "Run current Java file" "f" #'+java/java-run-current-file
+                  :desc "Run Maven project" "m" #'+java/java-run-maven
+                  :desc "Run Gradle project" "g" #'+java/java-run-gradle)
+
+                 (:prefix ("l t" . "LSP Test")
+                  :desc "Run Test" "r" #'lsp-java-run-test
+                  :desc "Run All Tests" "a" #'lsp-java-run-all-tests
+                  :desc "Debug Test" "d" #'lsp-java-debug-test))))
 
 ;;; config.el ends here
