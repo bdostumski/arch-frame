@@ -1,13 +1,17 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; $DOOMDIR/config.el --- Personal Doom Emacs configuration -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; DOOM EMACS CONFIGURATION
 
 ;; ============================================================================
 ;; IDENTITY
+;; Personal identity used by Emacs and external tools (Git, mail, etc.)
 ;; ============================================================================
 (setq user-full-name "Borislav Alexandrov Dostumski"
       user-mail-address "b.dostumski@gmail.com")
 
 ;; ============================================================================
 ;; APPEARANCE
+;; Doom themes, fonts, and basic UI behavior.
 ;; ============================================================================
 (use-package! doom-themes
   :init
@@ -28,15 +32,33 @@
   (doom-themes-org-config)
   (load-theme 'doom-one t))
 
-;; Transparent Emacs 
+;; Transparent Emacs (alpha-background controls frame transparency)
 (add-to-list 'default-frame-alist '(alpha-background . 100))
 
-;; Turn on pixel scrolling
+;; Turn on smooth pixel-based scrolling
 (pixel-scroll-precision-mode t)
+
+;; Enable git-commit-mode automatically when first file is opened
 (add-hook 'doom-first-file-hook #'global-git-commit-mode)
 
 ;; ============================================================================
+;; VERTICAL GUIDE (FILL COLUMN INDICATOR FOR PROG MODE)
+;; Shows a vertical line at the preferred code width only in programming buffers.
+;; ============================================================================
+;; Set your preferred maximum line width for code.
+(setq-default fill-column 140)
+
+;; Make sure the global mode is disabled, so it doesn't affect minibuffers/etc.
+(when (fboundp 'global-display-fill-column-indicator-mode)
+  (global-display-fill-column-indicator-mode -1))
+
+;; Enable the indicator only in programming modes.
+(when (boundp 'display-fill-column-indicator-mode)
+  (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
+
+;; ============================================================================
 ;; CREATE DIRECTORY IF NOT EXISTS
+;; Helpers to ensure directories and files exist (for org, snippets, backups).
 ;; ============================================================================
 (defun ensure-dir-exists (dir)
   (unless (file-directory-p dir)
@@ -56,22 +78,22 @@
 ;; Ensure org directory
 (ensure-dir-exists (expand-file-name "org/" doom-user-dir))
 
-;; Ensure org/images directory
+;; Ensure org/images directory (for org attachments/screenshots)
 (ensure-dir-exists (expand-file-name "org/images" doom-user-dir))
 
-;; Ensure org/roam directory
+;; Ensure org/roam directory (org-roam notes)
 (ensure-dir-exists (expand-file-name "org/roam/" doom-user-dir))
 
-;; Ensure org/notes directory
+;; Ensure org/notes directory (general notes)
 (ensure-dir-exists (expand-file-name "org/notes/" doom-user-dir))
 
-;; Ensure org/notes/tasks.org file
+;; Ensure org/notes/tasks.org file (task list)
 (ensure-file-exists (expand-file-name "org/notes/tasks.org" doom-user-dir))
 
-;; Ensure org/notes/notes.org file 
+;; Ensure org/notes/notes.org file (misc notes)
 (ensure-file-exists (expand-file-name "org/notes/notes.org" doom-user-dir))
 
-;; Ensure backups directory
+;; Ensure backups directory and configure backup behavior.
 (let ((backup-dir (expand-file-name "backups/" doom-cache-dir)))
   (ensure-dir-exists backup-dir)
   (setq backup-directory-alist `(("." . ,backup-dir))
@@ -85,6 +107,7 @@
 
 ;; ============================================================================
 ;; PROJECTILE 
+;; Project management: caching and project search paths.
 ;; ============================================================================
 (setq 
  projectile-enable-caching t
@@ -93,6 +116,7 @@
 
 ;; ============================================================================
 ;; FILE HANDLING
+;; Auto-save, backup files, and lockfile behavior.
 ;; ============================================================================
 (setq 
  auto-save-default t
@@ -106,12 +130,14 @@
 
 ;; ============================================================================
 ;; LINE NUMBERS
+;; Use relative line numbers in most buffers; disable for text-based modes.
 ;; ============================================================================
 (setq display-line-numbers-type 'relative)
 (remove-hook! '(text-mode-hook) #'display-line-numbers-mode)
 
 ;; ============================================================================
 ;; MODELINE
+;; Doom modeline tuning and time/battery display.
 ;; ============================================================================
 (after! doom-modeline
   (setq doom-modeline-height 28
@@ -131,6 +157,7 @@
 
 ;; ============================================================================
 ;; DIRED + DIRVISH
+;; Dired settings and Dirvish as an enhanced file manager UI.
 ;; ============================================================================
 (after! dired
   (setq dired-use-ls-dired t
@@ -148,6 +175,7 @@
 
 ;; ============================================================================
 ;; SUDO-EDIT
+;; Edit files as root using sudo-edit, with a mode-line indicator.
 ;; ============================================================================
 (use-package! sudo-edit
   :commands (sudo-edit sudo-edit-find-file)
@@ -156,6 +184,7 @@
 
 ;; ============================================================================
 ;; YAS-SNIPPET
+;; Include custom user snippets directory into yasnippet.
 ;; ============================================================================
 (after! yasnippet
   (add-to-list 'yas-snippet-dirs
@@ -163,11 +192,13 @@
 
 ;; ============================================================================
 ;; WORD-WRAP
+;; Enable global soft-wrapping of long lines.
 ;; ============================================================================
 (+global-word-wrap-mode) ;; Enable word-wrap almost everywhere
 
 ;; ============================================================================
 ;; PERFORMANCE TWEAKS
+;; GC tuning for smoother performance; gcmh for adaptive GC behavior.
 ;; ============================================================================
 (setq gc-cons-threshold (* 10 1000 1000) ;; Set a high threshold of 50MB during startup
       gc-cons-percentage 0.6           ;; Temporarily increase GC frequency during startup
@@ -190,6 +221,7 @@
 
 ;; ============================================================================
 ;; AUTOREVERT
+;; Automatically reload files when they change on disk (and non-file buffers).
 ;; ============================================================================
 (after! autorevert
   (setq global-auto-revert-non-file-buffers t ; Revert Dired and other buffers
@@ -202,6 +234,7 @@
 
 ;; ============================================================================
 ;; HL LINE
+;; Highlight current line and TODO keywords in programming buffers.
 ;; ============================================================================
 (defun my-code-setup ()
   "Custom setup for programming modes."
@@ -215,6 +248,7 @@
 
 ;; ============================================================================
 ;; HL-TODO
+;; Customize colors for TODO/FIXME/etc. markers.
 ;; ============================================================================
 (setq hl-todo-keyword-faces
       '(("TODO"       . "#ECBE7B")
@@ -230,6 +264,7 @@
 
 ;; ============================================================================
 ;; UNDO-TREE
+;; Persistent undo history stored in a dedicated directory.
 ;; ============================================================================
 (after! undo-tree
   (setq undo-tree-enable-undo-in-region t        ;; Allow region-based undo
@@ -238,6 +273,7 @@
 
 ;; ============================================================================
 ;; FORMAT
+;; Global format-on-save, but turn it off for certain major modes.
 ;; ============================================================================
 (setq +format-on-save-enabled-modes
       '(not 
@@ -250,6 +286,7 @@
 
 ;; ============================================================================
 ;; ORG-MODE
+;; Core Org configuration: appearance, agenda, exports.
 ;; ============================================================================
 (setq org-directory (expand-file-name "org/" doom-user-dir))
 
@@ -284,6 +321,7 @@
         org-export-headline-levels 4    ;; Restrict to 4-level headers
         org-export-with-toc t))         ;; Include a table of contents                 
 
+;; Visual polish for Org buffers and agendas.
 (use-package! org-modern
   :hook ((org-mode . org-modern-mode)           ; Enable org-modern in Org Mode
          (org-agenda-finalize . org-modern-agenda)) ; Enable for agenda, if used
@@ -303,6 +341,7 @@
         org-modern-horizontal "──────────────────────────────────────"
         ))
 
+;; Reveal emphasis markers and links near point for better editing.
 (use-package! org-appear
   :hook (org-mode . org-appear-mode)       ; Enable org-appear in Org Mode
   :config
@@ -312,10 +351,12 @@
         org-appear-autokeywords t          ; Show #+KEYWORDS dynamically when near the cursor
         org-appear-delay 0.3))             ; Add delay before showing elements (optional)
 
+;; Convenience variables for main Org capture files.
 (setq org-tasks-file (expand-file-name "org/notes/tasks.org" doom-user-dir))
 (setq org-notes-file (expand-file-name "org/notes/notes.org" doom-user-dir))
 (setq org-journal-file (expand-file-name "org/notes/journal.org" doom-user-dir))
 
+;; Capture templates for tasks, notes, projects, and journal entries.
 (setq org-capture-templates
       '(("t" "Task" entry (file+headline org-tasks-file "Tasks")
          "* TODO %?\n  SCHEDULED: %^t\n  %u\n  %a")
@@ -326,6 +367,7 @@
         ("j" "Journal Entry" entry (file+datetree org-journal-file)
          "* %U\n%?\n")))
 
+;; Handling of pasted/dragged images and screenshots inside Org.
 (use-package! org-download
   :after org
   :config
@@ -343,6 +385,7 @@
   ;; Enable drag-and-drop in Dired Mode
   (add-hook 'dired-mode-hook 'org-download-enable))
 
+;; Prettier bullets and list markers for Org headings and lists.
 (use-package! org-superstar
   :hook (org-mode . org-superstar-mode) ;; Automatically enable org-superstar-mode in org-mode
   :config
@@ -361,6 +404,7 @@
 
 ;; ============================================================================
 ;; DEFT
+;; Fast note search and browsing in org/notes.
 ;; ============================================================================
 (setq deft-recursive t                            ;; Search notes in subdirectories
       deft-use-filename-as-title t                ;; Use filenames as note titles in deft browser
@@ -380,6 +424,7 @@
 
 ;; ============================================================================
 ;; ORG-ROAM 
+;; Zettelkasten/PKM system over Org with org-roam and daily notes.
 ;; ============================================================================
 ;; Define the main Org-roam directory
 (setq org-roam-directory (file-truename (expand-file-name "org/roam/" doom-user-dir)))
@@ -407,9 +452,11 @@
                               "#+title: ${title}\n#+category: ${slug}\n#+created: %u\n#+filetags: :project:\n")
            :unnarrowed t))))
 
+;; Dependency for org-roam-ui (websocket support).
 (use-package! websocket
   :after org-roam) ;; Loaded after org-roam for org-roam-ui
 
+;; org-roam-ui: browser-based visualization of the org-roam graph.
 (use-package! org-roam-ui
   :after org-roam
   :config
@@ -433,6 +480,7 @@
   (global-set-key (kbd "C-c n u") #'toggle-org-roam-ui)) ;; Custom keybinding for toggling
 
 ;;; Org-Babel Configuration
+;; Enable multiple languages and tweak behavior of code blocks and results.
 (after! org
   ;; Load languages for Org-Babel
   (setq org-babel-load-languages
@@ -483,6 +531,7 @@
 
 ;; ============================================================================
 ;; CALENDAR
+;; ISO format, week numbers, weekend highlighting, basic Bulgarian holidays.
 ;; ============================================================================
 (after! calendar
   (setq calendar-date-style 'iso ; Use ISO date format (YYYY-MM-DD) for consistency
@@ -511,6 +560,7 @@
 
 ;; ============================================================================
 ;; VERTICO
+;; Minibuffer completion UI settings (number of candidates, cycling, etc.)
 ;; ============================================================================
 (after! vertico
   (setq vertico-count 15                        ;; Maximum numbers of candidates to show
@@ -520,6 +570,7 @@
 
 ;; ============================================================================
 ;; VERTICO ADDITIONAL PACKAGES
+;; Richer annotations (MARGINALIA) and context-sensitive actions (EMBARK).
 ;; ============================================================================
 (use-package! marginalia
   :after vertico
@@ -542,12 +593,14 @@
 
 ;; ============================================================================
 ;; WHICH-KEY
+;; Faster which-key popups for keybinding discovery.
 ;; ============================================================================
 (setq which-key-idle-delay 0.3
       which-key-idle-secondary-delay 0.05)
 
 ;; ============================================================================
 ;; MU4E
+;; Email setup using mu4e for Gmail with Maildir and msmtp.
 ;; ============================================================================
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 (require 'mu4e)
@@ -576,7 +629,7 @@
 (add-to-list 'mu4e-bookmarks
              '(:query "maildir:/inbox" :name "Inbox" :key ?i :favorite t))
 
-;; Mail fetching
+;; Mail fetching via offlineimap
 (setq mu4e-get-mail-command "offlineimap")
 
 ;; User identity & signature
@@ -595,7 +648,7 @@
       mail-envelope-from 'header
       message-send-mail-function 'message-send-mail-with-sendmail)
 
-;; Optional SMTP via smtpmail
+;; Optional SMTP via smtpmail (commented out)
 ;; (setq message-send-mail-function 'smtpmail-send-it
 ;;       starttls-use-gnutls t
 ;;       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
@@ -613,6 +666,7 @@
 
 ;; ============================================================================
 ;; LSP Configuration for Doom Emacs
+;; General LSP integration for programming modes.
 ;; ============================================================================
 (use-package! lsp-mode
   :init
@@ -626,6 +680,7 @@
         lsp-response-timeout 30            ;; Timeout for LSP server responses
         lsp-completion-provider :capf))    ;; Use Completion-at-Point framework for suggestions
 
+;; UI enhancements for LSP (inline docs, sideline diagnostics).
 (use-package! lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :config
@@ -636,6 +691,7 @@
         lsp-ui-sideline-show-hover t       ;; Show hover documentation in sideline
         lsp-ui-sideline-update-mode 'line))
 
+;; Company-mode for auto-completion in programming buffers.
 (use-package! company
   :hook (prog-mode . company-mode)
   :config
@@ -644,7 +700,7 @@
         company-tooltip-align-annotations t
         company-selection-wrap-around t))
 
-;; Suppress warn messages
+;; Suppress noisy warnings about missing LSP clients.
 (after! lsp-mode
   (setq lsp-warn-no-matched-clients nil))
 
@@ -657,6 +713,7 @@
 
 ;; ============================================================================
 ;; DAP (Debug Adapter Protocol) - IntelliJ-like Debugging
+;; Java and other languages debugging UI.
 ;; ============================================================================
 (after! dap-java
   (setq 
@@ -675,6 +732,7 @@
 
 ;; ============================================================================
 ;; COMPANY
+;; Fine-tuning company completion behavior and UI.
 ;; ============================================================================
 (after! company
   (setq
@@ -693,11 +751,13 @@
    company-dabbrev-ignore-case nil
    company-dabbrev-other-buffers t))
 
-;; Enable company in modes
+;; Enable company globally after init.
 (add-hook 'after-init-hook 'global-company-mode) ;; enable company mode instant
 
 ;; ============================================================================
 ;; EJC DATABASE CONFIGURATION
+;; Multi-database SQL client setup (Postgres, MySQL, MariaDB, SQLite, Oracle,
+;; SQL Server, H2, and cloud variants).
 ;; ============================================================================
 (use-package! ejc-sql
   :init
@@ -900,8 +960,8 @@
 
 ;; ============================================================================
 ;; JAVA (LSP + DAP + Maven + Gradle)
+;; Java-specific tooling: environment, LSP, DAP helpers, and run/debug commands.
 ;; ============================================================================
-
 ;; Only run on GUI frames, and only import what you need
 (when (memq window-system '(mac ns x))
   (use-package! exec-path-from-shell
@@ -949,8 +1009,23 @@
         ;; Keep JDTLS workspace in Doom cache to avoid permission issues
         lsp-java-workspace-dir (expand-file-name "lsp-java/" doom-cache-dir)))
 
+(let* ((java-lib-dir (expand-file-name "lib/java/" doom-user-dir))
+       (lombok-jar   (expand-file-name "lombok.jar" java-lib-dir)))
+  (unless (file-directory-p java-lib-dir)
+    (make-directory java-lib-dir t))
+  (setq lsp-java-vmargs
+        '("-XX:+UseG1GC"
+          "-XX:+UseStringDeduplication"
+          "-Xmx4G"
+          "-Xms1G"
+          "-XX:+AlwaysPreTouch"
+          "-Dsun.zip.disableMemoryMapping=true"))
+  (when (file-exists-p lombok-jar)
+    (push (concat "-javaagent:" lombok-jar) lsp-java-vmargs)))
+
 ;; ----------------------------------------------------------------------------
 ;; Helpers
+;; Utility functions for deriving project root, main class, and project name.
 ;; ----------------------------------------------------------------------------
 (defun +java/java-project-root ()
   "Get project root from LSP or Projectile."
@@ -968,6 +1043,7 @@
 
 ;; ----------------------------------------------------------------------------
 ;; Run / Debug: Single File
+;; Commands for compiling/running or debugging the current Java file.
 ;; ----------------------------------------------------------------------------
 (defun +java/java-run-current-file ()
   "Compile and run current Java file."
@@ -999,6 +1075,7 @@
 
 ;; ----------------------------------------------------------------------------
 ;; Run: Maven / Gradle
+;; Run project via Maven or Gradle from the detected project root.
 ;; ----------------------------------------------------------------------------
 (defun +java/java-run-maven ()
   "Run Maven project from root."
@@ -1019,6 +1096,7 @@
 
 ;; ----------------------------------------------------------------------------
 ;; Debug: Project Main Class
+;; DAP debug configuration for arbitrary project main class.
 ;; ----------------------------------------------------------------------------
 (defun +java/java-debug-main ()
   "Debug a project main class using DAP."
@@ -1033,6 +1111,7 @@
 
 ;; ----------------------------------------------------------------------------
 ;; Keybindings
+;; Doom leader key bindings for LSP run/debug/test workflows.
 ;; ----------------------------------------------------------------------------
 (after! lsp-java
   (map! :leader
