@@ -247,6 +247,33 @@
 (global-hl-todo-mode 1)
 
 ;; ============================================================================
+;; EWW AS DEFAULT BROWSER (FALLBACK WHEN NO LOCAL DOC)
+;; ============================================================================
+;; Make `browse-url` use eww by default
+(setq browse-url-browser-function #'eww-browse-url)
+
+;; Make LSP/Help/etc. open HTTP(S) links in eww too
+(with-eval-after-load 'help-mode
+  (define-key help-mode-map (kbd "RET") #'push-button))
+
+(with-eval-after-load 'eww
+  ;; Open new pages in the same eww buffer by default
+  (setq eww-reuse-buffers t
+        eww-use-external-browser nil))
+
+;; Optional: a helper to force external browser when you really want it
+(defun +eww/open-in-external-browser ()
+  "Open the URL at point in the external browser."
+  (interactive)
+  (let ((browse-url-browser-function #'browse-url-default-browser))
+    (call-interactively #'browse-url-at-point)))
+
+;; Example keybinding: open URL under cursor in external browser
+(map! :leader
+      :desc "Open URL in external browser"
+      "o b" #'+eww/open-in-external-browser)
+
+;; ============================================================================
 ;; HL-TODO
 ;; Customize colors for TODO/FIXME/etc. markers.
 ;; ============================================================================

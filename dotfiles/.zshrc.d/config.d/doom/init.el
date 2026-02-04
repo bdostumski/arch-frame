@@ -56,7 +56,7 @@
        :emacs
        (dired +dirvish +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ;;eww             ; the internet is gross
+       eww             ; the internet is gross
        (ibuffer +icons)  ; interactive buffer management
        ;;tramp           ; remote files at your arthritic fingertips
        (undo +tree)      ; persistent, smarter undo for your inevitable mistakes
