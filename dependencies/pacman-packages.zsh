@@ -39,6 +39,7 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${CONFIG_DIR}/clamav" "/etc/clamav" true
     backup_and_copy "${CONFIG_DIR}/cron/cron.daily" "/etc/cron.daily" true
     backup_and_copy "${CONFIG_DIR}/cron/cron.weekly" "/etc/cron.weekly" true
+    backup_and_copy "${CONFIG_DIR}/cron/cron.monthly" "/etc/cron.monthly" true
     backup_and_copy "${CONFIG_DIR}/ufw/before.rules" "/etc/ufw/before.rules" true
 else
 

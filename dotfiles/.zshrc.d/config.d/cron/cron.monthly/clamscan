@@ -1,0 +1,2 @@
+#!/bin/zsh
+0 22 1 * * clamscan -r --quiet --bell -i --exclude-dir=/sys --exclude-dir=/proc --exclude-dir=/dev /

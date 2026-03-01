@@ -74,6 +74,7 @@ function config_update() {
     config_backup "${LOCATION}/clamav" "/etc/" true
     config_backup "${LOCATION}/cron/cron.daily" "/etc/" true
     config_backup "${LOCATION}/cron/cron.weekly" "/etc/" true
+    config_backup "${LOCATION}/cron/cron.monthly" "/etc/" true
     config_backup "${LOCATION}/arch/pacman.conf" "/etc/" true
     config_backup "${LOCATION}/ufw/before.rules" "/etc/ufw/" true
 
