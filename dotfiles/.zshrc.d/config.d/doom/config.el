@@ -3,11 +3,35 @@
 ;;; DOOM EMACS CONFIGURATION
 
 ;; ============================================================================
+;; ENVIRONMENT VARIABLES
+;; ============================================================================
+
+;; --- Identity ---
+(defvar +var/first-name  (or (getenv "FIRST_NAME")  "Borislav")   "User first name.")
+(defvar +var/middle-name (or (getenv "MIDDLE_NAME") "Alexandrov") "User middle name.")
+(defvar +var/last-name   (or (getenv "LAST_NAME")   "Dostumski")  "User last name.")
+(defvar +var/full-name   (concat +var/first-name " " +var/middle-name " " +var/last-name)
+  "Full name assembled from FIRST_NAME MIDDLE_NAME LAST_NAME env vars.")
+(defvar +var/email       (or (getenv "GMAIL") "b.dostumski@gmail.com")
+  "Primary e-mail address from the GMAIL env var.")
+
+;; --- Database ---
+(defvar +var/db-name     (or (getenv "DB_NAME")     "database") "Default database name.")
+(defvar +var/db-user     (or (getenv "DB_USERNAME") "user")     "Default database username.")
+(defvar +var/db-password (or (getenv "DB_PASSWORD") "password") "Default database password.")
+
+;; --- Java ---
+(defvar +var/java-home   (or (getenv "JAVA_HOME") "/usr/lib/jvm/java-21-openjdk")
+  "Java home directory. Falls back to the system Java 21 OpenJDK path.")
+(defvar +var/java-bin    (expand-file-name "bin/java" +var/java-home)
+  "Absolute path to the java executable.")
+
+;; ============================================================================
 ;; IDENTITY
 ;; Personal identity used by Emacs and external tools (Git, mail, etc.)
 ;; ============================================================================
-(setq user-full-name "Borislav Alexandrov Dostumski"
-      user-mail-address "b.dostumski@gmail.com")
+(setq user-full-name +var/full-name
+      user-mail-address +var/email)
 
 ;; ============================================================================
 ;; APPEARANCE
@@ -811,9 +835,9 @@
    :classpath (concat (file-name-as-directory ejc-jdbc-driver-path) "postgresql-42.5.0.jar")
    :classname "org.postgresql.Driver"
    :subprotocol "postgresql"
-   :subname "//localhost:5432/my_database"
-   :user "user"
-   :password "password")
+   :subname (concat "//localhost:5432/" +var/db-name)
+   :user +var/db-user
+   :password +var/db-password)
 
   ;; MySQL Connection
   (ejc-create-connection
@@ -821,9 +845,9 @@
    :classpath (concat (file-name-as-directory ejc-jdbc-driver-path) "mysql-connector-java-8.0.33.jar")
    :classname "com.mysql.cj.jdbc.Driver"
    :subprotocol "mysql"
-   :subname "//127.0.0.1:3306/my_mysql_database"
-   :user "user"
-   :password "password")
+   :subname (concat "//127.0.0.1:3306/" +var/db-name)
+   :user +var/db-user
+   :password +var/db-password)
 
   ;; MariaDB (MySQL Fork)
   (ejc-create-connection
@@ -831,9 +855,9 @@
    :classpath (concat (file-name-as-directory ejc-jdbc-driver-path) "mariadb-java-client-3.0.8.jar") ;; MariaDB JDBC driver
    :classname "org.mariadb.jdbc.Driver"
    :subprotocol "mariadb"
-   :subname "//127.0.0.1:3306/your_database"
-   :user "user"
-   :password "password")
+   :subname (concat "//127.0.0.1:3306/" +var/db-name)
+   :user +var/db-user
+   :password +var/db-password)
 
   ;; SQLite
   (ejc-create-connection
@@ -841,7 +865,7 @@
    :classpath (concat (file-name-as-directory ejc-jdbc-driver-path) "sqlite-jdbc-3.36.0.3.jar")
    :classname "org.sqlite.JDBC"
    :subprotocol "sqlite"
-   :subname (expand-file-name "~/path/to/your_database.sqlite"))
+   :subname (expand-file-name (concat "~/" +var/db-name ".sqlite")))
 
   ;; Oracle
   (ejc-create-connection
@@ -849,9 +873,9 @@
    :classpath (concat (file-name-as-directory ejc-jdbc-driver-path) "ojdbc8.jar") ;; Note: Oracle restricts its downloads
    :classname "oracle.jdbc.driver.OracleDriver"
    :subprotocol "oracle:thin"
-   :subname "@//localhost:1521/your_service_name"
-   :user "user"
-   :password "password")
+   :subname (concat "@//localhost:1521/" +var/db-name)
+   :user +var/db-user
+   :password +var/db-password)
 
   ;; Microsoft SQL Server
   (ejc-create-connection
@@ -859,9 +883,9 @@
    :classpath (concat (file-name-as-directory ejc-jdbc-driver-path) "mssql-jdbc-9.4.1.jre8.jar") ;; Microsoft SQL Server JDBC driver
    :classname "com.microsoft.sqlserver.jdbc.SQLServerDriver"
    :subprotocol "sqlserver"
-   :subname "//localhost:1433;databaseName=your_database"
-   :user "user"
-   :password "password")
+   :subname (concat "//localhost:1433;databaseName=" +var/db-name)
+   :user +var/db-user
+   :password +var/db-password)
 
   ;; H2 Database (In-Memory or File-Based)
   (ejc-create-connection
@@ -869,7 +893,7 @@
    :classpath (concat (file-name-as-directory ejc-jdbc-driver-path) "h2-2.1.214.jar")
    :classname "org.h2.Driver"
    :subprotocol "h2"
-   :subname "~/your_database_file.h2.db" ;; For file-based H2 database
+   :subname (concat "~/" +var/db-name ".h2.db")
    :user "sa"
    :password "")
 
@@ -902,7 +926,7 @@
    :subname "//<server-name>.mysql.database.azure.com:3306/your_database"
    :user "username@<server-name>"
    :password "db_password")
-  
+
   ;; Optional keybinding: Connect and execute queries
   (after! ejc-sql
     (map! :map sql-mode-map
@@ -1032,7 +1056,7 @@
 
 (after! lsp-java
   ;; Force the exact Java binary JDTLS should use
-  (setq lsp-java-java-path "/usr/lib/jvm/java-21-openjdk/bin/java"
+  (setq lsp-java-java-path +var/java-home
         ;; Keep JDTLS workspace in Doom cache to avoid permission issues
         lsp-java-workspace-dir (expand-file-name "lsp-java/" doom-cache-dir)))
 
