@@ -3,19 +3,10 @@
 ;; ============================
 ;; Core Tools & Utilities
 ;; ============================
-
 (package! sudo-edit)
-(package! exec-path-from-shell)
 (package! tldr)          
 (package! pdf-tools)
-
-;; Web Tools
-(package! simple-httpd)
-(package! htmlize)
-(package! websocket
-  :recipe (:host github :repo "ahyatt/emacs-websocket")) ;; Dependency for org-mode
-
-;; AI Tools
+(package! exec-path-from-shell)
 (package! copilot
   :recipe (:host github
            :repo "copilot-emacs/copilot.el"
@@ -24,9 +15,9 @@
 ;; ============================
 ;; Database
 ;; ============================
-(package! ejc-sql) ;; Database connection
+(package! ejc-sql)
 (package! emacsql) ;; Required dependency for ejc-sql
-(package! dash-functional) 
+(package! dash-functional) ;; Sometimes also required depending on your Emacs version
 
 ;; ============================
 ;; Org & Notes
@@ -36,6 +27,8 @@
 (package! org-download)
 (package! org-superstar)
 (package! org-roam-ui)
+(package! websocket
+  :recipe (:host github :repo "ahyatt/emacs-websocket"))
 (package! ob-restclient)     
 (package! restclient)        
 
