@@ -15,43 +15,10 @@ source "$(dirname "${0}")/../utils/install-utils.zsh"
 # -------------------------
 export function create-package-directories() {
 
-	if [[ ! -d "${HOME}/Documents/notes" ]]; then
-		mkdir "${HOME}/Documents/notes"
-	fi
-
-	if [[ ! -d "${HOME}/Documents/diary" ]]; then
-		mkdir "${HOME}/Documents/diary"
-	fi
-	
 	if [[ ! -d "${HOME}/Maildir" ]]; then
 		mkdir "${HOME}/Maildir"
 	fi
 
-	if [[ ! -d "${HOME}/Documents/org" ]]; then
-		mkdir -p "${HOME}/Documents/org"
-	fi
-	
-	if [[ ! -d "${HOME}/Documents/org/roam" ]]; then
-		mkdir -p "${HOME}/Documents/org/roam"
-		touch "${HOME}/Documents/org/feeds.org"
-	fi
-
-	if [[ ! -d "${HOME}/Documents/org/feeds.org" ]]; then
-		mkdir -p "${HOME}/Documents/org/feeds.org"
-	fi
-	
-	if [[ ! -d "${HOME}/.config/emacs/yanist" ]]; then
-		mkdir -p "${HOME}/.config/emacs/yanist"
-	fi
-
-	if [[ ! -d "${HOME}/.config/doom/yanist" ]]; then
-		mkdir -p "${HOME}/.config/doom/yanist"
-	fi
-
-	if [[ ! -d "${HOME}/.config/doom/snippets" ]]; then
-		mkdir -p "${HOME}/.config/emacs/snippets"
-		chmod 777 "${HOME}/.config/emacs/snippets"
-	fi
 }
 
 # -------------------------
@@ -133,8 +100,8 @@ localfolders = ~/Maildir
 [Repository Remote]
 type = IMAP
 remotehost = imap.gmail.com
-remoteuser = YOUR_EMAIL
-remotepass = YOUR_PASSWORD
+remoteuser = ${GMAIL}
+remotepass = ${GMAIL_PASSWORD}
 ssl = yes
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 maxconnections = 1
@@ -167,9 +134,9 @@ tls_trust_file /etc/ssl/certs/ca-certificates.crt
 account Gmail
 host smtp.gmail.com
 port 587
-from YOUR_EMAIL
-user YOUR_EMAIL
-password YOUR_PASSWORD
+from ${GMAIL}
+user ${GMAIL_USER}
+password ${GMAIL_PASSWORD}
 
 account default : Gmail
 EOF

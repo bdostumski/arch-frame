@@ -5,26 +5,70 @@
 #
 
 export AUR_PACKAGES=(
+
+    # -------------------------
+    # Editors & IDEs
+    # -------------------------
     visual-studio-code-bin
-    postman-bin
-    stacer-bin
-    viber
-    backintime
-    backintime-cli
-    downgrade
+    intellij-idea-community-edition
+
+    # -------------------------
+    # JVM Languages (AUR)
+    # -------------------------
     scala
     scalafmt
     metals
+    lombok-common
+
+    # -------------------------
+    # Haskell
+    # -------------------------
     haskell-language-server
-    intellij-idea-community-edition
-    js-beautify
-    mu
+
+    # -------------------------
+    # Lisp / Clojure
+    # -------------------------
+    lisp
+
+    # -------------------------
+    # Go Dev Tools
+    # -------------------------
     gomodifytags
     gotests
     gore
-    lombok-common
+
+    # -------------------------
+    # JavaScript / Web Tools
+    # -------------------------
+    js-beautify
+
+    # -------------------------
+    # Mail Client Tools
+    # -------------------------
+    mu # Maildir indexer (mu4e backend)
+
+    # -------------------------
+    # GUI Applications
+    # -------------------------
+    postman-bin
+    stacer-bin
+    viber
+    aur/eww # Widget system for wayland/x11
+
+    # -------------------------
+    # Backup & Recovery
+    # -------------------------
+    backintime
+    backintime-cli
+    downgrade
+
+    # -------------------------
+    # System Optimisation
+    # -------------------------
     auto-cpufreq
-    lisp
+
+    # -------------------------
+    # Data Science & ML
+    # -------------------------
     anaconda
-    aur/eww
 )

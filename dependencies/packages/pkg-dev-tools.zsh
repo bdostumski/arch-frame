@@ -5,24 +5,54 @@
 #
 
 export PACMAN_PACKAGES=(
+
+    # -------------------------
+    # Containerisation
+    # -------------------------
     docker
     docker-machine
-    docker-compose
+    containerd
+
+    # -------------------------
+    # Configuration Management
+    # -------------------------
     ansible
+
+    # -------------------------
+    # Kubernetes
+    # -------------------------
     minikube
     kubeadm
     kubectl
-    containerd
+
+    # -------------------------
+    # Helm — Kubernetes Package Manager
+    # -------------------------
     helm
 )
 
 export AUR_PACKAGES=(
-    grip
-    docker-compose
+
+    # -------------------------
+    # Container Utilities
+    # -------------------------
+    dockfmt-git
+
+    # -------------------------
+    # Virtual Machines
+    # -------------------------
     vagrant
     qemu-full
+
+    # -------------------------
+    # Virtualisation Management
+    # -------------------------
     libvirt
     virt-manager
     dnsmasq
-    dockfmt-git
+
+    # -------------------------
+    # Miscellaneous Dev Utilities
+    # -------------------------
+    grip # Markdown preview server
 )

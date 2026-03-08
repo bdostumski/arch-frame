@@ -24,14 +24,14 @@ else
 fi
 
 # -------------------------
-# Create Directories for Packages 
+# Create Directories for Packages
 # -------------------------
 create-package-directories
 
 # -------------------------
 # Create SYSTEMD service
 # -------------------------
-config-doom-emacs-systemd
+# config-doom-emacs-systemd
 
 # -------------------------------
 # Create OFFLINEMAPRC IMAP config
@@ -62,7 +62,7 @@ if [[ "${MAIL}" = 'y' ]]; then
     # MU4E configuration
     # -------------------------------
     log "📨 Starting MU4E configuration"
-    mu init --maildir="${HOME}/Maildir" --my-address=b.dostumski@gmail.com
+    mu init --maildir="${HOME}/Maildir" --my-address="${GMAIL}"
     mu index
 
     log "✅ Mail client configuration for doom-emacs is done."
@@ -94,18 +94,6 @@ if [[ -d "dotfiles" ]]; then
     backup_and_copy "${HOME}/.zshrc.d/config.d/doom" "${HOME}/.config/doom"
 else
     log "⚠️ Dotfiles directory not found. Skipping dotfile setup." ">&2"
-fi
-
-if [[ ! -d "${HOME}/.config/emacs/snippets" ]]; then
-	mkdir -p "${HOME}/.config/emacs/snippets"
-fi
-
-if [[ ! -d "${HOME}/.local/share/yasnippet-snippets" ]]; then
-	mkdir -p "${HOME}/.local/share/yasnippet-snippets"
-fi
-
-if [[ ! -d "${HOME}/.config/emacs/snippets/project-specific-snippets" ]]; then
-	mkdir -p "${HOME}/.config/emacs/snippets/project-specific-snippets"
 fi
 
 log "🧩 Installing Doom Emacs..."

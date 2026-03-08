@@ -24,12 +24,24 @@ log "But first you have to install and run zsh"
 log "\n"
 log "Highly recommended is to try it on a virtual machine, or to install it on a fresh Arch installation"
 log "\n"
+
+# TODO: User Registration Process:
+# USERNAME
+# FIRST_NAME
+# MIDDLE_NAME
+# LAST_NAME
+# GIT_USERNAME
+# GMAIL
+# GMAIL_USER
+# GMAIL_PASSWORD
+# DB_NAME
+# DB_USERNAME
+# DB_PASSWORD
+
 log "Install Dependencies 📦"
-log "0) Install dependencies neede for the script [Zsh, Kitty, Fonts, Python]"
-log "1) Install core dependencies [Vim, Neovim, Emacs, System, ClamAV, UFW, Wine, VirtualBox, etc]"
-log "2) Install Dev Tools [Docker, Vagrant, K8s, etc.]"
-log "3) Install IDE for programming [Doom Emacs]"
-log "4) Install System Drivers & Firmware"
+log "1) Main Packages Installation [Neovim, Emacs, System, ClamAV, UFW, etc]"
+log "2) Dev Packages Installation [Docker, Vagrant, K8s, etc.]"
+log "3) System Drivers & Firmware Installation"
 log "x) Exit"
 log "\n"
 echo -n "Enter your choise: "
@@ -42,40 +54,27 @@ fi
 DEPENDENCIES_PATH="$(dirname ${0})/dependencies"
 
 case "${CHOICE}" in
-0)
-    log "\n"
-    log "= = = = = = = = = ="
-    log "Starting installation [Zsh, Kitty, Fonts, Python] . . ."
-    source "${DEPENDENCIES_PATH}/pacman-packages-main.zsh"
-    log "💡 Exit default terminal, and run kitty terminal"
-    ;;
 1)
     log "\n"
     log "= = = = = = = = = ="
-    log "Starting installation [Vim, Neovim, Emacs, System, ClamAV, UFW, Wine, VirtualBox, etc] . . ."
+    log "Main Packages Installation [Neovim, Emacs, System, ClamAV, UFW, etc] . . ."
     source "${DEPENDENCIES_PATH}/pacman-packages.zsh"
     source "${DEPENDENCIES_PATH}/git-packages.zsh"
     source "${DEPENDENCIES_PATH}/yay-packages.zsh"
+    source "${DEPENDENCIES_PATH}/doom-emacs.zsh"
     log "💡 Restart [exit/start again] rerun the script with kitty terminal"
     ;;
 2)
     log "\n"
     log "= = = = = = = = = ="
-    log "Starting installation [Docker, Vagrant, K8s, etc.] . . ."
+    log "Dev Packages Installation [Docker, Vagrant, K8s, etc.] . . ."
     source "${DEPENDENCIES_PATH}/dev-tools.zsh"
     log "💡 Restart [exit/start again] kitty terminal"
     ;;
-
 3)
     log "\n"
     log "= = = = = = = = = ="
-    log "Starting installation [Doom Emacs] . . ."
-    source "${DEPENDENCIES_PATH}/doom-emacs.zsh"
-    ;;
-4)
-    log "\n"
-    log "= = = = = = = = = ="
-    log "Install System Drivers & Firmware . . ."
+    log "System Drivers & Firmware Installation . . ."
     source "${DEPENDENCIES_PATH}/drivers.zsh"
     ;;
 *)

@@ -32,6 +32,13 @@ if [[ -d "${DOTFILES}" ]]; then
 
     CONFIG_DIR="${HOME}/.zshrc.d/config.d"
 
+    backup_and_copy "${DOTFILES}/.zshrc.d" "${HOME}/.zshrc.d" false
+    backup_and_copy "${CONFIG_DIR}/vim/.vimrc" "${HOME}/.vimrc" false
+    backup_and_copy "${CONFIG_DIR}/kitty" "${HOME}/.config/kitty" false
+    backup_and_copy "${CONFIG_DIR}/env/.env.zsh" "${HOME}/.env.zsh" false
+    backup_and_copy "${CONFIG_DIR}/gitconf/.gitconfig" "${HOME}/.gitconfig" false
+    backup_and_copy "${CONFIG_DIR}/arch/pacman.conf" "/etc/pacman.conf" true
+
     move_file "${HOME}/.config/nvim"
     backup_and_copy "${DOTFILES}/.zshrc" "${HOME}/.zshrc" false
     backup_and_copy "${CONFIG_DIR}/tmux" "${HOME}/.config/tmux" false
@@ -58,7 +65,7 @@ config_ufw
 # -------------------------------------
 # CLAMAV configuration
 # -------------------------------------
-config_clamav
+# config_clamav
 
 # -------------------------------------
 # NEOVIM kickstart configuration
@@ -71,28 +78,16 @@ else
 fi
 
 # -------------------------------------
-# ZSH configuration
-# -------------------------------------
-if [[ "${SHELL}" != *"zsh" ]]; then
-
-    log "⚙️ Setting Zsh as default shell..."
-    chsh -s "$(which zsh)"
-else
-
-    log "✅ Zsh is already the default shell." >&2
-fi
-
-# -------------------------------------
 # PYENV configuration
 # -------------------------------------
 if command -v pyenv >/dev/null 2>&1; then
-	
-    	log "⚙️ Setting pyenv..."
-	pyenv install 3.11.6
-	pyenv global 3.11.6
+
+    log "⚙️ Setting pyenv..."
+    pyenv install 3.11.6
+    pyenv global 3.11.6
 else
 
-	log "pyenv is not installed!"
+    log "pyenv is not installed!"
 fi
 
 chmod +x ~/.zshrc.d/functions.d/*.zsh

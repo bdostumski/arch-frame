@@ -684,11 +684,11 @@
 (setq mu4e-get-mail-command "offlineimap")
 
 ;; User identity & signature
-(setq user-mail-address "b.dostumski@gmail.com"
-      user-full-name  "Borislav Dostumski"
+(setq user-mail-address +var/email
+      user-full-name  +var/full-name
       message-signature
       (concat
-       "Borislav Dostumski\n"
+       +var/full-name "\n"
        "http://www.github.com/bdostumski\n"))
 
 ;; Sending mail via msmtp or smtpmail
