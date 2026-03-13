@@ -100,7 +100,7 @@ localfolders = ~/Maildir
 [Repository Remote]
 type = IMAP
 remotehost = imap.gmail.com
-remoteuser = ${GMAIL}
+remoteuser = ${GMAIL_USER}
 remotepass = ${GMAIL_PASSWORD}
 ssl = yes
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
@@ -134,7 +134,7 @@ tls_trust_file /etc/ssl/certs/ca-certificates.crt
 account Gmail
 host smtp.gmail.com
 port 587
-from ${GMAIL}
+from ${GMAIL_EMAIL}
 user ${GMAIL_USER}
 password ${GMAIL_PASSWORD}
 

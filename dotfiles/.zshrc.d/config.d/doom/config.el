@@ -12,8 +12,8 @@
 (defvar +var/last-name   (or (getenv "LAST_NAME")   "Dostumski")  "User last name.")
 (defvar +var/full-name   (concat +var/first-name " " +var/middle-name " " +var/last-name)
   "Full name assembled from FIRST_NAME MIDDLE_NAME LAST_NAME env vars.")
-(defvar +var/email       (or (getenv "GMAIL") "b.dostumski@gmail.com")
-  "Primary e-mail address from the GMAIL env var.")
+(defvar +var/email       (or (getenv "GMAIL_EMAIL") "b.dostumski@gmail.com")
+  "Primary e-mail address from the GMAIL_EMAIL env var.")
 
 ;; --- Database ---
 (defvar +var/db-name     (or (getenv "DB_NAME")     "database") "Default database name.")

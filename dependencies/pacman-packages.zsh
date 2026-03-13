@@ -12,6 +12,7 @@ source "$(dirname "${0}")/utils/install-utils.zsh"
 source "$(dirname "${0}")/packages/pkg-pacman.zsh"
 source "$(dirname "${0}")/configurations/config-ufw.zsh"
 source "$(dirname "${0}")/configurations/config-vbox.zsh"
+source "$(dirname "${0}")/configurations/config-env-variables.zsh"
 
 log "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
@@ -27,6 +28,9 @@ install_packman_packages "${PACMAN_PACKAGES[@]}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES="${SCRIPT_DIR}/dotfiles"
 if [[ -d "${DOTFILES}" ]]; then
+
+    log "💾 Create main config files ..."
+    create_env_variables_file
 
     log "💾 Copying main config file to home root directory..."
 

@@ -24,23 +24,36 @@ log "But first you have to install and run zsh"
 log "\n"
 log "Highly recommended is to try it on a virtual machine, or to install it on a fresh Arch installation"
 log "\n"
-
-# TODO: User Registration Process:
-# USERNAME
-# FIRST_NAME
-# MIDDLE_NAME
-# LAST_NAME
-# GIT_USERNAME
-# GMAIL
-# GMAIL_USER
-# GMAIL_PASSWORD
-# DB_NAME
-# DB_USERNAME
-# DB_PASSWORD
-
-log "Install Dependencies 📦"
+log "\n"
+log "USER REGISTRATION:"
+log "\n"
+log "OS User Name: "
+read -r USER_NAME
+log "First Name: "
+read -r FIRST_NAME
+log "Middle Name: "
+read -r MIDDLE_NAME
+log "Last Name: "
+read -r LAST_NAME
+log "Git User: "
+read -r GIT_USER
+log "Gmail Email: "
+read -r GMAIL_EMAIL
+log "Gmail User: "
+read -r GMAIL_USER
+log "Gmail Password: "
+read -r GMAIL_PASSWORD
+log "Local Database Name (example: database): "
+read -r DB_NAME
+log "Local Database User Name (example: user): "
+read -r DB_USERNAME
+log "Local Database Password (example: password): "
+read -r DB_PASSWORD
+log "\n"
+log "\n"
+log "INSTALL DEPENDENCIES:"
 log "1) Main Packages Installation [Neovim, Emacs, System, ClamAV, UFW, etc]"
-log "2) Dev Packages Installation [Docker, Vagrant, K8s, etc.]"
+log "2) Dev Packages Installation [Docker, Vagrant, K8s, etc]"
 log "3) System Drivers & Firmware Installation"
 log "x) Exit"
 log "\n"

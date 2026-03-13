@@ -62,7 +62,7 @@ if [[ "${MAIL}" = 'y' ]]; then
     # MU4E configuration
     # -------------------------------
     log "📨 Starting MU4E configuration"
-    mu init --maildir="${HOME}/Maildir" --my-address="${GMAIL}"
+    mu init --maildir="${HOME}/Maildir" --my-address="${GMAIL_EMAIL}"
     mu index
 
     log "✅ Mail client configuration for doom-emacs is done."
