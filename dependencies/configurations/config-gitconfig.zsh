@@ -3,9 +3,6 @@
 export create_gitconfig_file() {
     cat <<EOF >"${HOME}/.zshrc.d/config.d/gitconf/.gitconfig"
 [user] # Git user settings
-
-TODO fix all text with variables
-
 	name = "${FIRST_NAME} ${LAST_NAME}""
 	email = "${GMAIL_EMAIL}"
 	username = "${GIT_USER}"
