@@ -3,9 +3,12 @@
 export create_gitconfig_file() {
     cat <<EOF >"${HOME}/.zshrc.d/config.d/gitconf/.gitconfig"
 [user] # Git user settings
-	name = Borislav Dostumski
-	email = b.dostumski@gmail.com
-	username = bdostumski
+
+TODO fix all text with variables
+
+	name = "${FIRST_NAME} ${LAST_NAME}""
+	email = "${GMAIL_EMAIL}"
+	username = "${GIT_USER}"
 	signingkey = signingkey  # Using GPG signing
 
 [init] # Git init settings
@@ -22,7 +25,7 @@ export create_gitconfig_file() {
 [sendmail] # Send mail using mu4e
 	smtpserver = /usr/bin/mu
 	smtpserverport = 587
-	smtpuser = b.dostumski@gmail.com
+	smtpuser = "${GIT_USER}"
 
 [web] # Open a web browser
 	browser = firefox
@@ -110,7 +113,7 @@ export create_gitconfig_file() {
 	protected = *prod, *production
 
 [github] # GitHub settings
-	user = bdostumski
+	user = "${GIT_USER}"
 	token = token # GitHub token
 
 [sequence] # Sequence settings
