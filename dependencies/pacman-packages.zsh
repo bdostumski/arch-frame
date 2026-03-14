@@ -13,6 +13,7 @@ source "$(dirname "${0}")/packages/pkg-pacman.zsh"
 source "$(dirname "${0}")/configurations/config-ufw.zsh"
 source "$(dirname "${0}")/configurations/config-vbox.zsh"
 source "$(dirname "${0}")/configurations/config-env-variables.zsh"
+source "$(dirname "${0}")/configurations/config-gitconfig.zsh"
 
 log "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
@@ -31,6 +32,7 @@ if [[ -d "${DOTFILES}" ]]; then
 
     log "💾 Create main config files ..."
     create_env_variables_file
+    create_gitconfig_file
 
     log "💾 Copying main config file to home root directory..."
 
