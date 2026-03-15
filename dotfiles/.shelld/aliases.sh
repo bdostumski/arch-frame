@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # ALIASES
 # Description: Aliases are short commands that can be used to replace long commands.
@@ -24,7 +24,8 @@ alias emacs-kill="killall emacs || echo 'Emacs server not running'; /usr/bin/ema
 # external applications
 alias help='tldr'                                                    # help with examples
 alias zsh-source='source ${HOME}/.zshrc'                             # source zsh
-alias config-source='${HOME}/.zshrc.d/functions.d/config-update.zsh' # update configuration files
+alias bash-source='source ${HOME}/.bashrc'                           # source bash
+alias config-source='${HOME}/.shelld/functions.d/config-update.sh'  # update configuration files
 alias zsh-theme='p10k configure'                                     # configure p10k theme
 alias templates="templates"                                          # file templates for git, docker, kubernetes, vagrant etc.
 # ----------

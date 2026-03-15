@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # NAVIGATION
 # Description: Change several directories up
@@ -12,12 +12,11 @@ function cd_up() {
 
 	# If ${LIMIT} is empty or does not contains integer or is les than zero.
 	# Then return error message.
-	if [[ -z "${LIMIT}" || ! "${LIMIT}" =~ ^[0-9]+$ || "${LIMIT}" -le 0 ]]; then
+	if [ -z "${LIMIT}" ] || ! printf '%s' "${LIMIT}" | grep -qE '^[0-9]+$' || [ "${LIMIT}" -le 0 ]; then
 		echo "Error: Please provide a positive number." >&2
 		return 1
 	else
-		LIMIT=1
-		for ((count = 1; count <= LIMIT; count++)); do
+		for count in $(seq 1 "${LIMIT}"); do
 			LOCATION="../${LOCATION}"
 		done
 	fi

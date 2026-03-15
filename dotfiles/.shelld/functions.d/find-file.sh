@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # FIND FILES AND OPEN SELECTED IN NVIM
 # Description: This function uses fd to find files and open select one

@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # FIND DIRECTORIES AND OPEN SELECTED IN NVIM
 # Description: This script uses fd to find directories and open the selected

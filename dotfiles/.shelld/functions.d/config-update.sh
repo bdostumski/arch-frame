@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # Update Configuration Files
 # Description: Override all applications coniguration files
@@ -6,7 +6,7 @@
 
 # Check if it is user or not and copy directory
 function copy_directory() {
-    if [[ "${SUDO}" = 'true' ]]; then
+    if [ "${SUDO}" = 'true' ]; then
         sudo cp -r "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
     else
         cp -r "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
@@ -17,7 +17,7 @@ function copy_directory() {
 
 # Check if it is sudo or not and copy file
 function copy_file() {
-    if [[ "${SUDO}" = 'true' ]]; then
+    if [ "${SUDO}" = 'true' ]; then
         sudo cp "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
     else
         cp "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
@@ -35,18 +35,18 @@ function config_backup() {
     local SUDO="${3}"
     local FILE_NAME="$(echo "${COPY_FILE_DATA}" | awk -F '/' '{print $NF}')"
 
-    if [[ -s "${COPY_FILE_DATA}" && ! -e "${PASTE_FILE_PATH}${FILE_NAME}.bak" ]]; then
+    if [ -s "${COPY_FILE_DATA}" ] && [ ! -e "${PASTE_FILE_PATH}${FILE_NAME}.bak" ]; then
         echo "Backup ${FILE_NAME} into ${PASTE_FILE_PATH} path." >&2
         cp -r "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}${FILE_NAME}.bak"
     fi
 
-    if [[ -d "${COPY_FILE_DATA}" && ! -z "${PASTE_FILE_PATH}" ]]; then
+    if [ -d "${COPY_FILE_DATA}" ] && [ -n "${PASTE_FILE_PATH}" ]; then
         echo "Copy directory ${FILE_NAME} into ${PASTE_FILE_PATH}" >&2
         copy_directory
-    elif [[ -f "${COPY_FILE_DATA}" && ! -z "${PASTE_FILE_PATH}" ]]; then
+    elif [ -f "${COPY_FILE_DATA}" ] && [ -n "${PASTE_FILE_PATH}" ]; then
         echo "Copy file ${FILE_NAME} into ${PASTE_FILE_PATH}" >&2
         copy_file
-    elif [[ ! -s "$COPY_FILE_DATA" && ! -z "${PASTE_FILE_PATH}" ]]; then
+    elif [ ! -s "$COPY_FILE_DATA" ] && [ -n "${PASTE_FILE_PATH}" ]; then
         echo "Error: ${FILE_NAME} does not exists, or file path ${PASTE_FILE_PATH} is not correct." >&2
         return 1
     else
