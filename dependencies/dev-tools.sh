@@ -14,7 +14,7 @@
 # ---------------------------
 #  Install PACMAN Packages
 # ---------------------------
-install_packman_packages "${PACMAN_PACKAGES[@]}"
+install_pacman_packages "${PACMAN_PACKAGES[@]}"
 
 # ---------------------------
 #  Install AUR Packages

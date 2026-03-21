@@ -12,6 +12,7 @@
 . "$(dirname "${0}")/packages/pkg-pacman.sh"
 . "$(dirname "${0}")/configurations/config-ufw.sh"
 . "$(dirname "${0}")/configurations/config-vbox.sh"
+. "$(dirname "${0}")/configurations/config-clamav.sh"
 . "$(dirname "${0}")/configurations/config-env-variables.sh"
 . "$(dirname "${0}")/configurations/config-gitconfig.sh"
 
@@ -21,13 +22,12 @@ sudo pacman -Syu --noconfirm
 # -------------------------------------
 #  Install PACKMAN packages
 # -------------------------------------
-install_packman_packages "${PACMAN_PACKAGES[@]}"
-
+install_pacman_packages "${PACMAN_PACKAGES[@]}"
 # -------------------------------------
 # Copy and backup DOTFILES
 # -------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${0}")" && pwd)"
-DOTFILES="${SCRIPT_DIR}/dotfiles"
+DOTFILES="${SCRIPT_DIR}/../dotfiles"
 if [ -d "${DOTFILES}" ]; then
 
     log "💾 Create main config files ..."
@@ -71,7 +71,7 @@ config_ufw
 # -------------------------------------
 # CLAMAV configuration
 # -------------------------------------
-# config_clamav
+config_clamav
 
 # -------------------------------------
 # NEOVIM kickstart configuration

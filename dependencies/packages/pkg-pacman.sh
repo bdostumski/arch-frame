@@ -133,7 +133,6 @@ export PACMAN_PACKAGES=(
     sqlite
     jq
     direnv
-    ncdu
 
     # -------------------------
     # Linting & Formatting

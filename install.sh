@@ -64,7 +64,7 @@ if [ "${CHOICE}" = "x" ]; then
     exit 0
 fi
 
-DEPENDENCIES_PATH="$(dirname ${0})/dependencies"
+DEPENDENCIES_PATH="$(dirname "${0}")/dependencies"
 
 case "${CHOICE}" in
 1)

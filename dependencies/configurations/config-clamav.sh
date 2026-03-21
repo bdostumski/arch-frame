@@ -43,18 +43,18 @@ config_clamav() {
 
     # SYSTEMD user override
     mkdir -p "${HOME}/.config/systemd/user"
-    cat <<EOF >~/.config/systemd/user/clamav-clamonacc.service
-    [Unit]
-    Description=ClamAV On-Access Scanner
-    After=clamav-daemon.service
+    cat <<EOF >"${HOME}/.config/systemd/user/clamav-clamonacc.service"
+[Unit]
+Description=ClamAV On-Access Scanner
+After=clamav-daemon.service
 
-    [Service]
-    ExecStart=/usr/bin/clamonacc -F --fdpass --log=/var/log/clamav/clamonacc.log
-    Restart=on-failure
+[Service]
+ExecStart=/usr/bin/clamonacc -F --fdpass --log=/var/log/clamav/clamonacc.log
+Restart=on-failure
 
-    [Install]
-    WantedBy=default.target
-    EOF
+[Install]
+WantedBy=default.target
+EOF
 
     # ALLOW notifications
     if ! grep -q 'clamav ALL' "/etc/sudoers.d/clamav" >/dev/null 2>&1; then

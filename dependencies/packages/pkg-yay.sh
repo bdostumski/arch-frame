@@ -45,7 +45,7 @@ export AUR_PACKAGES=(
     # -------------------------
     # Mail Client Tools
     # -------------------------
-    mu # Maildir indexer (mu4e backend)
+    # mu is already installed via pacman (pkg-pacman.sh)
 
     # -------------------------
     # GUI Applications

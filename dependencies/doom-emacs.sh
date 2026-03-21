@@ -20,7 +20,6 @@ if git clone --depth 1 "https://github.com/doomemacs/doomemacs" "${HOME}/.config
     log "✅ Doom Emacs cloned."
 else
     log "⚠️ Doom Emacs already exists at ~/.config/emacs. Skipping clone."
-    exit 1
 fi
 
 # -------------------------
@@ -90,18 +89,19 @@ fi
 # Copy and backup DOTFILES
 # -------------------------
 log "📂 Copying main config file to home root directory..."
-if [ -d "dotfiles" ]; then
+SCRIPT_DIR="$(cd "$(dirname "${0}")" && pwd)"
+if [ -d "${SCRIPT_DIR}/../dotfiles" ]; then
     backup_and_copy "${HOME}/.zshrc.d/config.d/doom" "${HOME}/.config/doom"
 else
     log "⚠️ Dotfiles directory not found. Skipping dotfile setup." >&2
 fi
 
 log "🧩 Installing Doom Emacs..."
-"${HOME}/.config/emacs/bin/doom install"
+"${HOME}/.config/emacs/bin/doom" install
 
 log "🔄 Syncing Doom Emacs profiles..."
-"${HOME}/.config/emacs/bin/doom profile sync --all"
-"${HOME}/.config/emacs/bin/doom sync --rebuild"
+"${HOME}/.config/emacs/bin/doom" profile sync --all
+"${HOME}/.config/emacs/bin/doom" sync --rebuild
 log "✅ Doom profiles synced and rebuilt."
 
 # -------------------------------------
