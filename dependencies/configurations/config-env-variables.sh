@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 create_env_variables_file() {
+    mkdir -p "${HOME}/.zshrc.d/config.d/env"
     cat <<EOF >"${HOME}/.zshrc.d/config.d/env/.env.sh"
 #!/usr/bin/env sh
 #

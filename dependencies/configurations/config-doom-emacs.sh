@@ -110,8 +110,7 @@ EOF
     chmod 600 "${HOME}/.offlineimaprc"
     log "✅ offlineimap config written."
 
-    log "🔐 Setup username and password (password should be without spaces generated from google) in .offlineimaprc "
-    vim "${HOME}/.offlineimaprc"
+    log "🔐 Credentials have been written to .offlineimaprc from provided variables."
 
     log "✅ offlineimaprc configuration is done."
 
@@ -144,8 +143,7 @@ EOF
     chmod 600 "${HOME}/.msmtprc"
     log "✅ msmtprc config written."
 
-    log "🔐 Setup username and password (password should be without spaces generated from google) in .msmtprc "
-    vim "${HOME}/.msmtprc"
+    log "🔐 Credentials have been written to .msmtprc from provided variables."
 
     log "✅ msmtprc configuration is done."
 
