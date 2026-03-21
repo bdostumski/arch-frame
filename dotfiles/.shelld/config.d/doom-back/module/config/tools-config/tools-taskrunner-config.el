@@ -193,8 +193,11 @@
 (defun +taskrunner/get-makefile-targets ()
   "Extract targets from Makefile."
   (let ((targets '())
-        (makefile (or "Makefile" "makefile")))
-    (when (file-exists-p makefile)
+        (makefile (cond
+                   ((file-exists-p "Makefile") "Makefile")
+                   ((file-exists-p "makefile") "makefile")
+                   (t nil))))
+    (when makefile
       (with-temp-buffer
         (insert-file-contents makefile)
         (goto-char (point-min))
@@ -220,8 +223,11 @@
 (defun +taskrunner/get-just-recipes ()
   "Extract recipes from justfile."
   (let ((recipes '())
-        (justfile (or "justfile" "Justfile")))
-    (when (file-exists-p justfile)
+        (justfile (cond
+                   ((file-exists-p "justfile") "justfile")
+                   ((file-exists-p "Justfile") "Justfile")
+                   (t nil))))
+    (when justfile
       (with-temp-buffer
         (insert-file-contents justfile)
         (goto-char (point-min))
@@ -370,10 +376,14 @@
   (let ((runner (+taskrunner/detect-project-runner)))
     (when runner
       (let ((file (pcase runner
-                    ('make (or "Makefile" "makefile"))
+                    ('make (cond ((file-exists-p "Makefile") "Makefile")
+                                 ((file-exists-p "makefile") "makefile")
+                                 (t nil)))
                     ('npm "package.json")
                     ('cargo "Cargo.toml")
-                    ('just (or "justfile" "Justfile"))
+                    ('just (cond ((file-exists-p "justfile") "justfile")
+                                 ((file-exists-p "Justfile") "Justfile")
+                                 (t nil)))
                     (_ nil))))
         (if (and file (file-exists-p file))
             (find-file file)

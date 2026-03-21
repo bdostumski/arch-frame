@@ -42,14 +42,27 @@ read -r GMAIL_EMAIL
 log "Gmail User: "
 read -r GMAIL_USER
 log "Gmail Password: "
+stty -echo
 read -r GMAIL_PASSWORD
+stty echo
+printf '\n'
 log "Local Database Name (example: database): "
 read -r DB_NAME
 log "Local Database User Name (example: user): "
 read -r DB_USERNAME
 log "Local Database Password (example: password): "
+stty -echo
 read -r DB_PASSWORD
+stty echo
+printf '\n'
 log "\n"
+
+# Validate required fields
+if [ -z "${USER_NAME}" ] || [ -z "${GIT_USER}" ] || [ -z "${GMAIL_EMAIL}" ]; then
+    log "Error: USER_NAME, GIT_USER, and GMAIL_EMAIL are required." >&2
+    exit 1
+fi
+
 log "\n"
 log "INSTALL DEPENDENCIES:"
 log "1) Main Packages Installation [Neovim, Emacs, System, ClamAV, UFW, etc]"
