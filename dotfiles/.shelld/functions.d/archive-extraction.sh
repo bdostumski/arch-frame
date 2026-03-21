@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # EXTRACT ARCHIVE FILES
 # Usage: extract [FILE]
@@ -25,7 +25,7 @@ function usecase() {
 }
 
 function extract() {
-	if [[ $# -eq 0 ]]; then
+	if [ $# -eq 0 ]; then
 		usecase
 	else
 		for FILE in "$@"; do
@@ -35,7 +35,7 @@ function extract() {
 					tar xfv "${FILE}"
 					;;
 				*.lzma) unlzma ./"${FILE}" ;;
-				*.bz2) bnzip2 ./"${FILE}" ;;
+				*.bz2) bunzip2 ./"${FILE}" ;;
 				*.cbr | *.rar) unrar x -ad ./"${FILE}" ;;
 				*.gz) gunzip ./"${FILE}" ;;
 				*.cbz | *.epub | *.zip) unzip ./"${FILE}" ;;

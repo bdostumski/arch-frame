@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # LOCAL
 # Description: configuration for machine-specific settings
@@ -7,4 +7,4 @@
 # -----------------
 # LOAD ENVIRONMENT VARIABLES FILE
 # -----------------
-[[ -f "${HOME}/.zsh.d/.env.zsh" ]] && source "${HOME}/.zsh.d/.env.zsh"
+[ -f "${HOME}/.zsh.d/.env.zsh" ] && . "${HOME}/.zsh.d/.env.zsh"

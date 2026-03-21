@@ -30,4 +30,4 @@ zinit light romkatv/powerlevel10k # powerlevel10k - prompt theme
 autoload -Uz compinit                  # load the compinit module
 zinit ice wait lucid                   # wait for the completions to load
 rm -f ~/.zcompdump                     # remove the old completion dump file
-compinit -d "$HOME/.logs.d/.zcompdump" # create a new completion dump file
+compinit -d "${HOME}/.zshrc.d/.logs/.zcompdump" # create a new completion dump file

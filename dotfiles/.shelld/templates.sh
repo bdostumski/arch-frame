@@ -1,11 +1,11 @@
-#!/bin/env zsh
+#!/usr/bin/env sh
 #
 # FILE TEMPLATES
 # Description: File templates for various functionalities
-# Path: ~/.zshrc.d/templates.d/
+# Path: ~/.shelld/templates.d/
 #
 
-TEMPLATES_DIR="$(dirname "$0")/templates.d"
+TEMPLATES_DIR="${SHELLDDIR}/templates.d"
 
 function templates() {
 
@@ -26,7 +26,7 @@ function templates() {
   printf "\nChoice: "
   read -r choice
 
-  if [[ "$choice" = "0" ]]; then
+  if [ "$choice" = "0" ]; then
     return
   fi
 

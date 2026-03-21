@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # Ranger cd function
 # Description:  automatically change the current working directory to the last visited one after ranger quits.
