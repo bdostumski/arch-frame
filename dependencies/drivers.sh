@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------------
 # Install DRIVERS
@@ -8,8 +8,8 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-source "$(dirname "${0}")/utils/install-utils.zsh"
-source "$(dirname "${0}")/packages/pkg-drivers.zsh"
+. "$(dirname "${0}")/utils/install-utils.sh"
+. "$(dirname "${0}")/packages/pkg-drivers.sh"
 
 # -------------------------------------
 #  Install PACMAN Packages
@@ -35,9 +35,9 @@ sudo systemctl restart cups.service
 # NVIDIA configuration
 # -------------------------------------
 log "✅ Setup Nvidia"
-log 'export PATH=/opt/cuda/bin:$PATH' >>~/.zshrc.d/environment.zsh
-log 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH' >>~/.zshrc.d/environment.zsh
-source "${HOME}/.zshrc"
+printf 'export PATH=/opt/cuda/bin:$PATH\n' >> ~/.profile
+printf 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH\n' >> ~/.profile
+. "${HOME}/.profile"
 
 # -------------------------------------
 # System setup

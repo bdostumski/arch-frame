@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # Development tools packages
 # Export packages for dev-tools.zsh

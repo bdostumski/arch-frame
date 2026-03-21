@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------------
 # VBOX DRIVERS (only if using VirtualBox with Vagrant)
@@ -8,9 +8,9 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-source "$(dirname "${0}")/../utils/install-utils.zsh"
+. "$(dirname "${0}")/../utils/install-utils.sh"
 
-export function config_vbox() {
+config_vbox() {
 
     systemctl enable --now haveged
     systemctl enable --now libvirtd
@@ -22,7 +22,7 @@ export function config_vbox() {
         log "📦 vboxdrv already loaded"
     else
         log "📦 Loading vboxdrv kernel module..."
-        sudo modprobe vboxdrv || log "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers." ">&2"
+        sudo modprobe vboxdrv || log "⚠️ Failed to load vboxdrv. You may need to reboot or install kernel headers." >&2
     fi
 
     return 0

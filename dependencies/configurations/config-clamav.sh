@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------------
 # CLAMAV configuration
@@ -8,9 +8,9 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-source "$(dirname "${0}")/../utils/install-utils.zsh"
+. "$(dirname "${0}")/../utils/install-utils.sh"
 
-export function config_clamav() {
+config_clamav() {
 
     log "🛡️ Setting up ClamAV..."
 
@@ -18,11 +18,11 @@ export function config_clamav() {
     sudo systemctl stop clamav-clamonacc.service clamav-daemon.service clamav-freshclam.service
 
     # Ensure CLAMAV user and shadow group exist
-    if ! getent group shadow &>/dev/null; then
+    if ! getent group shadow >/dev/null 2>&1; then
         sudo groupadd shadow
     fi
 
-    if ! id -u clamav &>/dev/null; then
+    if ! id -u clamav >/dev/null 2>&1; then
         sudo useradd -r -s /usr/bin/nologin clamav
     fi
 
@@ -31,7 +31,7 @@ export function config_clamav() {
 
     # Create REQUIRED DIRECTORIES and set permissions
     sudo install -d -o clamav -g clamav -m 755 /var/lib/clamav /var/log/clamav /var/run/clamav /root/quarantine
-    if [[ ! -d "${HOME}/quarantine" ]]; then
+    if [ ! -d "${HOME}/quarantine" ]; then
         mkdir -p ~/quarantine
     fi
     sudo chown -R clamav:clamav ~/quarantine
@@ -57,7 +57,7 @@ export function config_clamav() {
     EOF
 
     # ALLOW notifications
-    if ! grep -q 'clamav ALL' "/etc/sudoers.d/clamav" &>/dev/null; then
+    if ! grep -q 'clamav ALL' "/etc/sudoers.d/clamav" >/dev/null 2>&1; then
         echo 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' | sudo tee "/etc/sudoers.d/clamav" >/dev/null
     fi
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 
 # YAY  packages
 # Export packages for yay-packages.zsh

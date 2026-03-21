@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------------
 # Install COMMON TOOLS for Arch Linux
@@ -8,12 +8,12 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-source "$(dirname "${0}")/utils/install-utils.zsh"
-source "$(dirname "${0}")/packages/pkg-pacman.zsh"
-source "$(dirname "${0}")/configurations/config-ufw.zsh"
-source "$(dirname "${0}")/configurations/config-vbox.zsh"
-source "$(dirname "${0}")/configurations/config-env-variables.zsh"
-source "$(dirname "${0}")/configurations/config-gitconfig.zsh"
+. "$(dirname "${0}")/utils/install-utils.sh"
+. "$(dirname "${0}")/packages/pkg-pacman.sh"
+. "$(dirname "${0}")/configurations/config-ufw.sh"
+. "$(dirname "${0}")/configurations/config-vbox.sh"
+. "$(dirname "${0}")/configurations/config-env-variables.sh"
+. "$(dirname "${0}")/configurations/config-gitconfig.sh"
 
 log "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
@@ -26,9 +26,9 @@ install_packman_packages "${PACMAN_PACKAGES[@]}"
 # -------------------------------------
 # Copy and backup DOTFILES
 # -------------------------------------
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${0}")" && pwd)"
 DOTFILES="${SCRIPT_DIR}/dotfiles"
-if [[ -d "${DOTFILES}" ]]; then
+if [ -d "${DOTFILES}" ]; then
 
     log "💾 Create main config files ..."
     create_env_variables_file
@@ -41,7 +41,7 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${DOTFILES}/.zshrc.d" "${HOME}/.zshrc.d" false
     backup_and_copy "${CONFIG_DIR}/vim/.vimrc" "${HOME}/.vimrc" false
     backup_and_copy "${CONFIG_DIR}/kitty" "${HOME}/.config/kitty" false
-    backup_and_copy "${CONFIG_DIR}/env/.env.zsh" "${HOME}/.env.zsh" false
+    backup_and_copy "${CONFIG_DIR}/env/.env.sh" "${HOME}/.env.sh" false
     backup_and_copy "${CONFIG_DIR}/gitconf/.gitconfig" "${HOME}/.gitconfig" false
     backup_and_copy "${CONFIG_DIR}/arch/pacman.conf" "/etc/pacman.conf" true
 
@@ -55,7 +55,7 @@ if [[ -d "${DOTFILES}" ]]; then
     backup_and_copy "${CONFIG_DIR}/ufw/before.rules" "/etc/ufw/before.rules" true
 else
 
-    log "❌ Dotfiles directory not found. Skipping dotfile setup." "&>2"
+    log "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
 fi
 
 # -------------------------------------
@@ -76,7 +76,7 @@ config_ufw
 # -------------------------------------
 # NEOVIM kickstart configuration
 # -------------------------------------
-if [[ ! -d "${HOME}/.config/nvim" ]]; then
+if [ ! -d "${HOME}/.config/nvim" ]; then
     echo "⚙️  Installing NeoVim kickstart configuration..."
     git clone https://github.com/nvim-lua/kickstart.nvim.git "${HOME}/.config/nvim"
 else

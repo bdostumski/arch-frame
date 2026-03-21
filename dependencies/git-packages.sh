@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # ----------------------------------------
 # Install YAY (AUR Helper)
@@ -8,9 +8,9 @@
 # ----------------------------------------
 # External IMPORTS
 # ----------------------------------------
-source "$(dirname "${0}")/utils/install-utils.zsh"
+. "$(dirname "${0}")/utils/install-utils.sh"
 
-if ! command -v yay &>/dev/null; then
+if ! command -v yay >/dev/null 2>&1; then
 
     log "📦 Installing yay..."
 
@@ -20,29 +20,29 @@ if ! command -v yay &>/dev/null; then
     cd "${TMPDIR}/yay" && makepkg -si --noconfirm
     cd ~ && rm -rf "${TMPDIR}"
 else
-    log "✅ yay is already installed." ">&2"
+    log "✅ yay is already installed." >&2
 fi
 
 # ----------------------------------------
 # Install TMUX plugin manager (TPM)
 # ----------------------------------------
 TPM_DIR="${HOME}/.config/tmux/plugins/tpm"
-if [[ ! -d "${TPM_DIR}" ]]; then
+if [ ! -d "${TPM_DIR}" ]; then
     log "📦 Installing TPM..."
     git clone https://github.com/tmux-plugins/tpm "${TPM_DIR}"
 else
 
-    log "✅ TPM already exists at $TPM_DIR" ">&2"
+    log "✅ TPM already exists at $TPM_DIR" >&2
 fi
 
 # ----------------------------------------
 # Install ZINIT - ZSH plugin manager
 # ----------------------------------------
-if [[ ! -d "${HOME}/.config/zinit" ]]; then
+if [ ! -d "${HOME}/.config/zinit" ]; then
     log "📦 Installing Zinit..."
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 else
-    log "✅ Zinit already installed." ">&2"
+    log "✅ Zinit already installed." >&2
 fi
 
 # ----------------------------------------
