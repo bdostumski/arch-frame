@@ -1,15 +1,18 @@
 #!/usr/bin/env sh
 #
 # Update Configuration Files
-# Description: Override all applications coniguration files
+# Description: Override all applications configuration files
 #
 
 # Check if it is user or not and copy directory
 function copy_directory() {
-    if [ "${SUDO}" = 'true' ]; then
-        sudo cp -r "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
+    local _src="${1}"
+    local _dst="${2}"
+    local _sudo="${3}"
+    if [ "${_sudo}" = 'true' ]; then
+        sudo cp -r "${_src}" "${_dst}"
     else
-        cp -r "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
+        cp -r "${_src}" "${_dst}"
     fi
 
     return 0
@@ -17,10 +20,13 @@ function copy_directory() {
 
 # Check if it is sudo or not and copy file
 function copy_file() {
-    if [ "${SUDO}" = 'true' ]; then
-        sudo cp "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
+    local _src="${1}"
+    local _dst="${2}"
+    local _sudo="${3}"
+    if [ "${_sudo}" = 'true' ]; then
+        sudo cp "${_src}" "${_dst}"
     else
-        cp "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}"
+        cp "${_src}" "${_dst}"
     fi
 
     return 0
@@ -42,10 +48,10 @@ function config_backup() {
 
     if [ -d "${COPY_FILE_DATA}" ] && [ -n "${PASTE_FILE_PATH}" ]; then
         echo "Copy directory ${FILE_NAME} into ${PASTE_FILE_PATH}" >&2
-        copy_directory
+        copy_directory "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}" "${SUDO}"
     elif [ -f "${COPY_FILE_DATA}" ] && [ -n "${PASTE_FILE_PATH}" ]; then
         echo "Copy file ${FILE_NAME} into ${PASTE_FILE_PATH}" >&2
-        copy_file
+        copy_file "${COPY_FILE_DATA}" "${PASTE_FILE_PATH}" "${SUDO}"
     elif [ ! -s "$COPY_FILE_DATA" ] && [ -n "${PASTE_FILE_PATH}" ]; then
         echo "Error: ${FILE_NAME} does not exists, or file path ${PASTE_FILE_PATH} is not correct." >&2
         return 1

@@ -160,13 +160,17 @@
             (insert (format "Expire-Date: 0\n"))
             (when (and passphrase (not (string-empty-p passphrase)))
               (insert (format "Passphrase: %s\n" passphrase)))
-            (write-file "/tmp/gpg-batch")
-            (message "🔄 Generating GPG key... (this may take a while)")
-            (if (= 0 (shell-command "gpg --batch --generate-key /tmp/gpg-batch"))
-                (progn
-                  (delete-file "/tmp/gpg-batch")
-                  (message "✅ GPG key generated successfully!"))
-              (message "❌ Failed to generate GPG key"))))))))
+            (let ((batch-file (make-temp-file "gpg-batch-")))
+              (unwind-protect
+                  (progn
+                    (write-region (point-min) (point-max) batch-file nil 'silent)
+                    (set-file-modes batch-file #o600)
+                    (message "🔄 Generating GPG key... (this may take a while)")
+                    (if (= 0 (shell-command (format "gpg --batch --generate-key %s" batch-file)))
+                        (message "✅ GPG key generated successfully!")
+                      (message "❌ Failed to generate GPG key")))
+                (when (file-exists-p batch-file)
+                  (delete-file batch-file))))))))))
 
 (defun +pass/ensure-loaded ()
   "Ensure pass package is loaded before operations."

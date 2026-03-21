@@ -9,6 +9,9 @@ create_env_variables_file() {
 # Description: Expose local environment variables
 # Path: ~/.zsh.d/.env.sh
 #
+# WARNING: This file contains sensitive credentials in plaintext.
+# Permissions are set to 600. Do not commit this file to version control.
+# Consider migrating to a secrets manager (e.g., pass, gpg) in the future.
 
 # -----------------
 # USER DATA
@@ -39,4 +42,5 @@ export DB_USERNAME="${DB_USERNAME}"
 export DB_PASSWORD="${DB_PASSWORD}"
 
 EOF
+    chmod 600 "${HOME}/.zshrc.d/config.d/env/.env.sh"
 }
