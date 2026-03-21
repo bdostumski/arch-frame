@@ -58,7 +58,7 @@ function config_backup() {
 # Main function
 function config_update() {
 
-    local LOCATION="$HOME/.zshrc.d/config.d"
+    local LOCATION="$HOME/.shelld/config.d"
 
     # Copy user-specific configs
     config_backup "${LOCATION}/gitconf/.gitconfig" "${HOME}/"
