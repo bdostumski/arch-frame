@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------
 # DOOM EMACS configuration
@@ -8,14 +8,14 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-source "$(dirname "${0}")/../utils/install-utils.zsh"
+. "$(dirname "${0}")/../utils/install-utils.sh"
 
 # -------------------------
 # Create Directories for DEFT
 # -------------------------
-export function create-package-directories() {
+create_package_directories() {
 
-	if [[ ! -d "${HOME}/Maildir" ]]; then
+	if [ ! -d "${HOME}/Maildir" ]; then
 		mkdir "${HOME}/Maildir"
 	fi
 
@@ -24,7 +24,7 @@ export function create-package-directories() {
 # -------------------------
 # Create SYSTEMD service
 # -------------------------
-export function config-doom-emacs-systemd() {
+config_doom_emacs_systemd() {
 
     log "🔁️️ Setting up systemd service for Emacs..."
     mkdir -p "${HOME}/.config/systemd/user"
@@ -50,7 +50,7 @@ EOF
 
     log "📁 Backing up ~/.emacs.d (if any)..."
     move_file "${HOME}/.emacs.d"
-    if [[ "${?}" -eq 0 ]]; then
+    if [ "${?}" -eq 0 ]; then
         log "✅ Backup of Emacs created."
     fi
 
@@ -66,12 +66,12 @@ EOF
 # -----------------------
 # GPG encryption and register your MAIL CLIENT
 # -----------------------
-export function config-gpg-key() {
+config_gpg_key() {
 
     log "🔐 Generate a GPG key..."
     gpg --full-generate-key
 
-    echo "📧 Register your mail clien..."
+    echo "📧 Register your mail client..."
     firefox https://support.google.com/accounts/answer/185833
 
     return 0
@@ -80,7 +80,7 @@ export function config-gpg-key() {
 # -------------------------------
 # Create OFFLINEMAPRC IMAP config
 # -------------------------------
-export function config-offlineimaprs-imap() {
+config_offlineimaprs_imap() {
 
     log "📬 Writing OFFLINEIMAPRC IMAP config..."
 
@@ -121,7 +121,7 @@ EOF
 # -------------------------------
 # Create MSMTPRC SMTP config
 # -------------------------------
-export function config-msmtprc-smtp() {
+config_msmtprc_smtp() {
 
     log "📤 Writing MSMTPRC SMTP config..."
 

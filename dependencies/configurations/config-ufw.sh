@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------------
 # UFW FIREWALL configuration
@@ -8,9 +8,9 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-source "$(dirname "${0}")/../utils/install-utils.zsh"
+. "$(dirname "${0}")/../utils/install-utils.sh"
 
-export function config_ufw() {
+config_ufw() {
 
     log "🔧 Configuring UFW firewall..."
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------
 # Install DOOM EMACS
@@ -8,7 +8,7 @@
 # -------------------------------
 # External IMPORTS
 # -------------------------------
-source "$(dirname "${0}")/configurations/config-doom-emacs.zsh"
+. "$(dirname "${0}")/configurations/config-doom-emacs.sh"
 
 log "\n⚙️️  Starting Doom Emacs installation...\n"
 
@@ -16,7 +16,7 @@ log "\n⚙️️  Starting Doom Emacs installation...\n"
 # Install DOOM EMACS
 # -------------------------------
 log "📥 Cloning Doom Emacs..."
-if git clone --depth 1 "https://github.com/doomemacs/doomemacs" "${HOME}/.config/emacs" &>/dev/null; then
+if git clone --depth 1 "https://github.com/doomemacs/doomemacs" "${HOME}/.config/emacs" >/dev/null 2>&1; then
     log "✅ Doom Emacs cloned."
 else
     log "⚠️ Doom Emacs already exists at ~/.config/emacs. Skipping clone."
@@ -26,22 +26,22 @@ fi
 # -------------------------
 # Create Directories for Packages
 # -------------------------
-create-package-directories
+create_package_directories
 
 # -------------------------
 # Create SYSTEMD service
 # -------------------------
-# config-doom-emacs-systemd
+# config_doom_emacs_systemd
 
 # -------------------------------
 # Create OFFLINEMAPRC IMAP config
 # -------------------------------
-config-offlineimaprs-imap
+config_offlineimaprs_imap
 
 # -------------------------------
 # Create MSMTPRC SMTP config
 # -------------------------------
-config-msmtprc-smtp
+config_msmtprc_smtp
 
 # -------------------------
 # MAIL CLIENT configuration
@@ -49,14 +49,14 @@ config-msmtprc-smtp
 log "Do you want MU4E configuration [y/n]:"
 read -r MAIL
 
-if [[ "${MAIL}" = 'y' ]]; then
+if [ "${MAIL}" = 'y' ]; then
 
     log "🛠️ Starting mail client configuration for doom-emacs ..."
 
     # -----------------------
     # GPG encryption and register your MAIL CLIENT
     # -----------------------
-    config-gpg-key
+    config_gpg_key
 
     # -------------------------------
     # MU4E configuration
@@ -77,23 +77,23 @@ fi
 # Link LIBTREE-SITTER if missing
 # ----------------------------------
 log "\n🔍 Checking libtree-sitter..."
-if [[ ! -f "/usr/lib/libtree-sitter.so.0.24" && -f "/usr/lib/libtree-sitter.so" ]]; then
+if [ ! -f "/usr/lib/libtree-sitter.so.0.24" ] && [ -f "/usr/lib/libtree-sitter.so" ]; then
     log "🔗 Creating symbolic link for libtree-sitter..."
     sudo ln -s /usr/lib/libtree-sitter.so /usr/lib/libtree-sitter.so.0.24 &&
         log "✅ libtree-sitter symlink created." ||
         log "❌ Failed to create libtree-sitter symlink."
 else
-    log "✅ libtree-sitter already properly linked or missing entirely." ">&2"
+    log "✅ libtree-sitter already properly linked or missing entirely." >&2
 fi
 
 # -------------------------
 # Copy and backup DOTFILES
 # -------------------------
 log "📂 Copying main config file to home root directory..."
-if [[ -d "dotfiles" ]]; then
+if [ -d "dotfiles" ]; then
     backup_and_copy "${HOME}/.zshrc.d/config.d/doom" "${HOME}/.config/doom"
 else
-    log "⚠️ Dotfiles directory not found. Skipping dotfile setup." ">&2"
+    log "⚠️ Dotfiles directory not found. Skipping dotfile setup." >&2
 fi
 
 log "🧩 Installing Doom Emacs..."

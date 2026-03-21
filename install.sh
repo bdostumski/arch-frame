@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # -------------------------------------
 # ARCH FRAME main INSTALLATION file
@@ -8,7 +8,7 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-source "$(dirname "${0}")/dependencies/utils/install-utils.zsh"
+. "$(dirname "${0}")/dependencies/utils/install-utils.sh"
 
 log "\n"
 log " ▗▄▖ ▗▄▄▖  ▗▄▄▖▗▖ ▗▖    ▗▄▄▄▖▗▄▄▖  ▗▄▖ ▗▖  ▗▖▗▄▄▄▖ "
@@ -57,7 +57,7 @@ log "2) Dev Packages Installation [Docker, Vagrant, K8s, etc]"
 log "3) System Drivers & Firmware Installation"
 log "x) Exit"
 log "\n"
-echo -n "Enter your choise: "
+printf "Enter your choice: "
 read -r CHOICE
 if [ "${CHOICE}" = "x" ]; then
     log "Exiting..."
@@ -71,28 +71,28 @@ case "${CHOICE}" in
     log "\n"
     log "= = = = = = = = = ="
     log "Main Packages Installation [Neovim, Emacs, System, ClamAV, UFW, etc] . . ."
-    source "${DEPENDENCIES_PATH}/pacman-packages.zsh"
-    source "${DEPENDENCIES_PATH}/git-packages.zsh"
-    source "${DEPENDENCIES_PATH}/yay-packages.zsh"
-    source "${DEPENDENCIES_PATH}/doom-emacs.zsh"
+    . "${DEPENDENCIES_PATH}/pacman-packages.sh"
+    . "${DEPENDENCIES_PATH}/git-packages.sh"
+    . "${DEPENDENCIES_PATH}/yay-packages.sh"
+    . "${DEPENDENCIES_PATH}/doom-emacs.sh"
     log "💡 Restart [exit/start again] rerun the script with kitty terminal"
     ;;
 2)
     log "\n"
     log "= = = = = = = = = ="
     log "Dev Packages Installation [Docker, Vagrant, K8s, etc.] . . ."
-    source "${DEPENDENCIES_PATH}/dev-tools.zsh"
+    . "${DEPENDENCIES_PATH}/dev-tools.sh"
     log "💡 Restart [exit/start again] kitty terminal"
     ;;
 3)
     log "\n"
     log "= = = = = = = = = ="
     log "System Drivers & Firmware Installation . . ."
-    source "${DEPENDENCIES_PATH}/drivers.zsh"
+    . "${DEPENDENCIES_PATH}/drivers.sh"
     ;;
 *)
     log "\n"
-    log -e "Invalid CHOICE. Please try again." ">&2"
+    log "Invalid CHOICE. Please try again." >&2
     exit 1
     ;;
 esac

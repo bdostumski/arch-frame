@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # Pacman  packages
 # Export packages for pacman-packages.zsh

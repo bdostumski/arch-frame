@@ -1,9 +1,9 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 
-export create_gitconfig_file() {
+create_gitconfig_file() {
     cat <<EOF >"${HOME}/.zshrc.d/config.d/gitconf/.gitconfig"
 [user] # Git user settings
-	name = "${FIRST_NAME} ${LAST_NAME}""
+	name = "${FIRST_NAME} ${LAST_NAME}"
 	email = "${GMAIL_EMAIL}"
 	username = "${GIT_USER}"
 	signingkey = signingkey  # Using GPG signing

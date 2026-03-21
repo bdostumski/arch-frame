@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 #
 # ----------------------------------------------------------------------
 # Install & Configure DEVELOPMENT TOOLS on Arch Linux
@@ -8,8 +8,8 @@
 # ---------------------------
 # External IMPORTS
 # ---------------------------
-source "$(dirname "${0}")/utils/install-utils.zsh"
-source "$(dirname "${0}")/packages/pkg-dev-tools.zsh"
+. "$(dirname "${0}")/utils/install-utils.sh"
+. "$(dirname "${0}")/packages/pkg-dev-tools.sh"
 
 # ---------------------------
 #  Install PACMAN Packages

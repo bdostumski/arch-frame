@@ -1,8 +1,8 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 
-export create_env_variables_file() {
-    cat <<EOF >"${HOME}/.zshrc.d/config.d/env/.env.zsh"
-#!/usr/bin/env zsh
+create_env_variables_file() {
+    cat <<EOF >"${HOME}/.zshrc.d/config.d/env/.env.sh"
+#!/usr/bin/env sh
 #
 # ENVIRONMENT VARIABLES
 # Description: Expose local environment variables
