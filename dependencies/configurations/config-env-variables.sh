@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 create_env_variables_file() {
     mkdir -p "${HOME}/.zshrc.d/config.d/env"

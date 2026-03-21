@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # -------------------------------------
 # ARCH FRAME main INSTALLATION file
@@ -27,8 +27,9 @@ log "\n"
 log "\n"
 log "USER REGISTRATION:"
 log "\n"
-log "OS User Name: "
+log "OS User Name (default: ${USER}): "
 read -r USER_NAME
+USER_NAME="${USER_NAME:-${USER}}"
 log "First Name: "
 read -r FIRST_NAME
 log "Middle Name: "

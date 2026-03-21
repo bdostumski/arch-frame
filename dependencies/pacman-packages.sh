@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # -------------------------------------
 # Install COMMON TOOLS for Arch Linux
@@ -17,7 +17,6 @@
 . "$(dirname "${0}")/configurations/config-gitconfig.sh"
 
 log "🔄 Updating system..."
-sudo pacman -Syu --noconfirm
 
 # -------------------------------------
 #  Install PACKMAN packages
@@ -45,7 +44,9 @@ if [ -d "${DOTFILES}" ]; then
     backup_and_copy "${CONFIG_DIR}/gitconf/.gitconfig" "${HOME}/.gitconfig" false
     backup_and_copy "${CONFIG_DIR}/arch/pacman.conf" "/etc/pacman.conf" true
 
-    move_file "${HOME}/.config/nvim"
+    if [ -e "${HOME}/.config/nvim" ]; then
+        move_file "${HOME}/.config/nvim"
+    fi
     backup_and_copy "${DOTFILES}/.zshrc" "${HOME}/.zshrc" false
     backup_and_copy "${CONFIG_DIR}/tmux" "${HOME}/.config/tmux" false
     backup_and_copy "${CONFIG_DIR}/ranger" "${HOME}/.config/ranger" false
@@ -89,8 +90,8 @@ fi
 if command -v pyenv >/dev/null 2>&1; then
 
     log "⚙️ Setting pyenv..."
-    pyenv install 3.11.6
-    pyenv global 3.11.6
+    pyenv install --latest 3.11
+    pyenv global "$(pyenv latest 3.11)"
 else
 
     log "pyenv is not installed!"
