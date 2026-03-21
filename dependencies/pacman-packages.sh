@@ -36,7 +36,7 @@ if [ -d "${DOTFILES}" ]; then
 
     log "💾 Copying main config file to home root directory..."
 
-    CONFIG_DIR="${HOME}/.zshrc.d/config.d"
+    CONFIG_DIR="${DOTFILES}/.zshrc.d/config.d"
 
     backup_and_copy "${DOTFILES}/.zshrc.d" "${HOME}/.zshrc.d" false
     backup_and_copy "${CONFIG_DIR}/vim/.vimrc" "${HOME}/.vimrc" false
@@ -96,6 +96,6 @@ else
     log "pyenv is not installed!"
 fi
 
-chmod +x ~/.zshrc.d/functions.d/*.zsh
+chmod +x ~/.zshrc.d/functions.d/*.sh
 
 log "\n🎉 Setup complete. Your system is ready!"

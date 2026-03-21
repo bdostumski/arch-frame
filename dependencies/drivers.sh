@@ -35,8 +35,8 @@ sudo systemctl restart cups.service
 # NVIDIA configuration
 # -------------------------------------
 log "✅ Setup Nvidia"
-printf 'export PATH=/opt/cuda/bin:$PATH\n' >> ~/.profile
-printf 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH\n' >> ~/.profile
+grep -qF '/opt/cuda/bin' "${HOME}/.profile" || printf 'export PATH=/opt/cuda/bin:$PATH\n' >> "${HOME}/.profile"
+grep -qF '/opt/cuda/lib64' "${HOME}/.profile" || printf 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH\n' >> "${HOME}/.profile"
 . "${HOME}/.profile"
 
 # -------------------------------------

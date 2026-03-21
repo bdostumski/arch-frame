@@ -17,8 +17,10 @@ if ! command -v yay >/dev/null 2>&1; then
     sudo pacman -S --needed git base-devel --noconfirm
     TMPDIR="$(mktemp -d)"
     git clone https://aur.archlinux.org/yay.git "${TMPDIR}/yay"
-    cd "${TMPDIR}/yay" && makepkg -si --noconfirm
-    cd ~ && rm -rf "${TMPDIR}"
+    cd "${TMPDIR}/yay" || { log "❌ Failed to enter ${TMPDIR}/yay. Aborting yay installation."; return 1; }
+    makepkg -si --noconfirm
+    cd - || true
+    rm -rf "${TMPDIR}"
 else
     log "✅ yay is already installed." >&2
 fi
