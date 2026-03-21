@@ -12,11 +12,11 @@
 
 config_vbox() {
 
-    systemctl enable --now haveged
-    systemctl enable --now libvirtd
-    sudo usermod -aG libvirt $(whoami)
-    systemctl start libvirtd
-    systemctl enable vboxservice.service
+    sudo systemctl enable --now haveged
+    sudo systemctl enable --now libvirtd
+    sudo usermod -aG libvirt "$(whoami)"
+    sudo systemctl start libvirtd
+    sudo systemctl enable vboxservice.service
 
     if lsmod | grep -q vboxdrv; then
         log "📦 vboxdrv already loaded"

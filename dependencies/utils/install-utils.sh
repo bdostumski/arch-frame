@@ -52,7 +52,7 @@ move_file() {
 
     local SRC="${1}"
 
-    if [ ! -d "${SRC}.bak" ]; then
+    if [ ! -e "${SRC}.bak" ]; then
         log "Moving ${SRC} to ${SRC}.bak"
         mv "${SRC}" "${SRC}.bak"
     else
@@ -66,7 +66,7 @@ move_file() {
 # ----------------------------------
 # Install PACMAN packages
 # ----------------------------------
-install_packman_packages() {
+install_pacman_packages() {
     log "🔄 PACMAN Updating system..."
 
     if [ -f "/var/lib/pacman/db.lck" ]; then
