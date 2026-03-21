@@ -57,14 +57,14 @@ log "2) Dev Packages Installation [Docker, Vagrant, K8s, etc]"
 log "3) System Drivers & Firmware Installation"
 log "x) Exit"
 log "\n"
-echo -n "Enter your choise: "
+echo -n "Enter your choice: "
 read -r CHOICE
-if [ "${CHOICE}" = "x" ]; then
+if [[ "${CHOICE}" == "x" ]]; then
     log "Exiting..."
     exit 0
 fi
 
-DEPENDENCIES_PATH="$(dirname ${0})/dependencies"
+DEPENDENCIES_PATH="$(dirname "${0}")/dependencies"
 
 case "${CHOICE}" in
 1)

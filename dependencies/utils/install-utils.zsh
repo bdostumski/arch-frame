@@ -8,11 +8,11 @@
 # -----------------------
 # System LOG messages
 # -----------------------
-export function log() {
+function log() {
 
     local MESSAGE="${1}"
     local SPECIAL_SYMBOL="${2}"
-    local SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local SCRIPT_DIR="$(cd "$(dirname "${0:A}")" && pwd)"
     local INSTALLATION_LOG="${3:-${SCRIPT_DIR}/install_messages.log}"
 
     if [[ ! -f "${INSTALLATION_LOG}" ]]; then
@@ -28,7 +28,7 @@ export function log() {
 # ----------------------------------
 # Copy and Backup FILE
 # ----------------------------------
-export function backup_and_copy() {
+function backup_and_copy() {
 
     local SRC="${1}"
     local DEST="${2}"
@@ -66,14 +66,14 @@ function move_file() {
 # ----------------------------------
 # Install PACMAN packages
 # ----------------------------------
-export function install_packman_packages() {
+function install_packman_packages() {
     log "🔄 PACMAN Updating system..."
 
     if [[ -f "/var/lib/pacman/db.lck" ]]; then
         sudo rm "/var/lib/pacman/db.lck"
     fi
 
-    sudo packman -Syu --noconfirm
+    sudo pacman -Syu --noconfirm
 
     local PACKAGES=("${@}")
 
@@ -98,7 +98,7 @@ export function install_packman_packages() {
 # ----------------------------------
 # Install YAY/AUR packages
 # ----------------------------------
-export function install_yay_packages() {
+function install_yay_packages() {
     log "🔄 YAY Updating system..."
 
     if [[ -f "/var/lib/pacman/db.lck" ]]; then
