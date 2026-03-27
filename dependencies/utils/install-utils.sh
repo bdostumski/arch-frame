@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 #
 # --------------------
 # Installation Utils
@@ -9,18 +9,17 @@
 # System LOG messages
 # -----------------------
 log() {
+    LOG_MESSAGE="${1}"
+    LOG_SPECIAL_SYMBOL="${2}"
+    LOG_SCRIPT_DIR="$(cd "$(dirname "${0}")" && pwd)"
+    LOG_INSTALLATION_LOG="${3:-${LOG_SCRIPT_DIR}/install_messages.log}"
 
-    local MESSAGE="${1}"
-    local SPECIAL_SYMBOL="${2}"
-    local SCRIPT_DIR="$(cd "$(dirname "${0}")" && pwd)"
-    local INSTALLATION_LOG="${3:-${SCRIPT_DIR}/install_messages.log}"
-
-    if [ ! -f "${INSTALLATION_LOG}" ]; then
-        touch "${INSTALLATION_LOG}"
+    if [ ! -f "${LOG_INSTALLATION_LOG}" ]; then
+        touch "${LOG_INSTALLATION_LOG}"
     fi
 
-    printf '%s\n' "${MESSAGE} ${SPECIAL_SYMBOL}"
-    printf '%s\n' "$(date "+%F %T") : ${MESSAGE}" >> "${INSTALLATION_LOG}"
+    printf '%b\n' "${LOG_MESSAGE} ${LOG_SPECIAL_SYMBOL}"
+    printf '%s\n' "$(date "+%F %T") : ${LOG_MESSAGE}" >>"${LOG_INSTALLATION_LOG}"
 
     return 0
 }
@@ -29,17 +28,16 @@ log() {
 # Copy and Backup FILE
 # ----------------------------------
 backup_and_copy() {
+    BAC_SRC="${1}"
+    BAC_DEST="${2}"
+    BAC_IS_ROOT="${3:-false}"
 
-    local SRC="${1}"
-    local DEST="${2}"
-    local IS_ROOT="${3:-false}"
-
-    if [ "${IS_ROOT}" = "true" ]; then
-        [ -e "${DEST}" ] && [ ! -e "${DEST}.bak" ] && sudo mv "${DEST}" "${DEST}.bak"
-        sudo cp -r "${SRC}" "$DEST"
+    if [ "${BAC_IS_ROOT}" = "true" ]; then
+        [ -e "${BAC_DEST}" ] && [ ! -e "${BAC_DEST}.bak" ] && sudo mv "${BAC_DEST}" "${BAC_DEST}.bak"
+        sudo cp -r "${BAC_SRC}" "${BAC_DEST}"
     else
-        [ -e "${DEST}" ] && [ ! -e "${DEST}.bak" ] && mv "${DEST}" "${DEST}.bak"
-        cp -r "${SRC}" "${DEST}"
+        [ -e "${BAC_DEST}" ] && [ ! -e "${BAC_DEST}.bak" ] && mv "${BAC_DEST}" "${BAC_DEST}.bak"
+        cp -r "${BAC_SRC}" "${BAC_DEST}"
     fi
 
     return 0
@@ -49,14 +47,13 @@ backup_and_copy() {
 # Move FILE to FILE.bak
 # ----------------------------------
 move_file() {
+    MV_SRC="${1}"
 
-    local SRC="${1}"
-
-    if [ ! -e "${SRC}.bak" ]; then
-        log "Moving ${SRC} to ${SRC}.bak"
-        mv "${SRC}" "${SRC}.bak"
+    if [ ! -e "${MV_SRC}.bak" ]; then
+        log "Moving ${MV_SRC} to ${MV_SRC}.bak"
+        mv "${MV_SRC}" "${MV_SRC}.bak"
     else
-        log "⚠️ ${SRC}.bak already exists" >&2
+        log "⚠️ ${MV_SRC}.bak already exists" >&2
         return 1
     fi
 
@@ -75,23 +72,21 @@ install_pacman_packages() {
 
     sudo pacman -Syu --noconfirm
 
-    local PACKAGES=("${@}")
-
-    log "📦 Installing ${#PACKAGES[@]} packages..."
-    for PKG in "${PACKAGES[@]}"; do
-        log "📦 Installing: ${PKG}"
-        if ! pacman -Qi "${PKG}" >/dev/null 2>&1; then
-            if sudo pacman -S --needed --noconfirm "${PKG}"; then
-                log "✅ ${PKG} installed."
+    log "📦 Installing ${#} packages..."
+    for PAC_PKG in "${@}"; do
+        log "📦 Installing: ${PAC_PKG}"
+        if ! pacman -Qi "${PAC_PKG}" >/dev/null 2>&1; then
+            if sudo pacman -S --needed --noconfirm "${PAC_PKG}"; then
+                log "✅ ${PAC_PKG} installed."
             else
-                log "❌ Failed to install: ${PKG}."
+                log "❌ Failed to install: ${PAC_PKG}."
             fi
         else
-            log "✅ ${PKG} is already installed."
+            log "✅ ${PAC_PKG} is already installed."
         fi
     done
 
-    echo "🏁 All packages processed."
+    printf '🏁 All packages processed.\n'
     return 0
 }
 
@@ -105,23 +100,23 @@ install_yay_packages() {
         sudo rm "/var/lib/pacman/db.lck"
     fi
 
-    sudo chown -R "${USER}" ~/.cache/yay
+    sudo chown -R "$(whoami)" ~/.cache/yay
     yay -Syu --noconfirm
 
-    local PACKAGES=("${@}")
-
-    log "\n🔧 Starting installation of AUR packages...\n"
-    for PKG in "${PACKAGES[@]}"; do
-        log "📦 Installing: ${PKG}"
-        if yay -Qi "${PKG}" >/dev/null 2>&1; then
-            log "✅  Already installed: ${PKG}"
-        elif yay -S --noconfirm "${PKG}" >/dev/null 2>&1; then
-            log "✅ Success: ${PKG} installed"
+    printf '\n'
+    log "🔧 Starting installation of AUR packages..."
+    printf '\n'
+    for YAY_PKG in "${@}"; do
+        log "📦 Installing: ${YAY_PKG}"
+        if yay -Qi "${YAY_PKG}" >/dev/null 2>&1; then
+            log "✅ Already installed: ${YAY_PKG}"
+        elif yay -S --noconfirm "${YAY_PKG}" >/dev/null 2>&1; then
+            log "✅ Success: ${YAY_PKG} installed"
         else
-            log "❌ Failed: ${PKG} installation failed"
+            log "❌ Failed: ${YAY_PKG} installation failed"
         fi
     done
 
-    echo "🏁 All packages processed."
+    printf '🏁 All packages processed.\n'
     return 0
 }
