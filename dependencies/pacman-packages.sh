@@ -9,7 +9,6 @@
 # Variables 
 # -------------------------------------
 BASE_DIR="$(cd "$(dirname "${0}")" && pwd)"
-/home/dostumski/Workspace/arch-frame/dependencies/pacman-packages.sh
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
