@@ -9,17 +9,17 @@
 # Variables 
 # -------------------------------------
 BASE_DIR="$(cd "$(dirname "${0}")" && pwd)"
-
+/home/dostumski/Workspace/arch-frame/dependencies/pacman-packages.sh
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-. "${BASE_DIR}/utils/install-utils.sh"
-. "${BASE_DIR}/packages/pkg-pacman.sh"
-. "${BASE_DIR}/configurations/config-ufw.sh"
-. "${BASE_DIR}/configurations/config-vbox.sh"
-. "${BASE_DIR}/configurations/config-clamav.sh"
-. "${BASE_DIR}/configurations/config-env-variables.sh"
-. "${BASE_DIR}/configurations/config-gitconfig.sh"
+. "${BASE_DIR}/dependencies/utils/install-utils.sh"
+. "${BASE_DIR}/dependencies/packages/pkg-pacman.sh"
+. "${BASE_DIR}/dependencies/configurations/config-ufw.sh"
+. "${BASE_DIR}/dependencies/configurations/config-vbox.sh"
+. "${BASE_DIR}/dependencies/configurations/config-clamav.sh"
+. "${BASE_DIR}/dependencies/configurations/config-env-variables.sh"
+. "${BASE_DIR}/dependencies/configurations/config-gitconfig.sh"
 
 log "🔄 Updating system..."
 sudo pacman -Syu --noconfirm
