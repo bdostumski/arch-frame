@@ -6,18 +6,23 @@
 #
 
 # -------------------------------------
+# Variables
+# -------------------------------------
+BASE_DIR="$(cd "$(dirname "${0}")" && pwd)"
+
+# -------------------------------------
 # External IMPORTS
 # -------------------------------------
-. "$(dirname "${0}")/../utils/install-utils.sh"
+. "${BASE_DIR}/dependencies/utils/install-utils.sh"
 
 # -------------------------
 # Create Directories for DEFT
 # -------------------------
 create_package_directories() {
 
-	if [ ! -d "${HOME}/Maildir" ]; then
-		mkdir "${HOME}/Maildir"
-	fi
+    if [ ! -d "${HOME}/Maildir" ]; then
+        mkdir "${HOME}/Maildir"
+    fi
 
 }
 

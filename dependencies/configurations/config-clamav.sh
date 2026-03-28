@@ -6,9 +6,14 @@
 #
 
 # -------------------------------------
+# Variables
+# -------------------------------------
+BASE_DIR="$(cd "$(dirname "${0}")" && pwd)"
+
+# -------------------------------------
 # External IMPORTS
 # -------------------------------------
-. "$(dirname "${0}")/../utils/install-utils.sh"
+. "${BASE_DIR}/dependencies/utils/install-utils.sh"
 
 config_clamav() {
 
