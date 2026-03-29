@@ -2,7 +2,7 @@
 #
 # FUNCTIONS
 # Description: custom shell scripts
-# Path: ~/.shelld/functions.d/
+# Path: ~/.shell.d/functions.d/
 #
 
 CURRENT_DIR="${SHELLDDIR}/functions.d"

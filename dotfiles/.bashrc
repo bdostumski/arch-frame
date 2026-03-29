@@ -9,18 +9,18 @@
 
 # Shell Home Directories
 export SHELLDIR="${HOME}/.bashrc.d"
-export SHELLDDIR="${HOME}/.shelld"
+export SHELLDDIR="${HOME}/.shell.d"
 
 # Load shared: environment, aliases, templates, functions, local
-[[ -f "${SHELLDDIR}/shell-detect.sh"  ]] && source "${SHELLDDIR}/shell-detect.sh"
-[[ -f "${SHELLDDIR}/environment.sh"   ]] && source "${SHELLDDIR}/environment.sh"
-[[ -f "${SHELLDDIR}/aliases.sh"       ]] && source "${SHELLDDIR}/aliases.sh"
-[[ -f "${SHELLDDIR}/templates.sh"     ]] && source "${SHELLDDIR}/templates.sh"
-[[ -f "${SHELLDDIR}/functions.sh"     ]] && source "${SHELLDDIR}/functions.sh"
-[[ -f "${SHELLDDIR}/local.sh"         ]] && source "${SHELLDDIR}/local.sh"
+[[ -f "${SHELLDDIR}/shell-detect.sh" ]] && source "${SHELLDDIR}/shell-detect.sh"
+[[ -f "${SHELLDDIR}/environment.sh" ]] && source "${SHELLDDIR}/environment.sh"
+[[ -f "${SHELLDDIR}/aliases.sh" ]] && source "${SHELLDDIR}/aliases.sh"
+[[ -f "${SHELLDDIR}/templates.sh" ]] && source "${SHELLDDIR}/templates.sh"
+[[ -f "${SHELLDDIR}/functions.sh" ]] && source "${SHELLDDIR}/functions.sh"
+[[ -f "${SHELLDDIR}/local.sh" ]] && source "${SHELLDDIR}/local.sh"
 
 # Load bash-specific modules
-[[ -f "${SHELLDIR}/initialize.bash"   ]] && source "${SHELLDIR}/initialize.bash"
-[[ -f "${SHELLDIR}/history.bash"      ]] && source "${SHELLDIR}/history.bash"
+[[ -f "${SHELLDIR}/initialize.bash" ]] && source "${SHELLDIR}/initialize.bash"
+[[ -f "${SHELLDIR}/history.bash" ]] && source "${SHELLDIR}/history.bash"
 [[ -f "${SHELLDIR}/key-bindings.bash" ]] && source "${SHELLDIR}/key-bindings.bash"
-[[ -f "${SHELLDIR}/profile.bash"      ]] && source "${SHELLDIR}/profile.bash"
+[[ -f "${SHELLDIR}/profile.bash" ]] && source "${SHELLDIR}/profile.bash"

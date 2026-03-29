@@ -2,7 +2,7 @@
 #
 # FILE TEMPLATES
 # Description: File templates for various functionalities
-# Path: ~/.shelld/templates.d/
+# Path: ~/.shell.d/templates.d/
 #
 
 TEMPLATES_DIR="${SHELLDDIR}/templates.d"
