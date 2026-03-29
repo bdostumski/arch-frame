@@ -31,7 +31,7 @@ install_pacman_packages "${PACMAN_PACKAGES[@]}"
 # -------------------------------------
 # Copy and backup DOTFILES
 # -------------------------------------
-DOTFILES="${BASE_DIR}/../dotfiles"
+DOTFILES="${BASE_DIR}/dotfiles"
 if [ -d "${DOTFILES}" ]; then
 
     log "💾 Create main config files ..."

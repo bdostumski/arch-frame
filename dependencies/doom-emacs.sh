@@ -90,8 +90,8 @@ fi
 # -------------------------
 log "📂 Copying main config file to home root directory..."
 SCRIPT_DIR="$(cd "$(dirname "${0}")" && pwd)"
-if [ -d "${SCRIPT_DIR}/../dotfiles" ]; then
-    backup_and_copy "${SCRIPT_DIR}/../dotfiles/.zshrc.d/config.d/doom" "${HOME}/.config/doom" false
+if [ -d "${SCRIPT_DIR}/dotfiles" ]; then
+    backup_and_copy "${SCRIPT_DIR}/dotfiles/.zshrc.d/config.d/doom" "${HOME}/.config/doom" false
 else
     log "⚠️ Dotfiles directory not found. Skipping dotfile setup." >&2
 fi
