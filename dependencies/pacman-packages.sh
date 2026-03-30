@@ -34,10 +34,6 @@ install_pacman_packages "${PACMAN_PACKAGES[@]}"
 DOTFILES="${BASE_DIR}/dotfiles"
 if [ -d "${DOTFILES}" ]; then
 
-    log "💾 Create main config files ..."
-    create_env_variables_file
-    create_gitconfig_file
-
     log "💾 Copying main config file to home root directory..."
 
     CONFIG_DIR="${DOTFILES}/.shell.d/config.d"
@@ -57,6 +53,12 @@ if [ -d "${DOTFILES}" ]; then
     backup_and_copy "${CONFIG_DIR}/cron/cron.daily" "/etc/cron.daily" true
     backup_and_copy "${CONFIG_DIR}/cron/cron.weekly" "/etc/cron.weekly" true
     backup_and_copy "${CONFIG_DIR}/ufw/before.rules" "/etc/ufw/before.rules" true
+
+
+    log "💾 Create main config files ..."
+    create_env_variables_file
+    create_gitconfig_file
+
 else
 
     log "❌ Dotfiles directory not found. Skipping dotfile setup." >&2
