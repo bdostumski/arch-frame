@@ -33,7 +33,7 @@ export ZINIT[SNIPPETS_DIR]="${HOME}/.config/zinit/share/zinit/snippets"
 export ZINIT_HOME="${HOME}/.config/zinit"
 export ZINIT[COMPINIT_OPTS]=-C
 export ZINIT[ZCOMET_NO_UPDATE]=1
-export ZINIT_DEFAULT_PROTOCOL="SSH"
+export ZINIT_DEFAULT_PROTOCOL="HTTPS"
 
 ZINIT_GIT="${HOME}/.config/zinit/.zinit.git"
 # ----------
