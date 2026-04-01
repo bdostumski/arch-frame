@@ -1,19 +1,48 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 #
-# BASH INITIALIZATION
-# Description: Bootstrap bash-completion and create required directories
+# ZSH INITIALIZATION
+# Description: Bootstrap Zinit plugin manager and create required directories
 #
 
-# Logs directory
-LOGS="${HOME}/.bashrc.d/.logs"
-[ ! -d "${LOGS}" ] && mkdir -p "${LOGS}"
+# -----------------
+# LOGS CONFIGURATION
+# -----------------
+LOGS="${HOME}/.zshrc.d/.logs"
+# Create .logs to store application messages
+[[ ! -d "${LOGS}" ]] && mkdir -p "${LOGS}"
 
-# History file
-[ ! -f "${LOGS}/.bash_history" ] && touch "${LOGS}/.bash_history"
+# -----------------
+# HISTORY FILE
+# -----------------
+# Create history file if it does not exist
+[[ ! -f "${LOGS}/.zsh_history" ]] && touch "${LOGS}/.zsh_history"
 
-# bash-completion (Arch Linux path)
-if [ -f /usr/share/bash-completion/bash_completion ]; then
-    source /usr/share/bash-completion/bash_completion
-elif [ -f /etc/bash_completion ]; then
-    source /etc/bash_completion
+# -----------------
+# AUTOSUGGESTION CONFIGURATION
+# -----------------
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+export ZSH_AUTOSUGGEST_HISTORY_IGNORE="(ls|pwd|exit|sudo reboot)"
+export ZSH_AUTOSUGGEST_COMPLETION_IGNORE="(ls|pwd|exit|sudo reboot)"
+export ZSH_IGNORE_ALL_DUPS=1
+
+# -----------------
+# ZINIT CONFIGURATION
+# -----------------
+ZINIT_HOME="${HOME}/.config/zinit/.zinit.git"
+
+# Download Zinit, if not already installed
+if [[ ! -d "${ZINIT_HOME}" ]]; then
+    mkdir -p "$(dirname ${ZINIT_HOME})"
+    git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT_HOME}"
 fi
+
+# Load Zinit
+source "${ZINIT_HOME}/zinit.zsh"
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust

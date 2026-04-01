@@ -20,33 +20,25 @@ LOGS="${HOME}/.zshrc.d/.logs"
 # -----------------
 # AUTOSUGGESTION CONFIGURATION
 # -----------------
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)                 # set autosuggest strategy (history, completion, match_prev_cmd)
-export ZSH_AUTOSUGGEST_HISTORY_IGNORE="(ls|pwd|exit|sudo reboot)"    # ignore these commands in autosuggest history (ls|pwd|exit|sudo reboot|cd|cd -|cd ..)
-export ZSH_AUTOSUGGEST_COMPLETION_IGNORE="(ls|pwd|exit|sudo reboot)" # ignore these commands in autosuggest completion (ls|pwd|exit|sudo reboot|cd|cd -|cd ..)
-export ZSH_IGNORE_ALL_DUPS=1                                         # ignore all duplicates in history
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+export ZSH_AUTOSUGGEST_HISTORY_IGNORE="(ls|pwd|exit|sudo reboot)"
+export ZSH_AUTOSUGGEST_COMPLETION_IGNORE="(ls|pwd|exit|sudo reboot)"
+export ZSH_IGNORE_ALL_DUPS=1
 
 # -----------------
 # ZINIT CONFIGURATION
 # -----------------
-export ZINIT[PLUGINS_DIR]="${HOME}/.config/zinit/share/zinit/plugins"
-export ZINIT[SNIPPETS_DIR]="${HOME}/.config/zinit/share/zinit/snippets"
-export ZINIT_HOME="${HOME}/.config/zinit"
-export ZINIT[COMPINIT_OPTS]=-C
-export ZINIT[ZCOMET_NO_UPDATE]=1
-export ZINIT_DEFAULT_PROTOCOL="HTTPS"
+ZINIT_HOME="${HOME}/.config/zinit/.zinit.git"
 
-ZINIT_GIT="${HOME}/.config/zinit/.zinit.git"
-# ----------
 # Download Zinit, if not already installed
-if [[ ! -d "${ZINIT_GIT}" ]]; then
-    mkdir -p "$(dirname ${ZINIT_GIT})"
-    git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT_GIT}"
+if [[ ! -d "${ZINIT_HOME}" ]]; then
+    mkdir -p "$(dirname ${ZINIT_HOME})"
+    git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT_HOME}"
 fi
 
-# ----------
-# Plugin Manager
-source "${ZINIT_GIT}/zinit.zsh"
-# ----------
+# Load Zinit
+source "${ZINIT_HOME}/zinit.zsh"
+
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
