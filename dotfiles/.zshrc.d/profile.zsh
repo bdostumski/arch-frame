@@ -10,7 +10,7 @@
 # To create new prompt configuration, run `p10k configure`
 # ---------- 
 # Theme home directory path
-THEMES="${SHELLDIR}/config.d/themes"
+THEMES="${SHELLDDIR}/config.d/themes"
 # ---------- 
 # Setup terminal theme
 PURE_THEME='.pure_theme.sh'
