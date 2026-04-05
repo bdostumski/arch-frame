@@ -2,34 +2,113 @@
 #
 # BASH PROFILE / THEMES
 # Description: Bash prompt, colors, fzf and direnv integration
+#              Mirrors zsh profile.zsh structure
 #
 
-SHELLDIR="${HOME}/.bashrc.d"
-THEMES="${SHELLDIR}/config.d/themes"  # shared themes dir (symlink or copy)
+# -----------------
+# TERMINAL THEME
+# -----------------
+# Notes:
+# To configure starship prompt, run: starship init bash
+# To switch to powerlevel10k-style prompt in bash, install starship + a Nerd Font
+# ----------
+# FIX: Themes live under .shell.d/config.d/themes — use SHELLDDIR not SHELLDIR
+THEMES="${SHELLDDIR}/config.d/themes"
 
-# LS colors
+# -----------------
+# LS COLOR SCHEMES
+# -----------------
+# Uncomment one to activate (mirrors the full list in profile.zsh)
+# LS_COLOR_SCHEME="${THEMES}/ls/alabaster_dark"
+# LS_COLOR_SCHEME="${THEMES}/ls/ayu"
+# LS_COLOR_SCHEME="${THEMES}/ls/catppuccin-frappe"
+# LS_COLOR_SCHEME="${THEMES}/ls/catppuccin-latte"
+# LS_COLOR_SCHEME="${THEMES}/ls/catppuccin-mocha"
+# LS_COLOR_SCHEME="${THEMES}/ls/dracula"
+# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-dark"
+# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-dark-hard"
+# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-dark-soft"
+# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-light"
+# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-light-hard"
+# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-light-soft"
 LS_COLOR_SCHEME="${THEMES}/ls/iceberg-dark"
-[ -f "${LS_COLOR_SCHEME}" ] && export LS_COLORS="$(cat "${LS_COLOR_SCHEME}")"
+# LS_COLOR_SCHEME="${THEMES}/ls/jellybeans"
+# LS_COLOR_SCHEME="${THEMES}/ls/lava"
+# LS_COLOR_SCHEME="${THEMES}/ls/modus-operandi"
+# LS_COLOR_SCHEME="${THEMES}/ls/molokai"
+# LS_COLOR_SCHEME="${THEMES}/ls/nord"
+# LS_COLOR_SCHEME="${THEMES}/ls/one-dark"
+# LS_COLOR_SCHEME="${THEMES}/ls/one-light"
+# LS_COLOR_SCHEME="${THEMES}/ls/rose-pine"
+# LS_COLOR_SCHEME="${THEMES}/ls/rose-pine-dawn"
+# LS_COLOR_SCHEME="${THEMES}/ls/rose-pine-moon"
+# LS_COLOR_SCHEME="${THEMES}/ls/snazzy"
+# LS_COLOR_SCHEME="${THEMES}/ls/solarized-dark"
+# LS_COLOR_SCHEME="${THEMES}/ls/solarized-light"
+# LS_COLOR_SCHEME="${THEMES}/ls/tokyonight-moon"
+# LS_COLOR_SCHEME="${THEMES}/ls/tokyonight-night"
+# LS_COLOR_SCHEME="${THEMES}/ls/tokyonight-storm"
+# LS_COLOR_SCHEME="${THEMES}/ls/zenburn"
+# ----------
+# Apply LS color scheme
+[[ -f "${LS_COLOR_SCHEME}" ]] && export LS_COLORS="$(cat "${LS_COLOR_SCHEME}")"
 
-# Prompt: use starship if available, else a clean PS1
-if command -v starship > /dev/null 2>&1; then
+# -----------------
+# COMPLETION STYLING
+# Bash equivalent of zsh zstyle completion settings in profile.zsh
+# -----------------
+# Use LS_COLORS for colored completion list (mirrors zstyle list-colors)
+bind 'set colored-stats on'
+# Case-insensitive completion (mirrors zstyle matcher-list 'm:{a-z}={A-Z}')
+bind 'set completion-ignore-case on'
+# Show completions on single Tab even if ambiguous (mirrors zsh menu select)
+bind 'set show-all-if-ambiguous on'
+bind 'TAB: menu-complete'             # cycle through completions with Tab
+bind '"\e[Z": menu-complete-backward' # shift+Tab to cycle backwards
+
+# -----------------
+# FZF INTEGRATION
+# Must run before key-bindings are set (fzf --bash registers its own bindings)
+# Mirrors: eval "$(fzf --zsh)" in profile.zsh
+# -----------------
+command -v fzf &>/dev/null && eval "$(fzf --bash)"
+
+# fzf completion preview (mirrors zstyle fzf-tab preview in profile.zsh)
+export FZF_DEFAULT_OPTS="--ansi --height=40% --layout=reverse --border"
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window=down:3:wrap"
+export FZF_CTRL_T_OPTS="--preview 'lsd --color=always {}' --preview-window=right:50%"
+export FZF_ALT_C_OPTS="--preview 'lsd --color=always --tree {} | head -50'"
+
+# -----------------
+# PROMPT THEME
+# Starship = closest bash equivalent to powerlevel10k
+# Mirrors: p10k theme loading in profile.zsh
+# -----------------
+if command -v starship &>/dev/null; then
     eval "$(starship init bash)"
 else
-    # Minimal colored PS1 fallback
-    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    # Minimal colored PS1 fallback (git branch aware)
+    _git_branch() {
+        git branch 2>/dev/null | grep '^\*' | sed 's/\* //'
+    }
+    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$( b=$(_git_branch); [ -n "$b" ] && echo " \[\033[33m\]($b)\[\033[00m\]" )\$ '
+    unset -f _git_branch
 fi
 
-# fzf integration
-if command -v fzf > /dev/null 2>&1; then
-    eval "$(fzf --bash)"
-fi
+# -----------------
+# DIRENV
+# Mirrors: command -v direnv guard in profile.zsh
+# -----------------
+command -v direnv &>/dev/null && eval "$(direnv hook bash)"
 
-# direnv integration
-if command -v direnv > /dev/null 2>&1; then
-    eval "$(direnv hook bash)"
-fi
+# -----------------
+# TERRAFORM AUTOCOMPLETE
+# -----------------
+command -v terraform &>/dev/null && complete -o nospace -C "$(which terraform)" terraform
 
-# Terraform autocomplete
-if command -v terraform > /dev/null 2>&1; then
-    complete -o nospace -C "$(which terraform)" terraform
-fi
+# -----------------
+# BLE.SH ATTACH
+# Must be the VERY LAST line — attaches the line editor after everything is loaded
+# Equivalent of zinit finishing plugin setup in zsh
+# -----------------
+[[ ${BLE_VERSION-} ]] && ble-attach
