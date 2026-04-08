@@ -13,42 +13,49 @@
 # To switch to powerlevel10k-style prompt in bash, install starship + a Nerd Font
 # ----------
 # FIX: Themes live under .shell.d/config.d/themes — use SHELLDDIR not SHELLDIR
-THEMES="${SHELLDDIR}/config.d/themes"
+BASH_THEMES="${SHELLDDIR}/config.d/themes/bash"
+LS_THEMES="${HOME}/.zshrc.d/config.d/themes/shell"
+
+# ----------
+# Setup terminal theme
+TERMINAL_THEME='.pure_theme.sh'
+# Prompt pure theme using (p10k plugin)
+# [[ ! -f "${BASH_THEMES}/${TERMINAL_THEME}" ]] || source "${BASH_THEMES}/${TERMINAL_THEME}"
 
 # -----------------
 # LS COLOR SCHEMES
 # -----------------
 # Uncomment one to activate (mirrors the full list in profile.zsh)
-# LS_COLOR_SCHEME="${THEMES}/ls/alabaster_dark"
-# LS_COLOR_SCHEME="${THEMES}/ls/ayu"
-# LS_COLOR_SCHEME="${THEMES}/ls/catppuccin-frappe"
-# LS_COLOR_SCHEME="${THEMES}/ls/catppuccin-latte"
-# LS_COLOR_SCHEME="${THEMES}/ls/catppuccin-mocha"
-# LS_COLOR_SCHEME="${THEMES}/ls/dracula"
-# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-dark"
-# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-dark-hard"
-# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-dark-soft"
-# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-light"
-# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-light-hard"
-# LS_COLOR_SCHEME="${THEMES}/ls/gruvbox-light-soft"
-LS_COLOR_SCHEME="${THEMES}/ls/iceberg-dark"
-# LS_COLOR_SCHEME="${THEMES}/ls/jellybeans"
-# LS_COLOR_SCHEME="${THEMES}/ls/lava"
-# LS_COLOR_SCHEME="${THEMES}/ls/modus-operandi"
-# LS_COLOR_SCHEME="${THEMES}/ls/molokai"
-# LS_COLOR_SCHEME="${THEMES}/ls/nord"
-# LS_COLOR_SCHEME="${THEMES}/ls/one-dark"
-# LS_COLOR_SCHEME="${THEMES}/ls/one-light"
-# LS_COLOR_SCHEME="${THEMES}/ls/rose-pine"
-# LS_COLOR_SCHEME="${THEMES}/ls/rose-pine-dawn"
-# LS_COLOR_SCHEME="${THEMES}/ls/rose-pine-moon"
-# LS_COLOR_SCHEME="${THEMES}/ls/snazzy"
-# LS_COLOR_SCHEME="${THEMES}/ls/solarized-dark"
-# LS_COLOR_SCHEME="${THEMES}/ls/solarized-light"
-# LS_COLOR_SCHEME="${THEMES}/ls/tokyonight-moon"
-# LS_COLOR_SCHEME="${THEMES}/ls/tokyonight-night"
-# LS_COLOR_SCHEME="${THEMES}/ls/tokyonight-storm"
-# LS_COLOR_SCHEME="${THEMES}/ls/zenburn"
+# LS_COLOR_SCHEME="${LS_THEMES}/alabaster_dark"
+# LS_COLOR_SCHEME="${LS_THEMES}/ayu"
+# LS_COLOR_SCHEME="${LS_THEMES}/catppuccin-frappe"
+# LS_COLOR_SCHEME="${LS_THEMES}/catppuccin-latte"
+# LS_COLOR_SCHEME="${LS_THEMES}/catppuccin-mocha"
+# LS_COLOR_SCHEME="${LS_THEMES}/dracula"
+# LS_COLOR_SCHEME="${LS_THEMES}/gruvbox-dark"
+# LS_COLOR_SCHEME="${LS_THEMES}/gruvbox-dark-hard"
+# LS_COLOR_SCHEME="${LS_THEMES}/gruvbox-dark-soft"
+# LS_COLOR_SCHEME="${LS_THEMES}/gruvbox-light"
+# LS_COLOR_SCHEME="${LS_THEMES}/gruvbox-light-hard"
+# LS_COLOR_SCHEME="${LS_THEMES}/gruvbox-light-soft"
+LS_COLOR_SCHEME="${LS_THEMES}/iceberg-dark"
+# LS_COLOR_SCHEME="${LS_THEMES}/jellybeans"
+# LS_COLOR_SCHEME="${LS_THEMES}/lava"
+# LS_COLOR_SCHEME="${LS_THEMES}/modus-operandi"
+# LS_COLOR_SCHEME="${LS_THEMES}/molokai"
+# LS_COLOR_SCHEME="${LS_THEMES}/nord"
+# LS_COLOR_SCHEME="${LS_THEMES}/one-dark"
+# LS_COLOR_SCHEME="${LS_THEMES}/one-light"
+# LS_COLOR_SCHEME="${LS_THEMES}/rose-pine"
+# LS_COLOR_SCHEME="${LS_THEMES}/rose-pine-dawn"
+# LS_COLOR_SCHEME="${LS_THEMES}/rose-pine-moon"
+# LS_COLOR_SCHEME="${LS_THEMES}/snazzy"
+# LS_COLOR_SCHEME="${LS_THEMES}/solarized-dark"
+# LS_COLOR_SCHEME="${LS_THEMES}/solarized-light"
+# LS_COLOR_SCHEME="${LS_THEMES}/tokyonight-moon"
+# LS_COLOR_SCHEME="${LS_THEMES}/tokyonight-night"
+# LS_COLOR_SCHEME="${LS_THEMES}/tokyonight-storm"
+# LS_COLOR_SCHEME="${LS_THEMES}/zenburn"
 # ----------
 # Apply LS color scheme
 [[ -f "${LS_COLOR_SCHEME}" ]] && export LS_COLORS="$(cat "${LS_COLOR_SCHEME}")"
