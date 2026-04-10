@@ -13,12 +13,6 @@
 ZSH_THEMES="${SHELLDIR}/config.d/themes/shell"
 LS_THEMES="${SHELLDDIR}/config.d/themes/ls"
 
-# ---------- 
-# Setup terminal theme
-TERMINAL_THEME='.pure_theme.sh'
-# Prompt pure theme using (p10k plugin)
-[[ ! -f "${ZSH_THEMES}/${TERMINAL_THEME}" ]] || source "${ZSH_THEMES}/${TERMINAL_THEME}"
-
 # -----------------
 # LS COLOR SCHEMES
 # -----------------
@@ -59,6 +53,15 @@ LS_COLOR_SCHEME="${LS_THEMES}/iceberg-dark"
 # ---------- 
 # Setup vivid plugin color scheme | Else use default custom color scheme
 [[ -f "${LS_COLOR_SCHEME}" ]] && export LS_COLORS="$(cat "${LS_COLOR_SCHEME}")"
+
+# ---------- 
+# SETUP TERMINAL THEME
+# ---------- 
+# TERMINAL_THEME='.classic_theme.sh'
+TERMINAL_THEME='.pure_theme.sh'
+
+# Prompt pure theme using (p10k plugin)
+export POWERLEVEL9K_CONFIG_FILE="${ZSH_THEMES}/${TERMINAL_THEME}"
 
 # -----------------
 # FZF CONFIGURATIONS

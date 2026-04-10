@@ -15,7 +15,7 @@ zinit light zsh-users/zsh-syntax-highlighting # syntax highlighting
 # zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light zsh-users/zsh-completions # completions
 zinit ice depth=1
-# zinit light romkatv/powerlevel10k # powerlevel10k prompt theme
+zinit light romkatv/powerlevel10k # powerlevel10k prompt theme
 
 # Install github copilot
 # gh auth login
