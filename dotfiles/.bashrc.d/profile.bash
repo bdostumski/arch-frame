@@ -80,27 +80,10 @@ bind '"\e[Z": menu-complete-backward' # shift+Tab to cycle backwards
 # -----------------
 command -v fzf &>/dev/null && eval "$(fzf --bash)"
 
-# fzf completion preview (mirrors zstyle fzf-tab preview in profile.zsh)
 export FZF_DEFAULT_OPTS="--ansi --height=40% --layout=reverse --border"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window=down:3:wrap"
 export FZF_CTRL_T_OPTS="--preview 'lsd --color=always {}' --preview-window=right:50%"
 export FZF_ALT_C_OPTS="--preview 'lsd --color=always --tree {} | head -50'"
-
-# -----------------
-# PROMPT THEME
-# Starship = closest bash equivalent to powerlevel10k
-# Mirrors: p10k theme loading in profile.zsh
-# -----------------
-if command -v starship &>/dev/null; then
-    eval "$(starship init bash)"
-else
-    # Minimal colored PS1 fallback (git branch aware)
-    _git_branch() {
-        git branch 2>/dev/null | grep '^\*' | sed 's/\* //'
-    }
-    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$( b=$(_git_branch); [ -n "$b" ] && echo " \[\033[33m\]($b)\[\033[00m\]" )\$ '
-    unset -f _git_branch
-fi
 
 # -----------------
 # DIRENV

@@ -27,7 +27,7 @@ alias zsh-source='source ${HOME}/.zshrc'                            # source zsh
 alias bash-source='source ${HOME}/.bashrc'                          # source bash
 alias config-source='${HOME}/.shell.d/functions.d/config-update.sh' # update configuration files
 alias zsh-theme='p10k configure'                                    # configure p10k theme
-alias templates="templates"                                         # file templates for git, docker, kubernetes, vagrant etc.
+alias templates="tool_templates"                                    # file templates for git, docker, kubernetes, vagrant etc.
 # ----------
 # TUI applications
 alias rr='ranger_cd' # change the current working directory after closing ranger
