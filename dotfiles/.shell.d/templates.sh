@@ -7,7 +7,7 @@
 
 TEMPLATES_DIR="${SHELLDDIR}/templates.d"
 
-templates() {
+tool_templates() {
 
     printf "\n"
     printf "= = = = = = = = ="
