@@ -10,8 +10,8 @@
 # To create new prompt configuration, run `p10k configure`
 # ---------- 
 # Theme home directory path
-ZSH_THEMES="${SHELLDDIR}/config.d/themes/ls"
-LS_THEMES="${SHELLDIR}/config.d/themes/shell"
+ZSH_THEMES="${SHELLDIR}/config.d/themes/shell"
+LS_THEMES="${SHELLDDIR}/config.d/themes/ls"
 
 # ---------- 
 # Setup terminal theme

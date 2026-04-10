@@ -13,12 +13,12 @@
 # To switch to powerlevel10k-style prompt in bash, install starship + a Nerd Font
 # ----------
 # FIX: Themes live under .shell.d/config.d/themes — use SHELLDDIR not SHELLDIR
-BASH_THEMES="${SHELLDDIR}/config.d/themes/bash"
-LS_THEMES="${HOME}/.zshrc.d/config.d/themes/shell"
+# BASH_THEMES="${SHELLDIR}/config.d/themes/shell"
+LS_THEMES="${SHELLDDIR}/config.d/themes/ls"
 
 # ----------
 # Setup terminal theme
-TERMINAL_THEME='.pure_theme.sh'
+# TERMINAL_THEME='.pure_theme.sh'
 # Prompt pure theme using (p10k plugin)
 # [[ ! -f "${BASH_THEMES}/${TERMINAL_THEME}" ]] || source "${BASH_THEMES}/${TERMINAL_THEME}"
 
