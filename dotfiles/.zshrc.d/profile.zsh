@@ -11,7 +11,7 @@
 # ---------- 
 # Theme home directory path
 ZSH_THEMES="${SHELLDDIR}/config.d/themes/ls"
-LS_THEMES="${HOME}/.zshrc.d/config.d/themes/shell"
+LS_THEMES="${SHELLDIR}/config.d/themes/shell"
 
 # ---------- 
 # Setup terminal theme

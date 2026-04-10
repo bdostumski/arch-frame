@@ -9,6 +9,7 @@
 # External IMPORTS
 # -------------------------------------
 . "$(dirname "${0}")/dependencies/utils/install-utils.sh"
+. "$(dirname "${0}")/install-config.sh"
 
 # -------------------------------------
 # Restore terminal on interrupt
@@ -28,41 +29,6 @@ log "This is the first of its sort, Linux configuration framework 🛠️"
 log "But first you have to install and run zsh"
 printf '\n'
 log "Highly recommended is to try it on a virtual machine, or to install it on a fresh Arch installation"
-printf '\n'
-printf '\n'
-
-# -------------------------------------
-# USER REGISTRATION
-# -------------------------------------
-printf "USER REGISTRATION:\n"
-printf '\n'
-printf "OS User Name: "
-read -r USER_NAME
-printf "First Name: "
-read -r FIRST_NAME
-printf "Middle Name: "
-read -r MIDDLE_NAME
-printf "Last Name: "
-read -r LAST_NAME
-printf "Git User: "
-read -r GIT_USER
-printf "Gmail Email: "
-read -r GMAIL_EMAIL
-printf "Gmail User: "
-read -r GMAIL_USER
-printf "Gmail Password: "
-stty -echo
-read -r GMAIL_PASSWORD
-stty echo
-printf '\n'
-printf "Local Database Name (example: database): "
-read -r DB_NAME
-printf "Local Database User Name (example: user): "
-read -r DB_USERNAME
-printf "Local Database Password (example: password): "
-stty -echo
-read -r DB_PASSWORD
-stty echo
 printf '\n'
 printf '\n'
 
