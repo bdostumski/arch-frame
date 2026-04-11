@@ -1,4 +1,4 @@
 *.log
 *.bak
 install_messages.log
-# install-config.sh
+install-config.sh

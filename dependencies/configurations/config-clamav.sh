@@ -32,6 +32,25 @@ config_clamav() {
         /var/run/clamav \
         /root/quarantine
 
+    log "🔐 Creating ClamAV certs directory..."
+    sudo mkdir -p /etc/clamav/certs
+
+    # Populate with system CA bundle — try all known Arch Linux locations
+    if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
+        sudo cp /etc/ssl/certs/ca-certificates.crt /etc/clamav/certs/
+    fi
+
+    # Symlink all individual PEM certs from the system store into clamav/certs/
+    # freshclam's libcurl looks for individual .pem files in this directory
+    if [ -d /etc/ssl/certs ]; then
+        sudo find /etc/ssl/certs -name "*.pem" -exec sh -c \
+            'sudo ln -sf "$1" /etc/clamav/certs/$(basename "$1")' _ {} \;
+    fi
+
+    sudo chown -R clamav:clamav /etc/clamav/certs
+    sudo chmod -R 755 /etc/clamav/certs
+    log "✅ ClamAV certs directory ready."
+
     # Create user quarantine directory
     if [ ! -d "${HOME}/quarantine" ]; then
         mkdir -p "${HOME}/quarantine"
@@ -45,21 +64,22 @@ config_clamav() {
 
     # Allow clamav to send desktop notifications
     if ! grep -q 'clamav ALL' /etc/sudoers.d/clamav 2>/dev/null; then
-        echo 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' | sudo tee /etc/sudoers.d/clamav >/dev/null
+        echo 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' |
+            sudo tee /etc/sudoers.d/clamav >/dev/null
     fi
 
     # -----------------
-    # FIX: Download the virus database FIRST before starting clamav-daemon.
-    # On a fresh install /var/lib/clamav/ is empty — clamd cannot start
-    # without a database, so the socket is never created and the wait loop
-    # times out. freshclam MUST run before clamav-daemon.service starts.
+    # Download virus database BEFORE starting clamav-daemon.
     # -----------------
     log "📥 Downloading ClamAV virus database (this may take a few minutes)..."
-    sudo freshclam --quiet
-    if [ $? -ne 0 ]; then
-        log "⚠️  freshclam failed — check network connection. Continuing anyway..." >&2
+    if sudo freshclam; then
+        log "✅ Virus database downloaded successfully."
     else
-        log "✅ Virus database downloaded."
+        log "❌ freshclam failed — cannot start clamav-daemon without a database." >&2
+        log "   Check: sudo freshclam --verbose" >&2
+        log "   Check: ls -la /etc/clamav/certs/" >&2
+        log "   Check: ping database.clamav.net" >&2
+        return 1
     fi
 
     # -----------------
@@ -87,14 +107,10 @@ EOF
 
     sudo systemctl daemon-reload
 
-    # -----------------
-    # Start clamav-daemon and wait for its socket to be ready.
-    # The database now exists so clamd will start successfully.
-    # -----------------
     log "🔄 Starting clamav-daemon..."
     sudo systemctl enable --now clamav-daemon.service
 
-    log "⏳ Waiting for clamd socket to be ready (database load takes ~10-30s)..."
+    log "⏳ Waiting for clamd socket (database load takes ~10-30s)..."
     _timeout=120
     while [ ! -S /run/clamav/clamd.ctl ]; do
         sleep 2
@@ -108,16 +124,11 @@ EOF
     done
     log "✅ clamd is ready — socket exists."
 
-    # Start freshclam service for ongoing scheduled updates
-    # (manual freshclam already ran above for initial download)
     log "🔄 Starting clamav-freshclam service..."
     sudo systemctl enable --now clamav-freshclam.service
 
-    # Now safe to start clamonacc — clamd socket is confirmed ready
     log "🔄 Starting clamav-clamonacc..."
     sudo systemctl enable --now clamav-clamonacc.service
-
-    # Enable scheduled tasks (cron)
     sudo systemctl enable --now cronie.service
 
     log "✅ ClamAV setup complete."
