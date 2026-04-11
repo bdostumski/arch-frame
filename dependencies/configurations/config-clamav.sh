@@ -15,6 +15,10 @@ config_clamav() {
         clamav-daemon.service \
         clamav-freshclam.service 2>/dev/null || true
 
+    # Clean up any previously copied system CA certs from /etc/clamav/certs/
+    # that may lack a CommonName (CN) field, causing codesign.rs:595 panic.
+    sudo rm -f /etc/clamav/certs/*.pem /etc/clamav/certs/*.crt 2>/dev/null || true
+
     # Ensure shadow group exists (needed for clamd to read /etc/shadow)
     if ! getent group shadow >/dev/null 2>&1; then
         sudo groupadd shadow
@@ -34,7 +38,6 @@ config_clamav() {
         /var/lib/clamav \
         /var/log/clamav \
         /var/run/clamav \
-        /etc/clamav/certs \
         /root/quarantine
 
     # Create user quarantine directory
@@ -52,17 +55,9 @@ config_clamav() {
         /var/log/clamav/freshclam.log \
         /var/log/clamav/clamd.log
 
-    # Copy system CA certificates into /etc/clamav/certs/
-    # and rehash so libclamav-rust can locate them
-    if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
-        sudo cp /etc/ssl/certs/ca-certificates.crt /etc/clamav/certs/
+    if [ ! -d /etc/clamav/certs ]; then
+        sudo install -d -o clamav -g clamav -m 755 /etc/clamav/certs
     fi
-    if [ -d /etc/ssl/certs ]; then
-        sudo find /etc/ssl/certs -maxdepth 1 -name "*.pem" \
-            -exec sudo cp {} /etc/clamav/certs/ \;
-    fi
-    command -v openssl >/dev/null 2>&1 &&
-        sudo openssl rehash /etc/clamav/certs/ 2>/dev/null || true
     sudo chown -R clamav:clamav /etc/clamav/certs
     sudo chmod -R 755 /etc/clamav/certs
 
@@ -73,7 +68,6 @@ config_clamav() {
     fi
 
     log "📥 Starting clamav-freshclam.service to download virus database..."
-    log "   (Running as clamav user avoids the libclamav_rust codesign.rs panic)"
     sudo systemctl start clamav-freshclam.service
 
     log "⏳ Waiting for virus database download to complete..."
