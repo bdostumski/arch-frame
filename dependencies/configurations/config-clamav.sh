@@ -9,7 +9,7 @@ config_clamav() {
 
     log "🛡️ Setting up ClamAV..."
 
-    # Stop existing CLAMAV services before reconfiguring
+    # Stop all existing ClamAV services before reconfiguring
     sudo systemctl stop clamav-clamonacc.service clamav-daemon.service clamav-freshclam.service 2>/dev/null || true
 
     # Ensure shadow group exists (needed for clamd to read /etc/shadow)
@@ -43,12 +43,30 @@ config_clamav() {
     sudo chown clamav:clamav /var/log/clamav/freshclam.log
     sudo chmod 644 /var/log/clamav/freshclam.log
 
-    # Allow clamav to send desktop notifications via sudo
+    # Allow clamav to send desktop notifications
     if ! grep -q 'clamav ALL' /etc/sudoers.d/clamav 2>/dev/null; then
         echo 'clamav ALL=(ALL) NOPASSWD: SETENV: /usr/bin/notify-send' | sudo tee /etc/sudoers.d/clamav >/dev/null
     fi
 
-    sudo tee /etc/systemd/system/clamav-clamonacc.service >/dev/null <<EOF
+    # -----------------
+    # FIX: Download the virus database FIRST before starting clamav-daemon.
+    # On a fresh install /var/lib/clamav/ is empty — clamd cannot start
+    # without a database, so the socket is never created and the wait loop
+    # times out. freshclam MUST run before clamav-daemon.service starts.
+    # -----------------
+    log "📥 Downloading ClamAV virus database (this may take a few minutes)..."
+    sudo freshclam --quiet
+    if [ $? -ne 0 ]; then
+        log "⚠️  freshclam failed — check network connection. Continuing anyway..." >&2
+    else
+        log "✅ Virus database downloaded."
+    fi
+
+    # -----------------
+    # Write clamonacc as a SYSTEM unit (requires root/fanotify)
+    # User units cannot use fanotify — must be in /etc/systemd/system/
+    # -----------------
+    sudo tee /etc/systemd/system/clamav-clamonacc.service >/dev/null <<'EOF'
 [Unit]
 Description=ClamAV On-Access Scanner
 Documentation=man:clamonacc(8)
@@ -69,27 +87,34 @@ EOF
 
     sudo systemctl daemon-reload
 
-    log "🔄 Starting clamav-daemon and waiting for it to be ready..."
+    # -----------------
+    # Start clamav-daemon and wait for its socket to be ready.
+    # The database now exists so clamd will start successfully.
+    # -----------------
+    log "🔄 Starting clamav-daemon..."
     sudo systemctl enable --now clamav-daemon.service
 
-    # Wait for clamd socket — database load can take up to 30 seconds
-    log "⏳ Waiting for clamd socket to be ready..."
-    _timeout=60
+    log "⏳ Waiting for clamd socket to be ready (database load takes ~10-30s)..."
+    _timeout=120
     while [ ! -S /run/clamav/clamd.ctl ]; do
         sleep 2
         _timeout=$((_timeout - 2))
         if [ "${_timeout}" -le 0 ]; then
-            log "❌ Timed out waiting for clamd socket. Check: journalctl -xeu clamav-daemon" >&2
+            log "❌ Timed out waiting for clamd socket." >&2
+            log "   Run: sudo journalctl -xeu clamav-daemon" >&2
+            log "   Run: sudo cat /var/log/clamav/clamd.log" >&2
             return 1
         fi
     done
-    log "✅ clamd is ready."
+    log "✅ clamd is ready — socket exists."
 
-    log "🔄 Starting clamav-freshclam.service..."
+    # Start freshclam service for ongoing scheduled updates
+    # (manual freshclam already ran above for initial download)
+    log "🔄 Starting clamav-freshclam service..."
     sudo systemctl enable --now clamav-freshclam.service
 
-    # Now it is safe to start clamonacc — clamd socket is confirmed ready
-    log "🔄 Starting clamav-clamonacc.service..."
+    # Now safe to start clamonacc — clamd socket is confirmed ready
+    log "🔄 Starting clamav-clamonacc..."
     sudo systemctl enable --now clamav-clamonacc.service
 
     # Enable scheduled tasks (cron)
