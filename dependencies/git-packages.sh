@@ -9,7 +9,7 @@
 # External IMPORTS
 # ----------------------------------------
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-. "${SCRIPT_DIR}/utils/install-utils.sh"
+. "${SCRIPT_DIR}/dependencies/utils/install-utils.sh"
 
 if ! command -v yay >/dev/null 2>&1; then
 

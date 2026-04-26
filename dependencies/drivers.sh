@@ -8,8 +8,9 @@
 # -------------------------------------
 # External IMPORTS
 # -------------------------------------
-. "$(dirname "${0}")/utils/install-utils.sh"
-. "$(dirname "${0}")/packages/pkg-drivers.sh"
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+. "${SCRIPT_DIR}/dependencies/utils/install-utils.sh"
+. "${SCRIPT_DIR}/dependencies/packages/pkg-drivers.sh"
 
 # -------------------------------------
 #  Install PACMAN Packages

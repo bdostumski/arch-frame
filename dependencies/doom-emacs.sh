@@ -8,7 +8,8 @@
 # -------------------------------
 # External IMPORTS
 # -------------------------------
-. "$(dirname "${0}")/configurations/config-doom-emacs.sh"
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+. "${SCRIPT_DIR}/configurations/config-doom-emacs.sh"
 
 log "\n⚙️️  Starting Doom Emacs installation...\n"
 
