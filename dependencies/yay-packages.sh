@@ -10,7 +10,7 @@
 # -------------------------------------
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 . "${SCRIPT_DIR}/dependencies/utils/install-utils.sh"
-. "${SCRIPT_DIR}/packages/pkg-yay.sh"
+. "${SCRIPT_DIR}/dependencies/packages/pkg-yay.sh"
 
 # -------------------------------------
 #  Install AUR packages
