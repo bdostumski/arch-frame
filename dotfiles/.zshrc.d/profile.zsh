@@ -4,11 +4,12 @@
 #
 
 # -----------------
-# TERMINAL THEME 
+# TERMINAL THEME
 # -----------------
 # Notes:
 # To create new prompt configuration, run `p10k configure`
-# ---------- 
+# ----------
+
 # Theme home directory path
 ZSH_THEMES="${SHELLDIR}/config.d/themes/shell"
 LS_THEMES="${SHELLDDIR}/config.d/themes/ls"
@@ -47,34 +48,35 @@ LS_COLOR_SCHEME="${LS_THEMES}/iceberg-dark"
 # LS_COLOR_SCHEME="${LS_THEMES}/tokyonight-night"
 # LS_COLOR_SCHEME="${LS_THEMES}/tokyonight-storm"
 # LS_COLOR_SCHEME="${LS_THEMES}/zenburn"
-# ---------- 
-# Choose ls color scheme
 
-# ---------- 
-# Setup vivid plugin color scheme | Else use default custom color scheme
-[[ -f "${LS_COLOR_SCHEME}" ]] && export LS_COLORS="$(cat "${LS_COLOR_SCHEME}")"
+# Apply LS color scheme (if present)
+[[ -f "${LS_COLOR_SCHEME}" ]] && export LS_COLORS="$(<"${LS_COLOR_SCHEME}")"
 
-# ---------- 
-# SETUP TERMINAL THEME
-# ---------- 
+# ----------
+# SETUP TERMINAL THEME (Powerlevel10k)
+# ----------
 # TERMINAL_THEME='.classic_theme.sh'
 TERMINAL_THEME='.pure_theme.sh'
 
-# Prompt pure theme using (p10k plugin)
-export POWERLEVEL9K_CONFIG_FILE="${ZSH_THEMES}/${TERMINAL_THEME}"
+# Use Powerlevel10k config file if it exists. This prevents startup warnings
+# when dotfiles are only partially installed.
+if [[ -n "${ZSH_THEMES}" && -f "${ZSH_THEMES}/${TERMINAL_THEME}" ]]; then
+  export POWERLEVEL9K_CONFIG_FILE="${ZSH_THEMES}/${TERMINAL_THEME}"
+else
+  unset POWERLEVEL9K_CONFIG_FILE
+fi
 
 # -----------------
 # FZF CONFIGURATIONS
 # -----------------
 # Completion styling
-# COMPLETION_LIST_COLORS="di=36:fi=0:ln=34:mh=00:pi=33:so=35:do=35:bd=33;1:cd=33;1:or=31;1:mi=0:su=31:sg=31:ca=31:tw=32:ow=32:st=34;1:ex=92"
-# ----------
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # Use LS_COLORS for completion list colors
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # Case-insensitive completion
-zstyle ':completion:*' menu no select # Disable menu selection
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}          # Use LS_COLORS for completion list colors
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'            # Case-insensitive completion
+zstyle ':completion:*' menu no select                          # Disable menu selection
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath' # Preview files with ls
-# ---------- 
-# fzf shell integration
-eval "$(fzf --zsh)"
-# 
-eval "$(direnv hook zsh)"
+
+# fzf shell integration (only if installed)
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --zsh)"
+
+# direnv integration (only if installed)
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
