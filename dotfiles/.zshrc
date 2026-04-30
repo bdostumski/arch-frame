@@ -25,5 +25,5 @@ export SHELLDDIR="${HOME}/.shell.d"
 # Load zsh-specific modules
 [[ -f "${SHELLDIR}/history.zsh" ]] && source "${SHELLDIR}/history.zsh"
 [[ -f "${SHELLDIR}/key-bindings.zsh" ]] && source "${SHELLDIR}/key-bindings.zsh"
-[[ -f "${SHELLDIR}/plugins.zsh" ]] && source "${SHELLDIR}/plugins.zsh"
 [[ -f "${SHELLDIR}/profile.zsh" ]] && source "${SHELLDIR}/profile.zsh"
+[[ -f "${SHELLDIR}/plugins.zsh" ]] && source "${SHELLDIR}/plugins.zsh"

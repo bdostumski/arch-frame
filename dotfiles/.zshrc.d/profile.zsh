@@ -61,9 +61,9 @@ TERMINAL_THEME='.pure_theme.sh'
 # Use Powerlevel10k config file if it exists. This prevents startup warnings
 # when dotfiles are only partially installed.
 if [[ -n "${ZSH_THEMES}" && -f "${ZSH_THEMES}/${TERMINAL_THEME}" ]]; then
-  export POWERLEVEL9K_CONFIG_FILE="${ZSH_THEMES}/${TERMINAL_THEME}"
+  source "${ZSH_THEMES}/${TERMINAL_THEME}"   # ✅ source instead of export
 else
-  unset POWERLEVEL9K_CONFIG_FILE
+  typeset -g POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
 fi
 
 # -----------------
