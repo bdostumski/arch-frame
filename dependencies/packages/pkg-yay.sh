@@ -67,8 +67,4 @@ export AUR_PACKAGES=(
     # -------------------------
     auto-cpufreq
 
-    # -------------------------
-    # Data Science & ML
-    # -------------------------
-    anaconda
 )
