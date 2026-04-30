@@ -91,4 +91,41 @@ case "${CHOICE}" in
     ;;
 esac
 
+# -------------------------------------
+# Set default login shell
+# -------------------------------------
+if [ -n "${DEFAULT_SHELL}" ]; then
+    # Map config value -> shell path
+    case "${DEFAULT_SHELL}" in
+    zsh) TARGET_SHELL="$(command -v zsh 2>/dev/null)" ;;
+    bash) TARGET_SHELL="$(command -v bash 2>/dev/null)" ;;
+    fish) TARGET_SHELL="$(command -v fish 2>/dev/null)" ;;
+    *)
+        log "⚠️ DEFAULT_SHELL='${DEFAULT_SHELL}' is not supported. Skipping shell change."
+        TARGET_SHELL=""
+        ;;
+    esac
+
+    if [ -n "${TARGET_SHELL}" ]; then
+        if command -v chsh >/dev/null 2>&1; then
+            # If already default, do nothing
+            if [ "${SHELL}" = "${TARGET_SHELL}" ]; then
+                log "✅ Default shell already set to ${TARGET_SHELL}"
+            else
+                log "🔧 Setting default shell for ${USER_NAME} to ${TARGET_SHELL}"
+                # chsh may prompt for password
+                if chsh -s "${TARGET_SHELL}" "${USER_NAME}"; then
+                    log "✅ Default shell changed to ${TARGET_SHELL}. Log out/in to apply."
+                else
+                    log "❌ Failed to change default shell (chsh returned non-zero)."
+                fi
+            fi
+        else
+            log "⚠️ chsh not found. Skipping default shell change."
+        fi
+    else
+        log "⚠️ Shell '${DEFAULT_SHELL}' not installed/found in PATH. Skipping."
+    fi
+fi
+
 exit 0

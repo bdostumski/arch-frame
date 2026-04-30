@@ -1,6 +1,17 @@
 #!/usr/bin/env sh
 #
 # ══════════════════════════════════════════════════════════════════════════════
+# 1b. DEFAULT SHELL
+# ══════════════════════════════════════════════════════════════════════════════
+# Choose your default login shell after installation.
+# Allowed values: "zsh", "bash", "fish"
+#
+# Example:
+#   DEFAULT_SHELL="zsh"
+#
+DEFAULT_SHELL="zsh"
+#
+# ══════════════════════════════════════════════════════════════════════════════
 # 1. OS USER
 # ══════════════════════════════════════════════════════════════════════════════
 # These values describe who you are on this machine.
