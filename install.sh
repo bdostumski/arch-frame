@@ -12,6 +12,33 @@
 . "$(dirname "${0}")/install-config.sh"
 
 # -------------------------------------
+# Validate no placeholder values remain
+# -------------------------------------
+PLACEHOLDER_ERRORS=0
+
+check_placeholder() {
+    var_name="${1}"
+    var_value="${2}"
+    placeholder="${3}"
+    if [ "${var_value}" = "${placeholder}" ]; then
+        log "❌ ${var_name} is still set to the default placeholder '${placeholder}'. Please update install-config.sh."
+        PLACEHOLDER_ERRORS=1
+    fi
+}
+
+check_placeholder "USER_NAME" "${USER_NAME}" "johndoe"
+check_placeholder "FIRST_NAME" "${FIRST_NAME}" "John"
+check_placeholder "LAST_NAME" "${LAST_NAME}" "Doe"
+check_placeholder "GIT_USER" "${GIT_USER}" "johndoe"
+check_placeholder "GMAIL_EMAIL" "${GMAIL_EMAIL}" "john.doe@gmail.com"
+check_placeholder "GMAIL_USER" "${GMAIL_USER}" "john.doe"
+
+if [ "${PLACEHOLDER_ERRORS}" = "1" ]; then
+    log "❌ Aborting. Fill in your real values in install-config.sh before running the installer."
+    exit 1
+fi
+
+# -------------------------------------
 # Restore terminal on interrupt
 # -------------------------------------
 trap 'stty echo; exit 1' INT TERM
