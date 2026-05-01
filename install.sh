@@ -15,13 +15,9 @@
 # Validate no placeholder values remain
 # -------------------------------------
 PLACEHOLDER_ERRORS=0
-
 check_placeholder() {
-    var_name="${1}"
-    var_value="${2}"
-    placeholder="${3}"
-    if [ "${var_value}" = "${placeholder}" ]; then
-        log "❌ ${var_name} is still set to the default placeholder '${placeholder}'. Please update install-config.sh."
+    if [ "${2}" = "${3}" ]; then
+        log "❌ ${1} is still set to the default '${3}'. Update install-config.sh."
         PLACEHOLDER_ERRORS=1
     fi
 }
@@ -34,7 +30,7 @@ check_placeholder "GMAIL_EMAIL" "${GMAIL_EMAIL}" "john.doe@gmail.com"
 check_placeholder "GMAIL_USER" "${GMAIL_USER}" "john.doe"
 
 if [ "${PLACEHOLDER_ERRORS}" = "1" ]; then
-    log "❌ Aborting. Fill in your real values in install-config.sh before running the installer."
+    log "❌ Aborting. Fill in your real values in install-config.sh."
     exit 1
 fi
 
@@ -62,8 +58,9 @@ printf '\n'
 # -------------------------------------
 # Validate required fields
 # -------------------------------------
-if [ -z "${USER_NAME}" ] || [ -z "${GIT_USER}" ] || [ -z "${GMAIL_EMAIL}" ]; then
-    log "Error: USER_NAME, GIT_USER, and GMAIL_EMAIL are required." >&2
+if [ -z "${USER_NAME}" ] || [ -z "${FIRST_NAME}" ] || [ -z "${GIT_USER}" ] ||
+    [ -z "${GMAIL_EMAIL}" ] || [ -z "${GMAIL_USER}" ] || [ -z "${GMAIL_PASSWORD}" ]; then
+    log "Error: USER_NAME, FIRST_NAME, GIT_USER, GMAIL_EMAIL, GMAIL_USER, and GMAIL_PASSWORD are required." >&2
     exit 1
 fi
 

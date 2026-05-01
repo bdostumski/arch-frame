@@ -58,10 +58,8 @@ LS_COLOR_SCHEME="${LS_THEMES}/iceberg-dark"
 # TERMINAL_THEME='.classic_theme.sh'
 TERMINAL_THEME='.pure_theme.sh'
 
-# Use Powerlevel10k config file if it exists. This prevents startup warnings
-# when dotfiles are only partially installed.
 if [[ -n "${ZSH_THEMES}" && -f "${ZSH_THEMES}/${TERMINAL_THEME}" ]]; then
-  source "${ZSH_THEMES}/${TERMINAL_THEME}"   # ✅ source instead of export
+  source "${ZSH_THEMES}/${TERMINAL_THEME}"   
 else
   typeset -g POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
 fi
