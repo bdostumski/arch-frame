@@ -49,3 +49,9 @@ CURRENT_DIR="${SHELLDDIR}/functions.d"
 # -----------------
 # If nvim exists then use nvim, else vim
 . "${CURRENT_DIR}/editor-nvim-vim.sh"
+
+# -----------------
+# GIT LOG AUTHOR
+# -----------------
+# Show git log filtered by author
+. "${CURRENT_DIR}/git-logauthor.sh"
