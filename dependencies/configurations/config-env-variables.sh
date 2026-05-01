@@ -39,7 +39,7 @@ export GIT_USER="${GIT_USER}"
 # -----------------
 export GMAIL_EMAIL="${GMAIL_EMAIL}"
 export GMAIL_USER="${GMAIL_USER}"
-export GMAIL_PASSWORD="${GMAIL_PASSWORD}"
+export GMAIL_PASSWORD="\$(echo '${GMAIL_PASSWORD}' | base64 -d | gpg --quiet --batch --no-tty --decrypt 2>/dev/null)"
 
 # -----------------
 # DATABASE DATA

@@ -136,7 +136,7 @@ GMAIL_USER="john.doe"
 # Example:
 #   GMAIL_PASSWORD="abcd efgh ijkl mnop"
 #
-GMAIL_PASSWORD="password"
+GMAIL_PASSWORD="$(echo "password" | gpg --symmetric --cipher-algo AES256 --armor | base64 -w0)"
 #
 # ══════════════════════════════════════════════════════════════════════════════
 #  4. LOCAL DATABASE
