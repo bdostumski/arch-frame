@@ -5,7 +5,7 @@
 #
 
 # Check if it is user or not and copy directory
-function copy_directory() {
+copy_directory() {
     local _src="${1}"
     local _dst="${2}"
     local _sudo="${3}"
@@ -19,7 +19,7 @@ function copy_directory() {
 }
 
 # Check if it is sudo or not and copy file
-function copy_file() {
+copy_file() {
     local _src="${1}"
     local _dst="${2}"
     local _sudo="${3}"
@@ -34,7 +34,7 @@ function copy_file() {
 
 # Backup target file and override it with new configuration
 # Override target file if backup file exists
-function config_backup() {
+config_backup() {
 
     local COPY_FILE_DATA="${1}"
     local PASTE_FILE_PATH="${2}"
@@ -62,7 +62,7 @@ function config_backup() {
 }
 
 # Main function
-function config_update() {
+config_update() {
 
     local LOCATION="$HOME/.shell.d/config.d"
 

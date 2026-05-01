@@ -5,10 +5,10 @@
 # Usage: find-file <file name>
 #
 
-function find_file() {
-  fd -g -H -t f "${1}" |
-    fzf --preview "lsd -al --color=auto {}" \
-      --bind "enter:execute(nvim {})"
+find_file() {
+    fd -g -H -t f "${1}" |
+        fzf --preview "lsd -al --color=auto {}" \
+            --bind "enter:execute(nvim {})"
 
-  return 0
+    return 0
 }

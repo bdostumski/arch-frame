@@ -5,7 +5,7 @@
 # To undo the effect of this function, you can type "cd -" to return to the original directory.
 #
 
-function ranger_cd() {
+ranger_cd() {
     TEMP_FILE="$(mktemp -t "ranger_cd.XXXXXXXXXX")"
     ranger --choosedir="${TEMP_FILE}" -- "${@:-$PWD}"
 

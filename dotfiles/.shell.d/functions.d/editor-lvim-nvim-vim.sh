@@ -5,7 +5,7 @@
 # Example: if lvim exists then use lvim, else nvim, else vim
 #
 
-function editor_lvim_nvim_vim() {
+editor_lvim_nvim_vim() {
     if command -v lvim >/dev/null 2>&1; then
         lvim "${@}"
     elif command -v nvim >/dev/null 2>&1; then
