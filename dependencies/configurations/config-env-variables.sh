@@ -3,9 +3,10 @@
 create_env_variables_file() {
 
     # Validate required variables
-    if [ -z "${USER_NAME}" ] || [ -z "${GMAIL_EMAIL}" ] || [ -z "${GIT_USER}" ]; then
-        printf '❌ Error: USER_NAME, GMAIL_EMAIL and GIT_USER are required.\n' >&2
-        return 1
+    if [ -z "${USER_NAME}" ] || [ -z "${FIRST_NAME}" ] || [ -z "${GIT_USER}" ] ||
+        [ -z "${GMAIL_EMAIL}" ] || [ -z "${GMAIL_USER}" ] || [ -z "${GMAIL_PASSWORD}" ]; then
+        log "Error: USER_NAME, FIRST_NAME, GIT_USER, GMAIL_EMAIL, GMAIL_USER, and GMAIL_PASSWORD are required." >&2
+        exit 1
     fi
 
     mkdir -p "${HOME}/.zshrc.d/config.d/env"
