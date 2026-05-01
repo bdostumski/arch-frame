@@ -19,10 +19,10 @@ bindkey '^[[3;5~' kill-word     # delete the word after the cursor "ctrl + delet
 bindkey '^[[3~' delete-char     # delete the character under the cursor "delete"
 # ----------
 # [alt + key] key navigation use one char at a time
-bindkey '^[h' backward-char        # move backward one character "alt + j"
-bindkey '^[l' forward-char         # move forward one character "alt + k"
-bindkey '^[j' backward-delete-char # delete the word before the cursor "alt + h"
-bindkey '^[k' delete-char          # delete the word after the cursor "alt + l"
+bindkey '^[h' backward-char        # move backward one character "alt + h"
+bindkey '^[l' forward-char         # move forward one character "alt + l"
+bindkey '^[j' backward-delete-char # delete the word before the cursor "alt + j"
+bindkey '^[k' delete-char          # delete the word after the cursor "alt + k"
 bindkey '^[i' backward-kill-word   # delete the word before the cursor "alt +  i"
 bindkey '^[o' kill-word            # delete the word after the cursor "alt + o"
 bindkey '^[u' backward-word        # move backward one word "alt + u"

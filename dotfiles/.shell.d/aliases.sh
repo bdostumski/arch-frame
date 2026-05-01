@@ -180,12 +180,12 @@ alias sys-disable='sudo systemctl disable' # disable service to start at boot ti
 alias sys-status='systemctl status'        # current status of a service
 # ----------
 # pacman
-alias install='sudo pacman -S'                      # install package
-alias remove='sudo pacman -R'                       # remove package
-alias search='pacman -Ss'                           # search package
-alias update='sudo pacman -Syu'                     # update system
-alias clean='sudo pacman -Sc'                       # clean cache
-alias autoremove='sudo pacman -Rns $(pacman -Qtdq)' # remove orphaned packages
+alias install='sudo pacman -S'                                                                             # install package
+alias remove='sudo pacman -R'                                                                              # remove package
+alias search='pacman -Ss'                                                                                  # search package
+alias update='sudo pacman -Syu'                                                                            # update system
+alias clean='sudo pacman -Sc'                                                                              # clean cache
+alias autoremove='[[ -n $(pacman -Qtdq) ]] && sudo pacman -Rns $(pacman -Qtdq) || echo "No orphans found"' # remove orphaned packages
 # ----------
 # pacman mirrors optimization
 alias mirror='sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist'

@@ -66,13 +66,13 @@ if [ -d "${DOTFILES}" ]; then
     backup_and_copy "${CONFIG_DIR}/cron/cron.weekly" "/etc/cron.weekly" true
     backup_and_copy "${CONFIG_DIR}/ufw/before.rules" "/etc/ufw/before.rules" true
 
-    # env and gitconfig are generated — copied from generated location
-    backup_and_copy "${HOME}/.shell.d/config.d/env/.env.sh" "${HOME}/.env.sh" false
-    backup_and_copy "${HOME}/.shell.d/config.d/gitconf/.gitconfig" "${HOME}/.gitconfig" false
-
     log "💾 Creating main config files..."
     create_env_variables_file
     create_gitconfig_file
+
+    # env and gitconfig are generated — copied from generated location
+    backup_and_copy "${HOME}/.shell.d/config.d/env/.env.sh" "${HOME}/.env.sh" false
+    backup_and_copy "${HOME}/.shell.d/config.d/gitconf/.gitconfig" "${HOME}/.gitconfig" false
 
     # NeoVim — move old config first then clone
     move_file "${HOME}/.config/nvim"
@@ -115,8 +115,9 @@ fi
 # -------------------------------------
 if command -v pyenv >/dev/null 2>&1; then
     log "⚙️ Setting pyenv..."
-    pyenv install 3.11.6
-    pyenv global 3.11.6
+    PYTHON_VERSION="$(pyenv install --list | grep -e '^\s+3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')"
+    pyenv install "${PYTHON_VERSION}"
+    pyenv global "${PYTHON_VERSION}"
 else
     log "⚠️ pyenv is not installed, skipping." >&2
 fi
