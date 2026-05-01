@@ -126,7 +126,7 @@ alias g='git' # g for git it is good combination with .gitconfig aliases
 alias log='git log --oneline --graph --decorate | bat --paging=always --language=gitlog'
 alias logall='git log --graph --decorate | bat --paging=always --language=gitlog'
 alias logfull='git log --graph --decorate --full-history | bat --paging=always --language=gitlog'
-alias logauthor='function_logauthor() { git log --graph --decorate --full-history --author="${1}" | bat --paging=always --language=gitlog }; function_logauthor'
+alias logauthor='git_logauthor'
 # ----------
 # github cli aliases
 alias copilot='gh copilot'
