@@ -213,8 +213,8 @@ alias ufw-mail-deny="sudo ufw deny 25,465,587,143,993,110,995/tcp"
 # clamav linux antivirus
 alias clamscan-home="clamscan -r --bell -i /home/${USER}"
 alias clamscan-full="sudo clamscan -r --bell -i --exclude-dir=/sys --exclude-dir=/proc --exclude-dir=/dev /"
-alias clamscan-home-quarantine="clamscan -r --move=/home/${USER}/.confg/.clamav/quarantine /home/${USER}/"
-alias clamscan-root-quarantine="sudo clamscan -r --move=/home/${USER}/.confg/.clamav/quarantine /"
+alias clamscan-home-quarantine="clamscan -r --move=/home/${USER}/.config/.clamav/quarantine /home/${USER}/"
+alias clamscan-root-quarantine="sudo clamscan -r --move=/home/${USER}/.config/.clamav/quarantine /"
 alias clamscan-logs="sudo tail -f /var/log/clamav/clamd.log"
 alias clamscan-update="sudo freshclam"
 # system and hardware commands
