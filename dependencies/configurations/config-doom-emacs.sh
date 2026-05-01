@@ -106,7 +106,7 @@ localfolders = ~/Maildir
 type = IMAP
 remotehost = imap.gmail.com
 remoteuser = ${GMAIL_USER}
-remotepass = ${GMAIL_PASSWORD}
+remotepasseval = echo '${GMAIL_PASSWORD}' | base64 -d | gpg --quiet --batch --no-tty --decrypt 2>/dev/null
 ssl = yes
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 maxconnections = 1
@@ -140,7 +140,7 @@ host smtp.gmail.com
 port 587
 from ${GMAIL_EMAIL}
 user ${GMAIL_USER}
-password ${GMAIL_PASSWORD}
+password echo '${GMAIL_PASSWORD}' | base64 -d | gpg --quiet --batch --no-tty --decrypt 2>/dev/null
 
 account default : Gmail
 EOF
