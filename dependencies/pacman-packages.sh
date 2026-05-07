@@ -20,6 +20,7 @@ BASE_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 . "${BASE_DIR}/dependencies/configurations/config-clamav.sh"
 . "${BASE_DIR}/dependencies/configurations/config-env-variables.sh"
 . "${BASE_DIR}/dependencies/configurations/config-gitconfig.sh"
+. "${BASE_DIR}/dependencies/configurations/config-apparmor.sh"
 
 trap 'stty echo; exit 1' INT TERM
 
