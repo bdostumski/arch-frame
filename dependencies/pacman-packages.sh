@@ -97,6 +97,11 @@ config_ufw
 config_clamav
 
 # -------------------------------------
+# Apparmor configuration
+# -------------------------------------
+config_apparmor
+
+# -------------------------------------
 # NEOVIM kickstart configuration
 # -------------------------------------
 if [ ! -d "${HOME}/.config/nvim" ]; then
