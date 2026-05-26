@@ -77,9 +77,12 @@ EOF
     # --- AIDE integrity database ---
     if command -v aide >/dev/null 2>&1; then
         log "🔧 Initialising AIDE integrity database (this may take a while)..."
-        sudo aide --init
-        sudo mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
-        log "💡 Schedule 'aide --check' in a cron job to detect tampering."
+        if sudo aide --init; then
+            sudo mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+            log "💡 Schedule 'aide --check' in a cron job to detect tampering."
+        else
+            log "❌ AIDE initialization failed. Run 'sudo aide --init' manually after install." >&2
+        fi
     fi
 
     # --- chrony time sync ---
