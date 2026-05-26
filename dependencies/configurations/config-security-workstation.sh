@@ -15,6 +15,8 @@ kernel.kptr_restrict = 1
 kernel.sysrq = 0
 kernel.unprivileged_bpf_disabled = 1
 net.core.bpf_jit_harden = 2
+
+# TCP hardening
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_rfc1337 = 1
 net.ipv4.conf.all.rp_filter = 1
