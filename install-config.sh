@@ -1,5 +1,23 @@
 #!/usr/bin/env sh
 #
+# ═══════════════════════════════════════════════════════════════════
+# 1c. MACHINE TYPE
+# ═══════════════════════════════════════════════════════════════════
+# Choose the machine profile for this installation.
+# This controls which packages and security hardening are applied.
+#
+# Allowed values:
+#   "laptop"   — portable machine: TLP, backlight, bluetooth, full-disk encryption helpers
+#   "desktop"  — workstation: NVIDIA, gaming, multimedia
+#   "server"   — headless / remote: strict firewall, fail2ban, AIDE, SSH hardening
+#
+# REQUIRED — the installer will abort if this is left as "choose".
+#
+# Example:
+#   MACHINE_TYPE="laptop"
+#
+MACHINE_TYPE="choose"
+#
 # ══════════════════════════════════════════════════════════════════════════════
 # 1b. DEFAULT SHELL
 # ══════════════════════════════════════════════════════════════════════════════
