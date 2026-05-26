@@ -66,6 +66,7 @@ This kind of automation has direct value for companies that need to:
 | 🎨 **Beautiful terminal** | Powerlevel10k Pure theme + Nerd Fonts + `lsd` + `bat` + `vivid` colours |
 | 🔌 **Plugin management** | Zinit with autosuggestions, syntax highlighting, fzf-tab completions |
 | 🛡️ **Security built-in** | ClamAV antivirus (with on-access scanning) + UFW firewall + GPG encryption |
+| 🖥️ **Machine profiles** | Choose `laptop`, `desktop`, `server`, or `workstation` — each with tailored packages and security hardening |
 | 📧 **Email in terminal** | mu4e + isync + msmtp — full email workflow inside Emacs/terminal |
 | 🧠 **Doom Emacs** | Pre-configured IDE with LSP, org-mode, mu4e, Magit, and more |
 | 🔀 **Rich Git config** | Auto-generated `.gitconfig` with 100+ aliases, delta diffs, kitty difftool |
@@ -94,19 +95,30 @@ arch-frame/
 │   ├── doom-emacs.sh                   # Doom Emacs installer & configuration
 │   │
 │   ├── packages/
-│   │   ├── pkg-pacman.sh               # Pacman package list (100+ packages)
-│   │   └── pkg-yay.sh                  # AUR package list (VSCode, IntelliJ, Postman...)
+│   │   ├── pkg-pacman.sh               # Common pacman package list (100+ packages)
+│   │   ├── pkg-yay.sh                  # AUR package list (VSCode, IntelliJ, Postman...)
+│   │   ├── pkg-laptop.sh               # Laptop-specific packages (TLP, bluez, brightnessctl...)
+│   │   ├── pkg-desktop.sh              # Desktop-specific packages (NVIDIA, steam, wine...)
+│   │   ├── pkg-server.sh               # Server-specific packages (fail2ban, aide, nftables...)
+│   │   ├── pkg-workstation.sh          # Secure workstation packages (AppArmor, aide, auditd...)
+│   │   ├── pkg-dev-tools.sh            # Dev tools package list
+│   │   └── pkg-drivers.sh             # Driver package list
 │   │
 │   ├── configurations/
-│   │   ├── config-env-variables.sh     # Generate ~/.env.sh (GPG-encrypted credentials)
-│   │   ├── config-gitconfig.sh         # Generate ~/.gitconfig (100+ git aliases)
-│   │   ├── config-ufw.sh               # UFW firewall rules (HTTP/HTTPS/SSH/VNC)
-│   │   ├── config-clamav.sh            # ClamAV full setup (daemon, freshclam, clamonacc)
-│   │   └── config-vbox.sh              # VirtualBox guest drivers
+│   │   ├── config-ufw.sh               # UFW firewall configuration
+│   │   ├── config-clamav.sh            # ClamAV antivirus configuration
+│   │   ├── config-vbox.sh              # VirtualBox configuration
+│   │   ├── config-apparmor.sh          # AppArmor MAC configuration
+│   │   ├── config-gitconfig.sh         # ~/.gitconfig generator
+│   │   ├── config-env-variables.sh     # ~/.env.sh generator
+│   │   ├── config-doom-emacs.sh        # Doom Emacs post-install configuration
+│   │   ├── config-security-laptop.sh   # Laptop security hardening (sysctl, UFW, TLP)
+│   │   ├── config-security-desktop.sh  # Desktop security hardening (sysctl, UFW, NVIDIA KMS)
+│   │   ├── config-security-server.sh   # Server security hardening (strict sysctl, SSH, fail2ban, AIDE)
+│   │   └── config-security-workstation.sh # Workstation security hardening (AppArmor, AIDE, auditd)
 │   │
 │   └── utils/
-│       └── install-utils.sh            # Shared utilities: log(), backup_and_copy(),
-│                                       # install_pacman_packages(), install_yay_packages()
+│       └── install-utils.sh            # Shared utility functions (log, backup_and_copy, etc.)
 │
 └── dotfiles/
     ├── .zshrc                          # Zsh entry point
@@ -274,17 +286,20 @@ cd arch-frame
 Edit `install-config.sh` and fill in your real values:
 
 ```sh
+MACHINE_TYPE="laptop"              # Machine profile: laptop | desktop | server | workstation
 USER_NAME="your-username"          # Your Linux username
 FIRST_NAME="Your"                  # Your first name
 LAST_NAME="Name"                   # Your last name
 GIT_USER="your-github-username"    # Your GitHub username
 GMAIL_EMAIL="your@gmail.com"       # Your Gmail address
 GMAIL_USER="your-gmail-user"       # Your Gmail username
-GMAIL_PASSWORD="gpg-encrypted"     # Your GPG-encrypted Gmail password
+GMAIL_PASSWORD="abcd efgh ijkl mnop"  # Your Gmail App Password (16-character)
 DEFAULT_SHELL="zsh"                # Default shell: zsh | bash | fish
 ```
 
-> 🔐 **Gmail Password** should be GPG-encrypted. The framework stores it base64+GPG encrypted and decrypts it at runtime.
+> 🔐 **Gmail Password** must be a plain **Gmail App Password** — a 16-character password generated at https://myaccount.google.com/apppasswords. Do **not** put a GPG command here; the value is stored with `chmod 600` and written directly into `~/.msmtprc` and `~/.offlineimaprc`.
+
+> 🖥️ **Machine Type** controls which packages and security hardening are applied. The installer will abort if `MACHINE_TYPE` is left as `"choose"`. See the [Machine Profiles](#️-machine-type-profiles) section for details on each profile.
 
 The installer **validates all placeholders** before running — it will refuse to proceed if default values like `"johndoe"` or `"john.doe@gmail.com"` are still in place.
 
@@ -397,6 +412,22 @@ All application configurations live in `~/.shell.d/config.d/` and are managed by
 | `gitconf/` | Generated `.gitconfig` with your user details + 100+ aliases |
 | `themes/` | Powerlevel10k themes · lsd colour themes |
 
+### 🖥️ Machine-Type Profiles
+
+The `MACHINE_TYPE` variable in `install-config.sh` controls which packages and security hardening profile are applied. You **must** set this before running the installer — it will abort if the value is left as `"choose"`.
+
+| Value | Description |
+|-------|-------------|
+| `"laptop"` | Portable machine — TLP power management, backlight control, bluetooth, full-disk encryption helpers |
+| `"desktop"` | Gaming workstation — NVIDIA drivers, Steam, Wine, gamemode, OBS Studio, MangoHud |
+| `"server"` | Headless / remote — strict firewall, fail2ban, AIDE integrity checking, SSH hardening |
+| `"workstation"` | Secure developer workstation — AppArmor, AIDE, auditd, USB guard, firejail, rkhunter, lynis |
+
+**Example:**
+```sh
+MACHINE_TYPE="laptop"
+```
+
 ### 🧩 Template System
 
 The `templates` command opens an interactive menu to scaffold project files:
@@ -423,6 +454,19 @@ Selecting a category generates the appropriate template file directly into your 
 ---
 
 ## 🛡️ Security
+
+### 🖥️ Machine-Type Security Profiles
+
+Each machine type applies a tailored security hardening profile automatically during installation:
+
+| Profile | Key Hardening |
+|---------|--------------|
+| `laptop` | sysctl (ptrace_scope=1, ASLR, dmesg_restrict), UFW deny-incoming/allow-outgoing, TLP power management |
+| `desktop` | Same sysctl as laptop, UFW deny-incoming/allow-outgoing, NVIDIA early-KMS mkinitcpio |
+| `server` | Strict sysctl (ptrace_scope=2, kptr_restrict=2, BPF JIT hardening), deny-all UFW with explicit allowlist, SSH hardening (no root/password/X11, client timeouts), fail2ban, AIDE integrity database, chrony NTP |
+| `workstation` | AppArmor enforcement, AIDE, auditd, USB guard, firejail, rkhunter, lynis security audit |
+
+---
 
 ### 🔥 UFW Firewall
 
