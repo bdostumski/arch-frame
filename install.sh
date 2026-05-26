@@ -28,11 +28,21 @@ check_placeholder "LAST_NAME" "${LAST_NAME}" "Doe"
 check_placeholder "GIT_USER" "${GIT_USER}" "johndoe"
 check_placeholder "GMAIL_EMAIL" "${GMAIL_EMAIL}" "john.doe@gmail.com"
 check_placeholder "GMAIL_USER" "${GMAIL_USER}" "john.doe"
+check_placeholder "MACHINE_TYPE" "${MACHINE_TYPE}" "choose"
 
 if [ "${PLACEHOLDER_ERRORS}" = "1" ]; then
     log "❌ Aborting. Fill in your real values in install-config.sh."
     exit 1
 fi
+
+# Validate MACHINE_TYPE is one of the allowed values
+case "${MACHINE_TYPE}" in
+laptop | desktop | server) ;;
+*)
+    log "❌ MACHINE_TYPE='${MACHINE_TYPE}' is not valid. Allowed values: laptop, desktop, server."
+    exit 1
+    ;;
+esac
 
 # -------------------------------------
 # Restore terminal on interrupt

@@ -21,6 +21,12 @@ BASE_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 . "${BASE_DIR}/dependencies/configurations/config-env-variables.sh"
 . "${BASE_DIR}/dependencies/configurations/config-gitconfig.sh"
 . "${BASE_DIR}/dependencies/configurations/config-apparmor.sh"
+. "${BASE_DIR}/dependencies/packages/pkg-laptop.sh"
+. "${BASE_DIR}/dependencies/packages/pkg-desktop.sh"
+. "${BASE_DIR}/dependencies/packages/pkg-server.sh"
+. "${BASE_DIR}/dependencies/configurations/config-security-laptop.sh"
+. "${BASE_DIR}/dependencies/configurations/config-security-desktop.sh"
+. "${BASE_DIR}/dependencies/configurations/config-security-server.sh"
 
 trap 'stty echo; exit 1' INT TERM
 
@@ -101,6 +107,29 @@ config_clamav
 # Apparmor configuration
 # -------------------------------------
 config_apparmor
+
+# -------------------------------------
+# Machine-type packages & security
+# -------------------------------------
+case "${MACHINE_TYPE}" in
+laptop)
+    install_pacman_packages "${LAPTOP_PACKAGES[@]}"
+    config_security_laptop
+    ;;
+desktop)
+    install_pacman_packages "${DESKTOP_PACKAGES[@]}"
+    config_security_desktop
+    ;;
+server)
+    install_pacman_packages "${SERVER_PACKAGES[@]}"
+    config_security_server
+    ;;
+*)
+    # Defensive fallback: MACHINE_TYPE is validated in install.sh but this
+    # script may also be sourced directly during testing or manual execution.
+    log "⚠️  Unknown MACHINE_TYPE '${MACHINE_TYPE}'. Skipping machine-specific setup."
+    ;;
+esac
 
 # -------------------------------------
 # NEOVIM kickstart configuration
