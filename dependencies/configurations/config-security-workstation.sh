@@ -73,8 +73,12 @@ EOF
     fi
 
     if command -v aide >/dev/null 2>&1; then
-        sudo aide --init
-        sudo mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+        log "Initializing AIDE integrity database (this may take several minutes)..."
+        if sudo aide --init; then
+            sudo mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+        else
+            log "⚠️  AIDE initialization failed. Run 'sudo aide --init' manually after install."
+        fi
     fi
 
     if command -v chronyd >/dev/null 2>&1; then
@@ -83,8 +87,14 @@ EOF
 
     MKINIT_CONF="/etc/mkinitcpio.conf"
     if [ -f "${MKINIT_CONF}" ]; then
-        if ! grep -q 'nvidia_modeset' "${MKINIT_CONF}"; then
-            sudo sed -i 's/^MODULES=(\(.*\))/MODULES=(\1 nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' "${MKINIT_CONF}"
+        MKINIT_CHANGED=0
+        for mod in nvidia nvidia_modeset nvidia_uvm nvidia_drm; do
+            if ! grep -q "${mod}" "${MKINIT_CONF}"; then
+                sudo sed -i "s/^MODULES=(\(.*\))/MODULES=(\1 ${mod})/" "${MKINIT_CONF}"
+                MKINIT_CHANGED=1
+            fi
+        done
+        if [ "${MKINIT_CHANGED}" = "1" ]; then
             sudo mkinitcpio -P
         fi
     fi
