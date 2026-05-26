@@ -13,4 +13,6 @@ config_apparmor() {
         # Enforce all profiles under /etc/apparmor.d that are loadable
         sudo aa-enforce /etc/apparmor.d/* 2>/dev/null || true
     fi
+
+    return 0
 }

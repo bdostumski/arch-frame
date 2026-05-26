@@ -116,7 +116,10 @@ export PACMAN_PACKAGES=(
     fastfetch
     cronie
     ufw
+    apparmor
+    audit
     clamav
+    fwupd
     ueberzug
     cargo
     gwenview
