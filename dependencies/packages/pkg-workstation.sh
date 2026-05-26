@@ -1,10 +1,7 @@
 #!/usr/bin/env sh
 #
-# ─────────────────────────────────────────────────────────────────
-# Workstation packages — Secure Coding Machine
-# ─────────────────────────────────────────────────────────────────
-# Targeted at a developer's primary desktop where security matters.
-# Distinct from the gaming-focused "desktop" profile.
+# Workstation-specific packages
+# Secure coding machine — developer primary desktop
 #
 
 export WORKSTATION_PACKAGES=(
@@ -22,21 +19,21 @@ export WORKSTATION_PACKAGES=(
     # Security & Sandboxing
     # -------------------------
     firejail          # sandbox for browser and untrusted apps
-    bubblewrap        # low-level sandboxing (used by Flatpak too)
-    rkhunter          # rootkit detection (complements ClamAV)
-    lynis             # full system security audit tool
-    veracrypt         # encrypted containers for sensitive project files
+    bubblewrap        # low-level sandboxing
+    rkhunter          # rootkit detection
+    lynis             # system security audit
+    veracrypt         # encrypted containers for sensitive files
     aide              # file integrity monitoring
 
     # -------------------------
     # Password & Secrets Management
     # -------------------------
     keepassxc         # local password manager
-    pass              # CLI password manager (already in base, explicit here)
-    gnupg             # key signing / encryption (already in base)
+    pass              # already in base, explicit here for workstation
+    gnupg             # already in base, key signing / encryption
 
     # -------------------------
-    # Hardware 2FA (YubiKey / Smart Card)
+    # Hardware 2FA
     # -------------------------
     yubikey-manager
     pcsclite
@@ -50,32 +47,38 @@ export WORKSTATION_PACKAGES=(
     networkmanager-openvpn
 
     # -------------------------
-    # Networking / Traffic Audit
+    # Networking / Audit
     # -------------------------
     nmap
     wireshark-qt
     tcpdump
     nethogs
+    bandwhich
 
     # -------------------------
-    # Intrusion Prevention
+    # Intrusion Detection
     # -------------------------
     fail2ban
 
     # -------------------------
-    # System Integrity & Audit
+    # Integrity / Audit
     # -------------------------
     audit
     acct              # process accounting
 
     # -------------------------
-    # Accurate Time Sync
+    # Time Sync
     # -------------------------
     chrony
 
     # -------------------------
-    # Multimedia (work-relevant only)
+    # Multimedia (work-relevant)
     # -------------------------
-    obs-studio        # screen recording / demos / presentations
+    obs-studio        # screen recording / demos
     vlc
+
+    # -------------------------
+    # Virtualisation (run untrusted code safely)
+    # -------------------------
+    # libvirt / virt-manager already handled by dev-tools profile
 )

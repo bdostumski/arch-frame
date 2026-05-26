@@ -37,9 +37,9 @@ fi
 
 # Validate MACHINE_TYPE is one of the allowed values
 case "${MACHINE_TYPE}" in
-laptop | desktop | server) ;;
+laptop | desktop | workstation | server) ;;
 *)
-    log "❌ MACHINE_TYPE='${MACHINE_TYPE}' is not valid. Allowed values: laptop, desktop, server."
+    log "❌ MACHINE_TYPE='${MACHINE_TYPE}' is not valid. Allowed values: laptop, desktop, workstation, server."
     exit 1
     ;;
 esac

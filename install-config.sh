@@ -7,9 +7,10 @@
 # This controls which packages and security hardening are applied.
 #
 # Allowed values:
-#   "laptop"   — portable machine: TLP, backlight, bluetooth, full-disk encryption helpers
-#   "desktop"  — workstation: NVIDIA, gaming, multimedia
-#   "server"   — headless / remote: strict firewall, fail2ban, AIDE, SSH hardening
+#   "laptop"      — portable machine: TLP, backlight, bluetooth, full-disk encryption helpers
+#   "desktop"     — gaming workstation: NVIDIA, Steam, Wine, gaming tools
+#   "workstation" — secure coding machine: security tools, sandboxing, VPN, dev hardening
+#   "server"      — headless / remote: strict firewall, fail2ban, AIDE, SSH hardening
 #
 # REQUIRED — the installer will abort if this is left as "choose".
 #

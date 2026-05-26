@@ -23,9 +23,11 @@ BASE_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 . "${BASE_DIR}/dependencies/configurations/config-apparmor.sh"
 . "${BASE_DIR}/dependencies/packages/pkg-laptop.sh"
 . "${BASE_DIR}/dependencies/packages/pkg-desktop.sh"
+. "${BASE_DIR}/dependencies/packages/pkg-workstation.sh"
 . "${BASE_DIR}/dependencies/packages/pkg-server.sh"
 . "${BASE_DIR}/dependencies/configurations/config-security-laptop.sh"
 . "${BASE_DIR}/dependencies/configurations/config-security-desktop.sh"
+. "${BASE_DIR}/dependencies/configurations/config-security-workstation.sh"
 . "${BASE_DIR}/dependencies/configurations/config-security-server.sh"
 
 trap 'stty echo; exit 1' INT TERM
@@ -119,6 +121,10 @@ laptop)
 desktop)
     install_pacman_packages "${DESKTOP_PACKAGES[@]}"
     config_security_desktop
+    ;;
+workstation)
+    install_pacman_packages "${WORKSTATION_PACKAGES[@]}"
+    config_security_workstation
     ;;
 server)
     install_pacman_packages "${SERVER_PACKAGES[@]}"

@@ -1,15 +1,12 @@
 #!/usr/bin/env sh
 #
-# ─────────────────────────────────────────────────────────────────
 # Security hardening for WORKSTATION (secure coding machine)
-# ─────────────────────────────────────────────────────────────────
+#
 
 config_security_workstation() {
     log "🔒 Applying workstation security hardening..."
 
-    # ─────────────────────────────────────────────────────────────
-    # sysctl hardening
-    # ─────────────────────────────────────────────────────────────
+    # --- sysctl hardening ---
     SYSCTL_CONF="/etc/sysctl.d/99-workstation-security.conf"
     sudo tee "${SYSCTL_CONF}" > /dev/null <<'EOF'
 # Kernel hardening
@@ -33,13 +30,13 @@ net.ipv4.conf.all.accept_redirects = 0
 net.ipv4.conf.default.accept_redirects = 0
 net.ipv4.conf.all.send_redirects = 0
 net.ipv6.conf.all.accept_redirects = 0
-net.ipv6.conf.default.accept_redirects = 0
+
+# Restrict unprivileged user namespaces (mitigates container escapes)
+kernel.unprivileged_userns_clone = 0
 EOF
     sudo sysctl --system
 
-    # ─────────────────────────────────────────────────────────────
-    # UFW firewall
-    # ─────────────────────────────────────────────────────────────
+    # --- UFW rules for workstation ---
     sudo ufw --force reset
     sudo ufw default deny incoming
     sudo ufw default allow outgoing
@@ -51,9 +48,7 @@ EOF
     sudo ufw logging high
     sudo ufw --force enable
 
-    # ─────────────────────────────────────────────────────────────
-    # SSH hardening (key-only, no root, no password auth)
-    # ─────────────────────────────────────────────────────────────
+    # --- SSH hardening (for when workstation acts as SSH target) ---
     SSHD_CONF="/etc/ssh/sshd_config"
     if [ -f "${SSHD_CONF}" ]; then
         log "🔧 Hardening SSH on workstation..."
@@ -69,71 +64,57 @@ EOF
         sudo systemctl restart sshd
     fi
 
-    # ─────────────────────────────────────────────────────────────
-    # firejail — sandbox Firefox and Thunderbird
-    # ─────────────────────────────────────────────────────────────
+    # --- firejail for browser ---
     if command -v firejail >/dev/null 2>&1; then
-        log "🔧 Linking firejail for browser and mail client..."
+        log "🔧 Enabling firejail profiles..."
+        # Link firejail for common apps
         for app in firefox thunderbird; do
             if command -v "${app}" >/dev/null 2>&1; then
                 sudo ln -sf "$(command -v firejail)" "/usr/local/bin/${app}" 2>/dev/null || true
             fi
         done
-        log "✅ firejail active for firefox and thunderbird."
+        log "✅ firejail linked for browser and mail client."
     fi
 
-    # ─────────────────────────────────────────────────────────────
-    # pcsclite — YubiKey / smart card daemon
-    # ─────────────────────────────────────────────────────────────
+    # --- pcsclite for YubiKey/smart card ---
     if command -v pcscd >/dev/null 2>&1; then
         sudo systemctl enable --now pcscd.service
-        log "✅ pcscd enabled for YubiKey / smart card support."
     fi
 
-    # ─────────────────────────────────────────────────────────────
-    # fail2ban
-    # ─────────────────────────────────────────────────────────────
+    # --- fail2ban ---
     if command -v fail2ban-server >/dev/null 2>&1; then
         log "🔧 Enabling fail2ban..."
         sudo systemctl enable --now fail2ban.service
     fi
 
-    # ─────────────────────────────────────────────────────────────
-    # AIDE — file integrity database
-    # ─────────────────────────────────────────────────────────────
+    # --- AIDE integrity database ---
     if command -v aide >/dev/null 2>&1; then
-        log "🔧 Initialising AIDE integrity database (may take a while)..."
+        log "🔧 Initialising AIDE integrity database..."
         sudo aide --init
         sudo mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
-        log "💡 Schedule 'aide --check' weekly in cron to detect tampering."
+        log "💡 Schedule 'aide --check' weekly via cron to detect tampering."
     fi
 
-    # ─────────────────────────────────────────────────────────────
-    # chrony — accurate time sync
-    # ─────────────────────────────────────────────────────────────
+    # --- chrony time sync ---
     if command -v chronyd >/dev/null 2>&1; then
         sudo systemctl enable --now chronyd.service
     fi
 
-    # ─────────────────────────────────────────────────────────────
-    # NVIDIA early KMS
-    # ─────────────────────────────────────────────────────────────
+    # --- NVIDIA early KMS ---
     MKINIT_CONF="/etc/mkinitcpio.conf"
     if [ -f "${MKINIT_CONF}" ]; then
         if ! grep -q 'nvidia_modeset' "${MKINIT_CONF}"; then
-            log "⚙️  Adding NVIDIA modules to mkinitcpio for early KMS..."
+            log "⚙️  Adding NVIDIA modules to mkinitcpio..."
             sudo sed -i 's/^MODULES=(\(.*\))/MODULES=(\1 nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' "${MKINIT_CONF}"
             sudo mkinitcpio -P
         fi
     fi
 
-    # ─────────────────────────────────────────────────────────────
-    # umask hardening — new files not world-readable
-    # ─────────────────────────────────────────────────────────────
+    # --- umask hardening ---
     UMASK_FILE="/etc/profile.d/umask.sh"
     if [ ! -f "${UMASK_FILE}" ]; then
         echo 'umask 027' | sudo tee "${UMASK_FILE}" > /dev/null
-        log "✅ umask set to 027."
+        log "✅ umask set to 027 — new files not world-readable."
     fi
 
     log "✅ Workstation security hardening complete."
