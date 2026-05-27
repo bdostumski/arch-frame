@@ -15,6 +15,12 @@ SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 # -------------------------------------
 #  Install PACMAN Packages
 # -------------------------------------
+case "${MACHINE_TYPE}" in
+desktop | workstation) ;;
+laptop | server)
+    log "ℹ️  INSTALL_DRIVERS is mainly relevant for desktop/workstation profiles."
+    ;;
+esac
 install_pacman_packages "${PACMAN_PACKAGES[@]}"
 
 # -------------------------------------
@@ -35,10 +41,20 @@ sudo systemctl restart cups.service
 # -------------------------------------
 # NVIDIA configuration
 # -------------------------------------
-log "✅ Setup Nvidia"
-grep -qF '/opt/cuda/bin' "${HOME}/.profile" || printf 'export PATH=/opt/cuda/bin:$PATH\n' >> "${HOME}/.profile"
-grep -qF '/opt/cuda/lib64' "${HOME}/.profile" || printf 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH\n' >> "${HOME}/.profile"
-. "${HOME}/.profile"
+case "${MACHINE_TYPE}" in
+desktop | workstation)
+    log "✅ Setup Nvidia"
+    grep -qF '/opt/cuda/bin' "${HOME}/.profile" || printf 'export PATH=/opt/cuda/bin:$PATH\n' >> "${HOME}/.profile"
+    grep -qF '/opt/cuda/lib64' "${HOME}/.profile" || printf 'export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH\n' >> "${HOME}/.profile"
+    . "${HOME}/.profile"
+    ;;
+laptop)
+    log "ℹ️  Skipping NVIDIA setup for laptop profile."
+    ;;
+server)
+    log "ℹ️  Skipping NVIDIA setup for server profile."
+    ;;
+esac
 
 # -------------------------------------
 # System setup

@@ -32,15 +32,29 @@ sudo usermod -aG docker "${USER}"
 # ---------------------------
 # LIBVIRT configuration
 # ---------------------------
-log "🔧 Configuring Libvirt..."
-sudo systemctl enable --now libvirtd
-sudo usermod -aG libvirt "${USER}"
+case "${MACHINE_TYPE}" in
+desktop | workstation | laptop)
+    log "🔧 Configuring Libvirt..."
+    sudo systemctl enable --now libvirtd
+    sudo usermod -aG libvirt "${USER}"
+    ;;
+server)
+    log "ℹ️  Skipping Libvirt on server profile (use remote VMs instead)."
+    ;;
+esac
 
 # ---------------------------
 # MINIKUBE configuration
 # ---------------------------
-log "🔧 Configuring MiniKube..."
-minikube start --driver=docker
+case "${MACHINE_TYPE}" in
+desktop | workstation | laptop)
+    log "🔧 Configuring MiniKube..."
+    minikube start --driver=docker
+    ;;
+server)
+    log "ℹ️  Skipping Minikube on server profile."
+    ;;
+esac
 
 # ---------------------------
 # HELM repo setup

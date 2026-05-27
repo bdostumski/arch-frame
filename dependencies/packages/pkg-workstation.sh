@@ -16,6 +16,15 @@ export WORKSTATION_PACKAGES=(
     lib32-nvidia-utils
 
     # -------------------------
+    # AI / ML (GPU compute)
+    # -------------------------
+    cudnn               # NVIDIA deep learning primitives — required by PyTorch & TensorFlow
+    opencl-nvidia       # OpenCL support alongside CUDA (used by some ML frameworks)
+    nvtop               # GPU process monitor (htop for NVIDIA — essential for ML work)
+    python-pip          # pip for installing ML frameworks (torch, tensorflow, etc.)
+    jupyter             # Jupyter notebooks for ML experimentation
+
+    # -------------------------
     # Security & Sandboxing
     # -------------------------
     firejail          # sandbox for browser and untrusted apps
