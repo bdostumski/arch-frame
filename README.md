@@ -12,21 +12,23 @@
 > **A professional-grade shell scripting framework that automatically installs and configures 100+ GB of software on Arch Linux — with a single command.**
 
 
-[📖 About](#-about) •
-[🚀 Features](#-features) •
-[🗂️ Structure](#️-project-structure) •
-[📦 Packages](#-what-gets-installed) •
-[⚙️ Installation](#️-installation) •
-[🔧 Configuration](#-configuration) •
-[🛡️ Security](#️-security) •
-[🧠 Doom Emacs](#-doom-emacs) •
-[⌨️ Key Bindings](#️-key-bindings) •
-[📝 Aliases](#-aliases) •
-[🔀 Git Config](#-git-configuration)
+[📖 About](#about) •
+[🚀 Features](#features) •
+[🗂️ Structure](#project-structure) •
+[📦 Packages](#what-gets-installed) •
+[⚙️ Installation](#installation) •
+[🔧 Configuration](#configuration) •
+[🛡️ Security](#security) •
+[🧠 Doom Emacs](#doom-emacs) •
+[⌨️ Key Bindings](#key-bindings) •
+[📝 Aliases](#aliases) •
+[🔀 Git Config](#git-configuration)
 
 </div>
 
 ---
+
+<a id="about"></a>
 
 ## 📖 About
 
@@ -36,14 +38,14 @@ It started as a hands-on project while completing the **[Linux Shell Scripting c
 
 ### 💡 The Problem It Solves
 
-Setting up a complete Arch Linux development environment from scratch is a **time-consuming, error-prone, and repetitive** process. It can take days of manual work to:
+Building a complete Arch Linux development environment from scratch is **slow, fragile, and painfully repetitive**. It can take days of manual work just to:
 - Install hundreds of packages
 - Configure security tools (antivirus, firewall)
-- Set up editors, terminals, shells and plugins
+- Set up editors, terminals, shells, and plugins
 - Configure mail, virtualisation, and development languages
-- Personalise dotfiles, aliases, keybindings and themes
+- Personalise dotfiles, aliases, key bindings, and themes
 
-**arch-frame eliminates all of that.** It automates the entire process end-to-end.
+> **arch-frame eliminates all of that — automating the entire process from end to end.**
 
 ### 🏢 Enterprise Value
 
@@ -55,6 +57,8 @@ This kind of automation has direct value for companies that need to:
 - 🔄 **Rebuild environments** quickly after hardware failure or OS reinstall
 
 ---
+
+<a id="features"></a>
 
 ## 🚀 Features
 
@@ -77,6 +81,8 @@ This kind of automation has direct value for companies that need to:
 | ⚡ **Idempotent** | Skips already-installed packages, safe to re-run |
 
 ---
+
+<a id="project-structure"></a>
 
 ## 🗂️ Project Structure
 
@@ -179,6 +185,8 @@ arch-frame/
 
 ---
 
+<a id="what-gets-installed"></a>
+
 ## 📦 What Gets Installed
 
 ### 🐧 Linux Kernel
@@ -262,6 +270,8 @@ arch-frame/
 
 ---
 
+<a id="installation"></a>
+
 ## ⚙️ Installation
 
 > ⚠️ **WARNING:** This script installs 100+ GB of software and modifies system-level files.
@@ -299,7 +309,7 @@ DEFAULT_SHELL="zsh"                # Default shell: zsh | bash | fish
 
 > 🔐 **Gmail Password** must be a plain **Gmail App Password** — a 16-character password generated at https://myaccount.google.com/apppasswords. Do **not** put a GPG command here; the value is stored with `chmod 600` and written directly into `~/.msmtprc` and `~/.offlineimaprc`.
 
-> 🖥️ **Machine Type** controls which packages and security hardening are applied. The installer will abort if `MACHINE_TYPE` is left as `"choose"`. See the [Machine Profiles](#️-machine-type-profiles) section for details on each profile.
+> 🖥️ **Machine Type** controls which package set and security hardening profile are applied. The installer will abort if `MACHINE_TYPE` is left as `"choose"`. See the [Machine Profiles](#machine-type-profiles) section for details on each profile.
 
 The installer **validates all placeholders** before running — it will refuse to proceed if default values like `"johndoe"` or `"john.doe@gmail.com"` are still in place.
 
@@ -333,6 +343,8 @@ exec zsh
 ```
 
 ---
+
+<a id="shell-configuration"></a>
 
 ## 🎨 Shell Configuration
 
@@ -390,6 +402,8 @@ Options: `appendhistory` · `sharehistory` · `inc_append_history` · `hist_igno
 
 ---
 
+<a id="configuration"></a>
+
 ## 🔧 Configuration
 
 ### 📁 Config Directory (`config.d/`)
@@ -412,9 +426,11 @@ All application configurations live in `~/.shell.d/config.d/` and are managed by
 | `gitconf/` | Generated `.gitconfig` with your user details + 100+ aliases |
 | `themes/` | Powerlevel10k themes · lsd colour themes |
 
+<a id="machine-type-profiles"></a>
+
 ### 🖥️ Machine-Type Profiles
 
-The `MACHINE_TYPE` variable in `install-config.sh` controls which packages and security hardening profile are applied. You **must** set this before running the installer — it will abort if the value is left as `"choose"`.
+The `MACHINE_TYPE` variable in `install-config.sh` controls which package set and security hardening profile are applied. You **must** set this before running the installer — it will abort if the value is left as `"choose"`.
 
 | Value | Description |
 |-------|-------------|
@@ -452,6 +468,8 @@ T e m p l a t e s
 Selecting a category generates the appropriate template file directly into your current directory.
 
 ---
+
+<a id="security"></a>
 
 ## 🛡️ Security
 
@@ -564,6 +582,8 @@ gpg-delete <keyid>      # Delete a key
 
 ---
 
+<a id="doom-emacs"></a>
+
 ## 🧠 Doom Emacs
 
 Doom Emacs is installed and pre-configured as a **full-featured IDE and personal productivity system**.
@@ -619,9 +639,11 @@ emacs-kill      # Kill Emacs server and restart daemon
 
 ---
 
+<a id="git-configuration"></a>
+
 ## 🔀 Git Configuration
 
-The framework auto-generates a complete `.gitconfig` with your personal details and the following configuration:
+The framework auto-generates a complete `.gitconfig` with your personal details and the following settings:
 
 ### Core Settings
 | Setting | Value |
@@ -684,6 +706,8 @@ g theirs <file>   # Resolve conflict with their version
 
 ---
 
+<a id="key-bindings"></a>
+
 ## ⌨️ Key Bindings
 
 ### Shell Navigation
@@ -723,6 +747,8 @@ g theirs <file>   # Resolve conflict with their version
 | `Alt + Shift + \` | Copilot explain |
 
 ---
+
+<a id="aliases"></a>
 
 ## 📝 Aliases
 
