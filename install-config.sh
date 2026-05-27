@@ -19,6 +19,21 @@
 #
 MACHINE_TYPE="choose"
 #
+# ═════════════════════════════════════════════════════════════════
+# INSTALL OPTIONS
+# ═════════════════════════════════════════════════════════════════
+# Choose which installation steps to run.
+# Set to "yes" to install, "no" to skip.
+# You can enable more than one at the same time.
+#
+#   INSTALL_MAIN_PACKAGES — Neovim, Emacs, System, ClamAV, UFW, etc.
+#   INSTALL_DEV_PACKAGES  — Docker, Vagrant, K8s, etc.
+#   INSTALL_DRIVERS       — System Drivers & Firmware
+#
+INSTALL_MAIN_PACKAGES="yes"
+INSTALL_DEV_PACKAGES="no"
+INSTALL_DRIVERS="no"
+#
 # ══════════════════════════════════════════════════════════════════════════════
 # 1b. DEFAULT SHELL
 # ══════════════════════════════════════════════════════════════════════════════

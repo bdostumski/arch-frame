@@ -75,27 +75,11 @@ if [ -z "${USER_NAME}" ] || [ -z "${FIRST_NAME}" ] || [ -z "${GIT_USER}" ] ||
 fi
 
 # -------------------------------------
-# INSTALL DEPENDENCIES MENU
+# INSTALL DEPENDENCIES
 # -------------------------------------
-printf '\n'
-log "INSTALL DEPENDENCIES:"
-log "1) Main Packages Installation [Neovim, Emacs, System, ClamAV, UFW, etc]"
-log "2) Dev Packages Installation [Docker, Vagrant, K8s, etc]"
-log "3) System Drivers & Firmware Installation"
-log "x) Exit"
-printf '\n'
-printf "Enter your choice: "
-read -r CHOICE
-
-if [ "${CHOICE}" = "x" ]; then
-    log "Exiting..."
-    exit 0
-fi
-
 DEPENDENCIES_PATH="$(dirname "${0}")/dependencies"
 
-case "${CHOICE}" in
-1)
+if [ "${INSTALL_MAIN_PACKAGES}" = "yes" ]; then
     printf '\n'
     log "= = = = = = = = = ="
     log "Main Packages Installation [Neovim, Emacs, System, ClamAV, UFW, etc] . . ."
@@ -104,26 +88,22 @@ case "${CHOICE}" in
     . "${DEPENDENCIES_PATH}/yay-packages.sh"
     . "${DEPENDENCIES_PATH}/doom-emacs.sh"
     log "💡 Restart [exit/start again] rerun the script with kitty terminal"
-    ;;
-2)
+fi
+
+if [ "${INSTALL_DEV_PACKAGES}" = "yes" ]; then
     printf '\n'
     log "= = = = = = = = = ="
     log "Dev Packages Installation [Docker, Vagrant, K8s, etc.] . . ."
     . "${DEPENDENCIES_PATH}/dev-tools.sh"
     log "💡 Restart [exit/start again] kitty terminal"
-    ;;
-3)
+fi
+
+if [ "${INSTALL_DRIVERS}" = "yes" ]; then
     printf '\n'
     log "= = = = = = = = = ="
     log "System Drivers & Firmware Installation . . ."
     . "${DEPENDENCIES_PATH}/drivers.sh"
-    ;;
-*)
-    printf '\n'
-    log "Invalid CHOICE. Please try again." >&2
-    exit 1
-    ;;
-esac
+fi
 
 # -------------------------------------
 # Set default login shell
